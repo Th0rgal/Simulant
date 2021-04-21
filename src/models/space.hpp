@@ -1,15 +1,15 @@
 #pragma once
 
-struct Vector
+struct Coordinates
 {
-    Vector(int x, int y);
+    Coordinates(int x, int y);
     int x;
     int y;
 };
 
-struct Coordinates
+struct Vector
 {
-    Coordinates(int x, int y);
+    Vector(int x, int y);
     int x;
     int y;
 };
