@@ -8,10 +8,14 @@ include(doctest)
 
 set(SRCS
     src/controllers/ant.cpp
+
+    src/models/space.hpp
 )
 
 set(HEADERS
     src/controllers/ant.hpp
+
+    src/models/space.hpp
 )
 
 set(TESTS
