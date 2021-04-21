@@ -11,6 +11,11 @@ public:
     void add_sugar();
     void remove_sugar();
     void move();
+
+private:
+    Coordinates location;
+    size_t index;
+    bool sugar;
 };
 
 bool is_closer_from_nest(Cell base, Cell compared);
