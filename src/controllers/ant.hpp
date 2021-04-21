@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdlib.h>
-#include "models/space.hpp"
+#include <sys/types.h>
+#include "models/grid.hpp"
 
 class Ant
 {

@@ -10,12 +10,14 @@ set(SRCS
     src/controllers/ant.cpp
 
     src/models/space.cpp
+    src/models/grid.cpp
 )
 
 set(HEADERS
     src/controllers/ant.hpp
 
     src/models/space.hpp
+    src/models/grid.hpp
 )
 
 set(TESTS
