@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <sys/types.h>
 
 struct Vector
 {

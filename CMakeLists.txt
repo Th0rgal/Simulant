@@ -9,7 +9,7 @@ include(doctest)
 set(SRCS
     src/controllers/ant.cpp
 
-    src/models/space.hpp
+    src/models/space.cpp
 )
 
 set(HEADERS
