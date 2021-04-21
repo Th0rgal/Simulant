@@ -22,6 +22,8 @@ set(HEADERS
 
 set(TESTS
     tests/tests.cpp
+
+    tests/models/space.cpp
 )
 
 set(LIBS
