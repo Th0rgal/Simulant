@@ -27,6 +27,8 @@ set(TESTS
 )
 
 set(LIBS
+    SDL2
+    SDL2_image
 )
 
 add_executable(simulant src/main.cpp ${SRCS} ${HEADERS})
