@@ -2,6 +2,9 @@
 
 #include <bits/stdc++.h>
 
+#define SPACE_WIDTH 21
+#define SPACE_HEIGHT 21
+
 struct Vector
 {
     Vector(int x, int y);
@@ -53,10 +56,11 @@ struct Coordinates
      * @author Thomas Marchand
      **/
     bool operator==(const Coordinates &other) const;
-    Coordinates operator+(const Vector &other);
-    Coordinates operator+=(const Vector &other);
-    Coordinates operator-(const Vector &other);
-    Coordinates operator-=(const Vector &other);
+    Coordinates operator+(const Vector &other) const;
+    Coordinates operator-(const Vector &other) const;
+
+    int get_x();
+    int get_y();
 };
 
 /**

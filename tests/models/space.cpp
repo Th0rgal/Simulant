@@ -28,3 +28,21 @@ TEST_CASE("testing vectors")
     beta /= 2;
     CHECK(beta == Vector{-1, 2});
 }
+
+TEST_CASE("testing coord") 
+{
+    Coordinates a(0, 0);
+    Coordinates b(-1, 1);
+    Coordinates c(1, -1);
+
+    CHECK(a.get_x() == 0);
+    CHECK(a.get_y() == 0);
+    CHECK(b.get_x() == -1);
+    CHECK(b.get_y() == 1);
+    CHECK(c.get_x() == 1);
+    CHECK(c.get_y() == -1);
+    
+    
+    //Coordinates d(-20, 0);
+
+}

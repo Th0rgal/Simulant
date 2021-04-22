@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 #include <sys/types.h>
 #include "models/space.hpp"
 
@@ -36,3 +37,16 @@ struct Grid
     void linearize_nest_pheromons();
     void reduce_sugar_pheromons();
 };
+
+class CoordinatesSet
+{
+public:
+    CoordinatesSet();
+    void append(const Coordinates &coordinates);
+    size_t index_of(const Coordinates &coordinates);
+
+private:
+    std::set<Coordinates> set;
+};
+
+std::ostream &operator<<(std::ostream &out, CoordinatesSet *coordinates_set);
