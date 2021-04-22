@@ -20,6 +20,7 @@ set(HEADERS
 
     src/models/space.hpp
     src/models/grid.hpp
+    src/models/grid.tpp
 )
 
 set(TESTS

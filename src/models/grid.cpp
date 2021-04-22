@@ -1,12 +1,5 @@
 #include "models/grid.hpp"
 
-std::ostream &operator<<(std::ostream &out, const std::unordered_set<Coordinates> &coordinates_set)
-{
-    out << "{";
-    for (const Coordinates &coordinates : coordinates_set)
-        out << coordinates;
-    return out << "}";
-}
 /*
 std::unordered_set<Coordinates> Grid::get_neighbors(const Coordinates &c) const
 {
@@ -27,7 +20,7 @@ Cell::Cell(Coordinates location) : location(location)
 {
 }
 
-Grid::Grid()
+Grid::Grid() : ants({})
 {
     for (int i = 0; i < SPACE_WIDTH * SPACE_HEIGHT; i++)
         map[i] = new Cell(Coordinates(i % SPACE_WIDTH, i / SPACE_WIDTH));
