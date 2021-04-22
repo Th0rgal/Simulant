@@ -42,7 +42,8 @@ int main()
     //     }
     // }
 
-    Game game{};
+    Game game;
+    game.start();
     //create_ants_array({Coordinates(1, -2)});
     return 0;
 }
