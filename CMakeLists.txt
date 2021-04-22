@@ -8,6 +8,7 @@ include(doctest)
 
 set(SRCS
     src/controllers/ant.cpp
+    src/controllers/game.cpp
 
     src/models/space.cpp
     src/models/grid.cpp
@@ -15,6 +16,7 @@ set(SRCS
 
 set(HEADERS
     src/controllers/ant.hpp
+    src/controllers/game.hpp
 
     src/models/space.hpp
     src/models/grid.hpp
