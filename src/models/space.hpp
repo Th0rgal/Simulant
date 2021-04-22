@@ -1,6 +1,6 @@
 #pragma once
 
-#include <bits/stdc++.h>
+#include <stdlib.h>
 #include <iostream>
 
 #define SPACE_WIDTH 21
@@ -72,7 +72,7 @@ struct Coordinates
     int get_y_max() const;
 };
 
-std::ostream    &operator<<(std::ostream &flux, const Coordinates& c);
+std::ostream &operator<<(std::ostream &flux, const Coordinates &c);
 
 /**
  * to define Coordinates hash (required in order to use unordered_set)

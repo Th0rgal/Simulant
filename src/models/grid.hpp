@@ -5,13 +5,15 @@
 #include <sys/types.h>
 #include "models/space.hpp"
 #include "controllers/ant.hpp"
+#include <unordered_set>
+#include <array>
 
 class Cell
 {
 public:
     Cell(const Coordinates location);
-    Coordinates 	get_location();
-    bool 			is_void();
+    Coordinates get_location();
+    bool is_void();
 
     unsigned short get_sugar_pheromons();
     bool has_sugar();
@@ -30,23 +32,24 @@ public:
     void remove_ant();
 
 private:
-	Coordinates     location;
-    bool 			sugar;
-    unsigned short 	sugar_pheromon;
-    unsigned short 	nest_pheromon;
-	Ant				*ant;
+    Coordinates location;
+    bool sugar;
+    unsigned short sugar_pheromon;
+    unsigned short nest_pheromon;
+    Ant *ant;
 };
 
 class Grid
 {
-	public:
-		Grid(); //construit la map
+public:
+    Grid(); //construit la map
 
-		void linearize_nest_pheromons();
-		void reduce_sugar_pheromons();
-	private:
-		//std::unordered_set<Ant> ants;
-		std::array<Cell*, SPACE_WIDTH*SPACE_HEIGHT> map;
+    void linearize_nest_pheromons();
+    void reduce_sugar_pheromons();
+
+private:
+    //std::unordered_set<Ant> ants;
+    std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
 };
 
 // class Nest {
