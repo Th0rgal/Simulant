@@ -1,17 +1,12 @@
 #include "ant.hpp"
 
-Ant::Ant(Coordinates coordinates, size_t index) : location(coordinates), index(index), sugar(false)
+Ant::Ant(Coordinates coordinates, size_t index) : location(coordinates), sugar(false)
 {
 }
 
 Coordinates Ant::get_location()
 {
     return location;
-}
-
-size_t Ant::get_index()
-{
-    return index;
 }
 
 bool Ant::has_sugar()

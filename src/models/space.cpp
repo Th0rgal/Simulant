@@ -32,6 +32,12 @@ bool Coordinates::operator==(const Coordinates &other) const
     return x == other.x && y == other.y;
 }
 
+bool Coordinates::operator!=(const Coordinates &other) const
+{
+    return !(*this == other);
+}
+
+
 Coordinates Coordinates::operator+(const Vector &other) const
 {
     return Coordinates{x + other.x, y + other.y};
@@ -42,15 +48,20 @@ Coordinates Coordinates::operator-(const Vector &other) const
     return Coordinates{x - other.x, y - other.y};
 }
 
-int Coordinates::get_x()
+int Coordinates::get_x() const
 {
     return x;
 }
 
-int Coordinates::get_y()
+int Coordinates::get_y() const
 {
     return y;
 }
+
+std::ostream    &operator<<(std::ostream &flux, const Coordinates& c) {
+    flux << c.get_x() << ", " << c.get_y();
+    return flux;
+};
 
 Vector::Vector(int x, int y) : x(x), y(y)
 {

@@ -4,12 +4,14 @@
 #include <iostream>
 #include <sys/types.h>
 #include "models/space.hpp"
+#include "controllers/ant.hpp"
 
-struct Cell
+class Cell
 {
+public:
     Cell(const Coordinates location);
-    Coordinates get_location();
-    bool is_void();
+    Coordinates 	get_location();
+    bool 			is_void();
 
     unsigned short get_sugar_pheromons();
     bool has_sugar();
@@ -19,34 +21,44 @@ struct Cell
     void add_sugar_pheromon();
     void reduce_sugar_pheromon();
 
-    unsigned short get_nest_pheromons();
     bool is_nest();
     void set_nest();
+    unsigned short get_nest_pheromons();
 
     ssize_t get_ant_index();
     void set_ant(size_t antIndex);
     void remove_ant();
-};
-
-struct Grid
-{
-    Grid();
-    std::vector<Coordinates> get_neighbors(const Coordinates &location);
-    Cell load_cell(const Coordinates &location); //copy
-    void add_cell(Cell cell);
-    void linearize_nest_pheromons();
-    void reduce_sugar_pheromons();
-};
-
-class CoordinatesSet
-{
-public:
-    CoordinatesSet();
-    void append(const Coordinates &coordinates);
-    size_t index_of(const Coordinates &coordinates);
 
 private:
-    std::set<Coordinates> set;
+	Coordinates     location;
+    bool 			sugar;
+    unsigned short 	sugar_pheromon;
+    unsigned short 	nest_pheromon;
+	Ant				*ant;
 };
 
-std::ostream &operator<<(std::ostream &out, CoordinatesSet *coordinates_set);
+class Grid
+{
+	public:
+		Grid(); //construit la map
+
+		void linearize_nest_pheromons();
+		void reduce_sugar_pheromons();
+	private:
+		//std::unordered_set<Ant> ants;
+		std::array<Cell*, SPACE_WIDTH*SPACE_HEIGHT> map;
+};
+
+// class Nest {
+// 	public:
+// 		Nest();
+
+// 	private:
+//		Coordinates				cor;
+// 		std::unordered_set<Ant>	ants;
+// 		uint8_t					color;
+//}
+
+std::ostream &operator<<(std::ostream &out, const std::unordered_set<Coordinates> &coordinates_set);
+
+bool is_closer_from_nest(Cell base, Cell compared);

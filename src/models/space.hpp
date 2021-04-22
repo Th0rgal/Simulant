@@ -1,9 +1,15 @@
 #pragma once
 
 #include <bits/stdc++.h>
+#include <iostream>
 
 #define SPACE_WIDTH 21
 #define SPACE_HEIGHT 21
+
+#define X_MIN ((-SPACE_WIDTH / 2))
+#define Y_MIN ((-SPACE_HEIGHT / 2))
+#define X_MAX ((SPACE_WIDTH / 2 - (SPACE_WIDTH % 2 == 0 ? 1 : 0)))
+#define Y_MAX ((SPACE_HEIGHT / 2 - (SPACE_HEIGHT % 2 == 0 ? 1 : 0)))
 
 struct Vector
 {
@@ -56,12 +62,17 @@ struct Coordinates
      * @author Thomas Marchand
      **/
     bool operator==(const Coordinates &other) const;
+    bool operator!=(const Coordinates &other) const;
     Coordinates operator+(const Vector &other) const;
     Coordinates operator-(const Vector &other) const;
 
-    int get_x();
-    int get_y();
+    int get_x() const;
+    int get_y() const;
+    int get_x_max() const;
+    int get_y_max() const;
 };
+
+std::ostream    &operator<<(std::ostream &flux, const Coordinates& c);
 
 /**
  * to define Coordinates hash (required in order to use unordered_set)
