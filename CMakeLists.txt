@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(poyuterm VERSION 0.0.1)
+project(simulant VERSION 0.0.1)
 
 # Prepare doctest for other targets to use
 find_package(doctest REQUIRED)
