@@ -22,7 +22,7 @@ void Game::start()
 
 void Game::loop(unsigned long delay)
 {
-    grid.map_ants([&](Ant &ant) {
+    grid.map_colonie([&](Ant &ant) {
         std::cout << ant.has_sugar();
     });
     std::cout << delay << std::endl;

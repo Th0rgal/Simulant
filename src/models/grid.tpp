@@ -1,6 +1,7 @@
 template <class Function>
-void Grid::map_ants(Function &&function)
+void Grid::map_colonie(Function &&function)
 {
-    for (Ant &ant : ants)
-        function(ant);
+    for (Colonie &colonie : colonies) {
+        colonie.map_ants(function);
+    }
 }

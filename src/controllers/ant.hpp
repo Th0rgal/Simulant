@@ -2,6 +2,7 @@
 
 #include <sys/types.h>
 #include "models/space.hpp"
+#include <vector>
 
 class Ant
 {
@@ -17,3 +18,17 @@ private:
     Coordinates location;
     bool sugar;
 };
+
+class Colonie 
+{
+public:
+    Colonie() {};
+    ~Colonie() {};
+    template <class Function>
+    void map_ants(Function &&function);
+
+private:
+    std::vector<Ant> ants;
+};
+
+#include "controllers/ant.tpp"

@@ -45,11 +45,11 @@ public:
     void linearize_nest_pheromons();
     void reduce_sugar_pheromons();
     template <class Function>
-    void map_ants(Function &&function);
+    void map_colonie(Function &&function);
 
 private:
-    std::vector<Ant> ants;
-    std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
+    std::vector<Colonie> colonies;
+    std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT>  map;
 };
 
 // class Nest {
