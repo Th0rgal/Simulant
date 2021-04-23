@@ -6,6 +6,7 @@
 #include "models/space.hpp"
 #include "controllers/ant.hpp"
 #include <array>
+#include <unordered_set>
 
 class Cell
 {

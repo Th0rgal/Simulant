@@ -1,6 +1,14 @@
 #include "ant.hpp"
 
-Ant::Ant(Coordinates coordinates, size_t index) : location(coordinates), sugar(false)
+std::mt19937 gen(std::random_device{}());
+
+std::size_t random_index(std::size_t lower, std::size_t higher)
+{
+    std::uniform_int_distribution<std::size_t> dist(lower, higher);
+    return dist(gen);
+}
+
+Ant::Ant(Coordinates coordinates) : location(coordinates), sugar(false)
 {
 }
 
@@ -24,7 +32,8 @@ void Ant::remove_sugar()
     sugar = false;
 }
 
-void Ant::move()
+Coordinates Ant::find_move()
 {
-    // todo
+    std::vector<Coordinates> neighbors = location.get_neighbors();
+    return neighbors[random_index(0, neighbors.size()-1)];
 }

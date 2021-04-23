@@ -1,3 +1,5 @@
+#pragma once
+
 #include "models/grid.hpp"
 
 class Game

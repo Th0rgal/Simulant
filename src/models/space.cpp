@@ -39,7 +39,6 @@ bool Coordinates::operator!=(const Coordinates &other) const
     return !(*this == other);
 }
 
-
 Coordinates Coordinates::operator+(const Vector &other) const
 {
     return Coordinates{x + other.x, y + other.y};
@@ -50,18 +49,26 @@ Coordinates Coordinates::operator-(const Vector &other) const
     return Coordinates{x - other.x, y - other.y};
 }
 
-int Coordinates::get_x() const
+std::vector<Coordinates> Coordinates::get_neighbors()
 {
-    return x;
+    std::vector<Coordinates> coordinates;
+
+    int x_start = std::max(X_MIN, x - 1);
+    int x_end = std::max(Y_MIN, y - 1);
+    int y_start = std::min(X_MAX, x + 1);
+    int y_end = std::min(Y_MAX, y + 1);
+
+    for (int i = x_start; i < x_end; i++)
+    {
+        for (int j = y_start; j < y_end; j++)
+            coordinates.emplace_back(i, j);
+    }
+    return coordinates;
 }
 
-int Coordinates::get_y() const
+std::ostream &operator<<(std::ostream &flux, const Coordinates &c)
 {
-    return y;
-}
-
-std::ostream    &operator<<(std::ostream &flux, const Coordinates& c) {
-    flux << c.get_x() << ", " << c.get_y();
+    flux << c.x << ", " << c.y;
     return flux;
 };
 

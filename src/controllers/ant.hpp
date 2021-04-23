@@ -3,27 +3,28 @@
 #include <sys/types.h>
 #include "models/space.hpp"
 #include <vector>
+#include <random>
 
 class Ant
 {
 public:
-    Ant(Coordinates coordinates, size_t index);
+    Ant(Coordinates coordinates);
     Coordinates get_location();
     bool has_sugar();
     void add_sugar();
     void remove_sugar();
-    void move();
+    Coordinates find_move();
 
 private:
     Coordinates location;
     bool sugar;
 };
 
-class Colony 
+class Colony
 {
 public:
-    Colony() {};
-    ~Colony() {};
+    Colony(){};
+    ~Colony(){};
     template <class Function>
     void map_ants(Function &&function);
 

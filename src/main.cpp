@@ -9,8 +9,8 @@ std::vector<Ant> create_ants_array(const std::vector<Coordinates> &coordinates)
 {
     std::vector<Ant> output;
     output.reserve(coordinates.size());
-    for (size_t i = 0; i < coordinates.size(); i++)
-        output.emplace_back(coordinates[i], i);
+    for (const Coordinates &coordinate : coordinates)
+        output.emplace_back(coordinate);
     return output;
 }
 

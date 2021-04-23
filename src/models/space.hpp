@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
 #define SPACE_WIDTH 21
 #define SPACE_HEIGHT 21
@@ -18,7 +20,7 @@ struct Vector
     int y;
 
     /**
-     * to compare two Vector objects (required for unordered_set)
+     * to compare two Vector objects (required for set)
      * 
      * @param const Vector &other, another instance of Vector
      *
@@ -36,7 +38,7 @@ struct Vector
 };
 
 /**
- * to define Vector hash (required in order to use unordered_set)
+ * to define Vector hash (required in order to use set)
  * 
  * @param const Vector &vector a Vector instance
  *
@@ -51,11 +53,14 @@ struct std::hash<Vector>
 struct Coordinates
 {
     Coordinates(int x, int y);
-    int x;
-    int y;
+
+    const int x;
+    const int y;
+    int get_x_max() const;
+    int get_y_max() const;
 
     /**
-     * to compare two Coordinates objects (required for unordered_set)
+     * to compare two Coordinates objects (required for set)
      * 
      * @param const Coordinates &other, another instance of Coordinates
      *
@@ -65,17 +70,13 @@ struct Coordinates
     bool operator!=(const Coordinates &other) const;
     Coordinates operator+(const Vector &other) const;
     Coordinates operator-(const Vector &other) const;
-
-    int get_x() const;
-    int get_y() const;
-    int get_x_max() const;
-    int get_y_max() const;
+    std::vector<Coordinates> get_neighbors();
 };
 
 std::ostream &operator<<(std::ostream &flux, const Coordinates &c);
 
 /**
- * to define Coordinates hash (required in order to use unordered_set)
+ * to define Coordinates hash (required in order to use set)
  * 
  * @param const Coordinates &coordinates a Coordinate instance
  *

@@ -29,30 +29,28 @@ TEST_CASE("testing vectors")
     CHECK(beta == Vector{-1, 2});
 }
 
-TEST_CASE("testing coord") 
+TEST_CASE("testing coord")
 {
     Coordinates a(0, 0);
     Coordinates b(-1, 1);
     Coordinates c(1, -1);
 
-    CHECK(a.get_x() == 0);
-    CHECK(a.get_y() == 0);
-    CHECK(b.get_x() == -1);
-    CHECK(b.get_y() == 1);
-    CHECK(c.get_x() == 1);
-    CHECK(c.get_y() == -1);
-    
+    CHECK(a.x == 0);
+    CHECK(a.y == 0);
+    CHECK(b.x == -1);
+    CHECK(b.y == 1);
+    CHECK(c.x == 1);
+    CHECK(c.y == -1);
+
     CHECK(X_MAX == 10);
     CHECK(Y_MAX == 10);
     CHECK(X_MIN == -10);
     CHECK(X_MIN == -10);
 
-
     CHECK(c == c);
     CHECK_FALSE(c == a);
     CHECK(c != a);
     CHECK_FALSE(c != c);
-    
-    //Coordinates d(-20, 0);
 
+    //Coordinates d(-20, 0);
 }
