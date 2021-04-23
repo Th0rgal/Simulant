@@ -52,7 +52,6 @@ public:
 private:
     std::array<Cell*, SPACE_WIDTH * SPACE_HEIGHT> map;
     std::vector<Colony> colonies;
-
 };
 
 // class Nest {
