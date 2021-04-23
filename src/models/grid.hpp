@@ -46,6 +46,8 @@ public:
     void reduce_sugar_pheromons();
     template <class Function>
     void map_colony(Function &&function);
+    template <class Function>
+    void map_ants(Function &&function);
 
 private:
     std::array<Cell*, SPACE_WIDTH * SPACE_HEIGHT> map;

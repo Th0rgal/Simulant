@@ -22,10 +22,8 @@ void Game::start()
 
 void Game::loop(unsigned long delay)
 {
-    grid.map_colony([&](Colony &colony) {
-        colony.map_ants([&](Ant &ant) {
+    grid.map_ants([&](Ant &ant) {
 
-        });
     });
     std::cout << delay << std::endl;
 }
