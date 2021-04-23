@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include "models/space.hpp"
 #include <vector>
-#include <random>
+#include "models/grid.hpp"
 
 class Ant
 {
@@ -23,10 +23,10 @@ private:
 class Colony
 {
 public:
-    Colony(){};
-    ~Colony(){};
+    Colony(std::array<Cell, 4>);
     template <class Function>
     void map_ants(Function &&function);
+    const std::array<Cell, 4> cells;
 
 private:
     std::vector<Ant> ants;

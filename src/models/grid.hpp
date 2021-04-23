@@ -24,7 +24,7 @@ public:
     void reduce_sugar_pheromon();
 
     bool is_nest();
-    void set_nest();
+    void set_nest(Colony &colony);
     unsigned short get_nest_pheromons();
 
     ssize_t get_ant_index();
@@ -42,16 +42,18 @@ private:
 class Grid
 {
 public:
-    Grid(); //construit la map
+    Grid(size_t colonies_amount); //construit la map
     void linearize_nest_pheromons();
     void reduce_sugar_pheromons();
     template <class Function>
     void map_colony(Function &&function);
     template <class Function>
     void map_ants(Function &&function);
+    Cell get_cell(int x, int y);
 
 private:
-    std::array<Cell*, SPACE_WIDTH * SPACE_HEIGHT> map;
+    std::array<Cell, 4>  Grid::find_nest_cells();
+    std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
     std::vector<Colony> colonies;
 };
 
