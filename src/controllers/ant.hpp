@@ -19,11 +19,11 @@ private:
     bool sugar;
 };
 
-class Colonie 
+class Colony 
 {
 public:
-    Colonie() {};
-    ~Colonie() {};
+    Colony() {};
+    ~Colony() {};
     template <class Function>
     void map_ants(Function &&function);
 
