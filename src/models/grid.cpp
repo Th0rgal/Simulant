@@ -23,5 +23,5 @@ Cell::Cell(Coordinates location) : location(location)
 Grid::Grid() : ants({})
 {
     for (int i = 0; i < SPACE_WIDTH * SPACE_HEIGHT; i++)
-        map[i] = new Cell(Coordinates(i % SPACE_WIDTH, i / SPACE_WIDTH));
+        map[i] = new Cell(Coordinates(X_MIN + i % SPACE_WIDTH, Y_MIN + i / SPACE_WIDTH));
 }

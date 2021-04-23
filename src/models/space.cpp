@@ -13,10 +13,12 @@ Coordinates::Coordinates(int x, int y) : x(x), y(y)
         y_max--;
     if (x < x_min or x > x_max)
     {
+        std::cout << "THOMAS est un connard x = " << x << ", xMin = " << x_min << ", xMax = " << x_max << std::endl;
         throw std::invalid_argument("Incorect value for coordinates");
     }
     if (y < y_min or y > y_max)
     {
+        std::cout << "THOMAS est un gros connard" << std::endl;
         throw std::invalid_argument("Incorect value for coordinates");
     }
 }
