@@ -13,7 +13,7 @@ View::View(bool fullScreen)
     else
         window = SDL_CreateWindow("Ant", 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_ALLOW_HIGHDPI);
 
-    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
     SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
 
     SDL_GL_GetDrawableSize(window, &window_w, &window_h);
@@ -28,13 +28,14 @@ View::View(int w, int h)
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_ALLOW_HIGHDPI);
-    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 
     SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
     SDL_GL_GetDrawableSize(window, &window_w, &window_h);
-    init_grid();
 
     scale_high_dpi = window_w / (double)w;
+    
+    init_grid();
 }
 
 void View::init_grid()
@@ -83,6 +84,7 @@ void View::init_grid()
         down.h = diff / 2;
     }
 }
+
 View::~View()
 {
     SDL_DestroyRenderer(render);
@@ -120,27 +122,6 @@ bool View::event_manager()
     return close_requested;
 }
 
-void View::show_grid()
-{
-    //2C3A47
-    SDL_SetRenderDrawColor(render, 15, 17, 34, 0xFF);
-    SDL_RenderFillRect(render, &right);
-    SDL_RenderFillRect(render, &left);
-    SDL_RenderFillRect(render, &top);
-    SDL_RenderFillRect(render, &down);
-
-    SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
-    //SDL_SetRenderDrawColor(render, 0xFF, 0, 0, 0xFF);
-    for (int i = 0; i < SPACE_HEIGHT; i++)
-    {
-        for (int j = 0; j < SPACE_WIDTH; j++)
-        {
-            SDL_Rect rect = {j * cell_w + grid_x, i * cell_h + grid_y, cell_w, cell_h};
-            SDL_RenderDrawRect(render, &rect);
-        }
-    }
-}
-
 void View::draw_cell_rect(Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     int x = (c.x - X_MIN) * cell_w + grid_x;
@@ -165,26 +146,50 @@ void View::draw_cell_circle(Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uin
     //SDL_RenderFillRect(render, &rect);
 }
 
-void View::show_map(const Grid &grid) {
+void    View::init_grid(const Grid &grid) {
+    grid_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    SDL_SetTextureBlendMode(grid_texture, SDL_BLENDMODE_BLEND);
+    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
+    pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_BLEND);
+
+    for (Colony *colony : grid.colonies)
+    {
+        m[colony] = generate_random_tint(0.35, 0.93);
+        disp_pheromons[colony] = false;
+    }
+
+    SDL_SetRenderTarget(render, grid_texture);
+
     SDL_SetRenderDrawColor(render, 15, 17, 34, 0xFF);
     SDL_RenderClear(render);
 
-    show_grid();
+    SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
+    for (int i = 0; i < SPACE_HEIGHT; i++)
+    {
+        for (int j = 0; j < SPACE_WIDTH; j++)
+        {
+            SDL_Rect rect = {j * cell_w + grid_x, i * cell_h + grid_y, cell_w, cell_h};
+            SDL_RenderDrawRect(render, &rect);
+        }
+    }
+    SDL_SetRenderTarget(render, NULL);
+    init_entities(grid);
+    update_pheromons(grid);
+
+
+}
+
+void    View::init_entities(const Grid &grid) {
+    SDL_SetRenderTarget(render, entities_texture);
+
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
 
     for (Cell *cell : grid.map)
     {
         Coordinates c = cell->get_location();
-        //if (cell->has_sugar()) {
-        //    draw_cell(c, 0xFF, 0xFF, 0xFF);
-        //}
-        for (Colony *colony : grid.colonies)
-        {
-            if (disp_pheromons[colony]) {
-                double alpha = cell->get_nest_pheromons(colony);
-                rgb color = m[colony];
-                draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, std::max(0.0, alpha * 255 - 128));
-            }
-        }
         if (cell->is_nest())
         {
             rgb color = m[cell->get_nest()];
@@ -196,20 +201,29 @@ void View::show_map(const Grid &grid) {
             rgb color = m[a->colony];
             draw_cell_circle(c, color.r * 255, color.g * 255, color.b * 255, 255);
         }
-        //cell->get_nest_pheromons();
+        //if (cell->has_sugar()) {
+        //    draw_cell(c, 0xFF, 0xFF, 0xFF);
+        //}
     }
-
-    SDL_RenderPresent(render);
+    SDL_SetRenderTarget(render, NULL);
 }
 
-void View::disp_grid(const Grid &grid)
-{
-    for (Colony *colony : grid.colonies)
-    {
-        m[colony] = generate_random_tint(0.35, 0.93);
-        disp_pheromons[colony] = false;
+void    View::update_pheromons(const Grid &grid) {
+    SDL_SetRenderTarget(render, pheromons_texture);
+
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
+
+    for (Cell *cell : grid.map) {
+        Coordinates c = cell->get_location();
+        for (Colony *colony : grid.colonies)
+        {
+            if (disp_pheromons[colony]) {
+                double alpha = cell->get_nest_pheromons(colony);
+                rgb color = m[colony];
+                draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, std::max(0.0, alpha * 255 - 100));
+            }
+        }
     }
-
-    show_map(grid);
-
+    SDL_SetRenderTarget(render, NULL);
 }

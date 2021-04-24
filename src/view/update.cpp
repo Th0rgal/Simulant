@@ -2,19 +2,23 @@
 
 void    View::update(double time, const Grid& grid) {
     if (clicked) {
-        int x_grid = (mouse_x * scale_high_dpi - grid_x) / cell_w + X_MIN;
-        int y_grid = (mouse_y * scale_high_dpi - grid_y) / cell_h + Y_MIN;
+        int x_grid = (mouse_x * scale_high_dpi - grid_x) / cell_w;
+        int y_grid = (mouse_y * scale_high_dpi - grid_y) / cell_h;
 
-        x_grid = x_grid < 0 ? x_grid - 1 : x_grid;
-        y_grid = y_grid < 0 ? y_grid - 1 : y_grid;
+        x_grid += X_MIN;
+        y_grid += Y_MIN;
 
         Cell *cell = grid.get_cell(x_grid, y_grid);
-        std::cout << x_grid << ", " << y_grid << std::endl;
         if (cell->is_nest()) {
             disp_pheromons[cell->get_nest()] = !disp_pheromons[cell->get_nest()];
-            show_map(grid);
+            update_pheromons(grid);
         }
     }
+
+    SDL_RenderCopy(render, grid_texture, NULL, NULL);
+    SDL_RenderCopy(render, entities_texture, NULL, NULL);
+    SDL_RenderCopy(render, pheromons_texture, NULL, NULL);
+    SDL_RenderPresent(render);
 }
 
 void    View::update_map(std::vector<Action> d) {

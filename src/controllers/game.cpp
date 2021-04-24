@@ -10,7 +10,7 @@ void Game::start()
 {
     unsigned long minimal_delay = 1e9; // one second
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
-    view.disp_grid(grid);
+    view.init_grid(grid);
     while (!view.event_manager())
     {
         long delay = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - previousTime).count();

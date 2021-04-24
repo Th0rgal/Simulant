@@ -27,17 +27,19 @@ public:
     ~View();
 
     void    init_grid();
-    void    disp_grid(const Grid  &grid);
     bool    event_manager();
-    
-    void    show_grid();
-    void    show_map(const Grid &grid);
 
     void    draw_cell_rect(Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
     void    draw_cell_circle(Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
+    void    init_grid(const Grid &grid);
+    void    init_entities(const Grid &grid);
+    void    update_pheromons(const Grid &grid);
+
     void    update(double time, const Grid &grid);
     void    update_map(std::vector<Action> d);
+
+
 
 
 private:
@@ -60,6 +62,10 @@ private:
     bool            clicked;
     int             mouse_x;
     int             mouse_y;
+
+    SDL_Texture     *grid_texture;
+    SDL_Texture     *entities_texture;
+    SDL_Texture     *pheromons_texture;
 
     double          scale_high_dpi;
 
