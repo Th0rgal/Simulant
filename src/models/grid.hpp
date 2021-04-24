@@ -62,6 +62,7 @@ public:
     void map_ants(Function &&function);
     Cell *get_cell(int x, int y) const;
     Cell *get_cell(Coordinates location) const;
+    void clear();
 
 private:
     std::array<Cell *, 4> find_nest_cells();

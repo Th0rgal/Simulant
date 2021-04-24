@@ -151,7 +151,7 @@ void Grid::summon_sugars(size_t amount)
             for (Colony *colony : colonies)
                 distance += cell->location.square_distance_to(colony->centroid_x, colony->centroid_y);
             for (const Coordinates &sugar_location : sugar_locations)
-                distance += cell->location.square_distance_to(sugar_location)*1.5;
+                distance += cell->location.square_distance_to(sugar_location) * 1.5;
             if (distance > best_distance)
             {
                 best_distance = distance;
@@ -179,4 +179,12 @@ Cell *Grid::get_cell(int x, int y) const
 Cell *Grid::get_cell(Coordinates location) const
 {
     return map[(location.y - Y_MIN) * SPACE_WIDTH + location.x - X_MIN];
+}
+
+void Grid::clear()
+{
+    for (Cell *cell : map)
+        delete cell;
+    for (Colony *colony : colonies)
+        delete colony;
 }
