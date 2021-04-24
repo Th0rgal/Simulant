@@ -16,8 +16,8 @@ void    View::update(double time, const Grid& grid) {
     }
 
     SDL_RenderCopy(render, grid_texture, NULL, NULL);
-    SDL_RenderCopy(render, entities_texture, NULL, NULL);
     SDL_RenderCopy(render, pheromons_texture, NULL, NULL);
+    SDL_RenderCopy(render, entities_texture, NULL, NULL);
     SDL_RenderPresent(render);
 }
 
