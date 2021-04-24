@@ -1,6 +1,41 @@
 #include "view/view.hpp"
 #include <algorithm>
 
+View::View(bool fullScreen)
+{
+    int w;
+    int h;
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+    if (!fullScreen)
+        window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 800, SDL_WINDOW_ALLOW_HIGHDPI);
+    else
+        window = SDL_CreateWindow("Ant", 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_ALLOW_HIGHDPI);
+
+    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
+
+    SDL_GL_GetDrawableSize(window, &window_w, &window_h);
+    SDL_GetWindowSize(window, &w, &h);
+
+    scale_high_dpi = window_w / (double)w;
+
+    init_grid();
+}
+
+View::View(int w, int h)
+{
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+    window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_ALLOW_HIGHDPI);
+    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
+    SDL_GL_GetDrawableSize(window, &window_w, &window_h);
+    init_grid();
+
+    scale_high_dpi = window_w / (double)w;
+}
+
 void View::init_grid()
 {
     int cell_size = std::min(window_w / SPACE_WIDTH, window_h / SPACE_HEIGHT);
@@ -47,33 +82,6 @@ void View::init_grid()
         down.h = diff / 2;
     }
 }
-
-View::View(bool fullScreen)
-{
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
-    if (!fullScreen)
-        window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 800, SDL_WINDOW_ALLOW_HIGHDPI);
-    else
-        window = SDL_CreateWindow("Ant", 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_ALLOW_HIGHDPI);
-
-    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
-
-    SDL_GL_GetDrawableSize(window, &window_w, &window_h);
-    init_grid();
-}
-
-View::View(int w, int h)
-{
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
-    window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_ALLOW_HIGHDPI);
-    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
-    SDL_GL_GetDrawableSize(window, &window_w, &window_h);
-    init_grid();
-}
-
 View::~View()
 {
     SDL_DestroyRenderer(render);
@@ -85,6 +93,7 @@ bool View::event_manager()
 {
     bool close_requested = false;
     SDL_Event event;
+    clicked = false;
 
     while (SDL_PollEvent(&event))
     {
@@ -100,6 +109,11 @@ bool View::event_manager()
                 close_requested = true;
                 break;
             }
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            clicked = true;
+            mouse_x = event.button.x;
+            mouse_y = event.button.y;
         }
     }
     return close_requested;
@@ -150,17 +164,12 @@ void View::draw_cell_circle(Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uin
     //SDL_RenderFillRect(render, &rect);
 }
 
-void View::disp_grid(const Grid &grid)
+void View::show_map(const Grid &grid)
 {
     SDL_SetRenderDrawColor(render, 15, 17, 34, 0xFF);
     SDL_RenderClear(render);
 
     show_grid();
-    std::map<const Colony *, rgb> m;
-
-    double base_tint = create_base_tint();
-    for (size_t i = 0; i < grid.colonies.size(); i++)
-        m[grid.colonies[i]] = get_tint(i, grid.colonies.size(), base_tint, 0.35, 0.93);
 
     for (Cell *cell : grid.map)
     {
@@ -170,9 +179,12 @@ void View::disp_grid(const Grid &grid)
         //}
         for (Colony *colony : grid.colonies)
         {
-            double alpha = cell->get_nest_pheromons(colony);
-            rgb color = m[colony];
-            draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, std::max(0.0, alpha * 255 - 128));
+            if (disp_pheromons[colony])
+            {
+                double alpha = cell->get_nest_pheromons(colony);
+                rgb color = m[colony];
+                draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, std::max(0.0, alpha * 255 - 128));
+            }
         }
         if (cell->is_nest())
         {
@@ -189,4 +201,17 @@ void View::disp_grid(const Grid &grid)
     }
 
     SDL_RenderPresent(render);
+}
+
+void View::disp_grid(const Grid &grid)
+{
+
+    double base_tint = create_base_tint();
+    for (size_t i = 0; i < grid.colonies.size(); i++)
+    {
+        m[grid.colonies[i]] = get_tint(i, grid.colonies.size(), base_tint, 0.35, 0.93);
+        disp_pheromons[grid.colonies[i]] = false;
+    }
+
+    show_map(grid);
 }

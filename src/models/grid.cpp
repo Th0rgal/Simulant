@@ -133,12 +133,12 @@ void Grid::spawn_ants(Colony *colony, int x, int y)
         }
 }
 
-Cell *Grid::get_cell(int x, int y)
+Cell *Grid::get_cell(int x, int y) const
 {
     return (x >= X_MIN && x <= X_MAX && y >= Y_MIN && y <= Y_MAX) ? map[(y - Y_MIN) * SPACE_WIDTH + x - X_MIN] : NULL;
 }
 
-Cell *Grid::get_cell(Coordinates location)
+Cell *Grid::get_cell(Coordinates location) const
 {
     return map[(location.y - Y_MIN) * SPACE_WIDTH + location.x - X_MIN];
 }

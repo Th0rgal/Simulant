@@ -29,11 +29,14 @@ public:
     void    init_grid();
     void    disp_grid(const Grid  &grid);
     bool    event_manager();
+    
     void    show_grid();
+    void    show_map(const Grid &grid);
+
     void    draw_cell_rect(Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
     void    draw_cell_circle(Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
-    void    update(double time);
+    void    update(double time, const Grid &grid);
     void    update_map(std::vector<Action> d);
 
 
@@ -53,6 +56,16 @@ private:
     SDL_Rect        right;
     SDL_Rect        left;
     SDL_Rect        down;
+
+    bool            clicked;
+    int             mouse_x;
+    int             mouse_y;
+
+    double          scale_high_dpi;
+
+    std::map<const Colony *, rgb> m;
+    std::map<const Colony *, bool> disp_pheromons;
+
 
     std::vector<Action> delta;
 };
