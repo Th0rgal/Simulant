@@ -12,7 +12,7 @@ public:
     ~View();
 
     void    init_grid();
-    void    disp_map(std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT>  map);
+    void    disp_grid(const Grid  &grid);
     bool    event_manager();
     void    show_grid();
 

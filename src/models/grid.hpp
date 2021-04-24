@@ -12,7 +12,7 @@ class Cell
 {
 public:
     Cell(const Coordinates location);
-    Coordinates get_location();
+    Coordinates get_location() const;
     bool is_void();
 
     unsigned short get_sugar_pheromons();
@@ -49,12 +49,14 @@ public:
     void map_colony(Function &&function);
     template <class Function>
     void map_ants(Function &&function);
-    Cell get_cell(int x, int y);
+    Cell *get_cell(int x, int y);
 
 private:
-    std::array<Cell, 4> find_nest_cells();
+    std::array<Cell *, 4> find_nest_cells();
     std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
     std::vector<Colony> colonies;
+
+    friend class View;
 };
 
 // class Nest {

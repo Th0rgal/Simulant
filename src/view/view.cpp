@@ -111,10 +111,14 @@ void    View::show_grid() {
     }
 }
 
-void    View::disp_map(std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT>  map) {
+void    View::disp_grid(const Grid &grid) {
     SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(render);
 
+
+    for (Cell* cell : grid.map) {
+        //std::cout << cell->get_location() << std::endl;
+    }
     show_grid();
 
     SDL_RenderPresent(render);

@@ -68,8 +68,7 @@ std::vector<Coordinates> Coordinates::get_neighbors()
 
 std::ostream &operator<<(std::ostream &flux, const Coordinates &c)
 {
-    flux << c.x << ", " << c.y;
-    return flux;
+    return flux << "{ " << c.x << ", " << c.y << " }";
 };
 
 Vector::Vector(int x, int y) : x(x), y(y)

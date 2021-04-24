@@ -17,14 +17,8 @@ std::vector<Ant> create_ants_array(const std::vector<Coordinates> &coordinates)
 
 int main()
 {
-    View v(true);
-    std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
-
-    while (!v.event_manager()) {
-        v.disp_map(map);
-    }
-    //Game game;
-    //game.start();
+    Game game;
+    game.start();
     //create_ants_array({Coordinates(1, -2)});
     return 0;
 }
