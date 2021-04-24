@@ -6,7 +6,9 @@ Game::Game() : grid(3), view() // 3 colonie
 {
 }
 
-void Game::restart() {
+void Game::restart()
+{
+    grid.clear();
     grid = Grid(3);
     view.init_grid(grid);
 }
@@ -23,7 +25,8 @@ void Game::start()
         if (event == Event::restart)
             restart();
         long delay = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - previousTime).count();
-        if (delay < minimal_delay) {
+        if (delay < minimal_delay)
+        {
             view.update(delay / (double)minimal_delay, grid);
             continue;
         }
