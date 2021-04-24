@@ -2,7 +2,7 @@
 #include <iostream>
 #include <chrono>
 
-Game::Game() : grid(3), view(700, 700) // 3 colonie
+Game::Game() : grid(3), view() // 3 colonie
 {
 }
 

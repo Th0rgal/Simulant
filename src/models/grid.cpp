@@ -1,6 +1,7 @@
 #include "models/grid.hpp"
 #include "controllers/random.hpp"
 #include "algorithm"
+#include "math.h"
 
 Cell::Cell(Coordinates location) : location(location)
 {
@@ -116,7 +117,8 @@ void Grid::spawn_ants(Colony *colony, int x, int y)
         }
     };
     Cell *cell = get_cell(x, y);
-    if (cell) {
+    if (cell)
+    {
         cell->set_ant(new Ant(colony, cell->get_location()));
     }
     for (size_t permutation = 0; permutation <= 3; permutation++)
