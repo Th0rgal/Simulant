@@ -80,4 +80,5 @@ void    DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, in
 void    SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius);
 
 rgb     hsv2rgb(hsv in);
-rgb     generate_random_tint(double s, double v);
+double  create_base_tint();
+rgb get_tint(size_t index, size_t size, double base_tint, double s, double v);

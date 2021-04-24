@@ -1,7 +1,6 @@
 #include "view/view.hpp"
 #include <algorithm>
 
-
 View::View(bool fullScreen)
 {
     int w;
@@ -154,10 +153,11 @@ void    View::init_grid(const Grid &grid) {
     pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_BLEND);
 
-    for (Colony *colony : grid.colonies)
+    double base_tint = create_base_tint();
+    for (size_t i = 0; i < grid.colonies.size(); i++)
     {
-        m[colony] = generate_random_tint(0.35, 0.93);
-        disp_pheromons[colony] = false;
+        m[grid.colonies[i]] = get_tint(i, grid.colonies.size(), base_tint, 0.35, 0.93);
+        disp_pheromons[grid.colonies[i]] = false;
     }
 
     SDL_SetRenderTarget(render, grid_texture);
