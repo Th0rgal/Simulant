@@ -17,6 +17,7 @@ set(SRCS
     src/view/view.cpp
     src/view/color.cpp
     src/view/circle.cpp
+    src/view/update.cpp
 )
 
 set(HEADERS

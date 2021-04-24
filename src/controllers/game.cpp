@@ -14,8 +14,10 @@ void Game::start()
     while (!view.event_manager())
     {
         long delay = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - previousTime).count();
-        if (delay < minimal_delay)
+        if (delay < minimal_delay) {
+            view.update(delay / (double)minimal_delay, grid);
             continue;
+        }
         loop(delay);
         previousTime = std::chrono::high_resolution_clock::now();
     }
