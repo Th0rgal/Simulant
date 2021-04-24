@@ -1,4 +1,68 @@
-#include "view.hpp"
+#include "view/view.hpp"
+#include "controllers/random.hpp"
+
+//https://stackoverflow.com/a/6930407
+rgb hsv2rgb(hsv in)
+{
+    double      hh, p, q, t, ff;
+    long        i;
+    rgb         out;
+
+    if(in.s <= 0.0) {       // < is bogus, just shuts up warnings
+        out.r = in.v;
+        out.g = in.v;
+        out.b = in.v;
+        return out;
+    }
+    hh = in.h;
+    if(hh >= 360.0) hh = 0.0;
+    hh /= 60.0;
+    i = (long)hh;
+    ff = hh - i;
+    p = in.v * (1.0 - in.s);
+    q = in.v * (1.0 - (in.s * ff));
+    t = in.v * (1.0 - (in.s * (1.0 - ff)));
+
+    switch(i) {
+    case 0:
+        out.r = in.v;
+        out.g = t;
+        out.b = p;
+        break;
+    case 1:
+        out.r = q;
+        out.g = in.v;
+        out.b = p;
+        break;
+    case 2:
+        out.r = p;
+        out.g = in.v;
+        out.b = t;
+        break;
+
+    case 3:
+        out.r = p;
+        out.g = q;
+        out.b = in.v;
+        break;
+    case 4:
+        out.r = t;
+        out.g = p;
+        out.b = in.v;
+        break;
+    case 5:
+    default:
+        out.r = in.v;
+        out.g = p;
+        out.b = q;
+        break;
+    }
+    return out;     
+}
+
+rgb     generate_random_tint(double s, double v) {
+    return (hsv2rgb(hsv{random_double(0, 360), s, v}));
+}
 
 void    View::init_grid() {
     int cell_size = std::min(window_w / SPACE_WIDTH, window_h / SPACE_HEIGHT);
@@ -128,6 +192,7 @@ void    View::disp_grid(const Grid &grid) {
     SDL_RenderClear(render);
 
     show_grid();
+    std::map<Colony *, rgb> m;
 
     for (Cell* cell : grid.map) {
         Coordinates c = cell->get_location();
@@ -135,7 +200,10 @@ void    View::disp_grid(const Grid &grid) {
         //    draw_cell(c, 0xFF, 0xFF, 0xFF);
         //}
         if (cell->is_nest()) {
-            draw_cell(c, 0x9A, 0xEC, 0xDB);;
+            if (m.find(cell->get_nest()) == m.end())
+                m[cell->get_nest()] = generate_random_tint(0.35, 0.93);
+            rgb color = m[cell->get_nest()];
+            draw_cell(c, color.r * 255, color.g * 255, color.b * 255);
         }
     }
 
