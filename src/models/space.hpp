@@ -57,6 +57,7 @@ struct Coordinates
     const int x;
     const int y;
 
+    double square_distance_to(Coordinates location);
     double distance_to(double x, double y);
     double square_distance_to(double x, double y);
     std::vector<Coordinates> get_neighbors();

@@ -103,10 +103,7 @@ Grid::Grid(size_t colonies_amount)
                             std::sqrt(max_square_distance);
         summon_ants(colony);
     }
-    summon_sugar();
-    summon_sugar();
-    summon_sugar();
-    summon_sugar();
+    summon_sugars(colonies.size());
 }
 
 void Grid::summon_ants(Colony *colony)
@@ -140,24 +137,30 @@ void Grid::summon_ants(Colony *colony)
         }
 }
 
-void Grid::summon_sugar()
+void Grid::summon_sugars(size_t amount)
 {
-    double best_distance = -1;
-    Cell *best_cell;
-    for (size_t i = 0; i < 3; i++)
+    std::vector<Coordinates> sugar_locations;
+    for (size_t i = 0; i < amount; i++)
     {
-        Cell *cell = find_empty_cell();
-        double distance = 0;
-        for (Colony *colony : colonies)
-            distance += cell->location.distance_to(colony->centroid_x, colony->centroid_y);
-        distance /= colonies.size();
-        if (distance > best_distance)
+        double best_distance = -1;
+        Cell *best_cell;
+        for (size_t i = 0; i < 7; i++)
         {
-            best_distance = distance;
-            best_cell = cell;
+            Cell *cell = find_empty_cell();
+            double distance = 0;
+            for (Colony *colony : colonies)
+                distance += cell->location.square_distance_to(colony->centroid_x, colony->centroid_y);
+            for (const Coordinates &sugar_location : sugar_locations)
+                distance += cell->location.square_distance_to(sugar_location)*1.5;
+            if (distance > best_distance)
+            {
+                best_distance = distance;
+                best_cell = cell;
+            }
         }
+        best_cell->add_sugar();
+        sugar_locations.push_back(best_cell->get_location());
     }
-    best_cell->add_sugar();
 }
 
 Cell *Grid::find_empty_cell()

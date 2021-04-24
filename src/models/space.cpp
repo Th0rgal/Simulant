@@ -54,6 +54,11 @@ double Coordinates::distance_to(double other_x, double other_y)
     return sqrt(square_distance_to(other_x, other_y));
 }
 
+double Coordinates::square_distance_to(Coordinates location)
+{
+    return square_distance_to(location.x, location.y);
+}
+
 std::vector<Coordinates> Coordinates::get_neighbors()
 {
     std::vector<Coordinates> coordinates;

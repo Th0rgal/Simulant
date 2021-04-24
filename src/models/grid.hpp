@@ -68,7 +68,7 @@ private:
     std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
     std::vector<Colony *> colonies;
     void summon_ants(Colony *colony);
-    void summon_sugar();
+    void summon_sugars(size_t amount);
     Cell* find_empty_cell();
 
     friend class View;
