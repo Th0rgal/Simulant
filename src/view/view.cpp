@@ -201,9 +201,11 @@ void    View::init_entities(const Grid &grid) {
             rgb color = m[a->colony];
             draw_cell_circle(c, color.r * 255, color.g * 255, color.b * 255, 255);
         }
-        //if (cell->has_sugar()) {
-        //    draw_cell(c, 0xFF, 0xFF, 0xFF);
-        //}
+        if (cell->has_sugar()) {
+            draw_cell_rect(c, 0xFF, 0xFF, 0xFF, 0xFF);
+
+           //(c, 0xFF, 0xFF, 0xFF);
+        }
     }
     SDL_SetRenderTarget(render, NULL);
 }
