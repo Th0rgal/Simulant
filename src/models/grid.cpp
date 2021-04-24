@@ -53,6 +53,11 @@ Ant *Cell::get_ant()
     return ant;
 }
 
+bool Cell::has_sugar()
+{
+    return sugar;
+}
+
 void Cell::add_sugar()
 {
     sugar = true;
