@@ -1,5 +1,6 @@
 #include "models/grid.hpp"
 #include "controllers/random.hpp"
+#include "algorithm"
 
 Cell::Cell(Coordinates location) : location(location)
 {
@@ -50,6 +51,13 @@ Ant *Cell::get_ant()
     return ant;
 }
 
+double Cell::get_nest_pheromons(const Colony *colony)
+{
+    if (nest_pheromons.find(colony) == nest_pheromons.end())
+        return 0;
+    return nest_pheromons[colony];
+}
+
 // find a void top left cell of a nest square (2x2 cell)
 std::array<Cell *, 4> Grid::find_nest_cells()
 {
@@ -69,16 +77,33 @@ Grid::Grid(size_t colonies_amount)
 
     for (colonies_amount++; colonies_amount > 1; colonies_amount--)
     {
-        colonies.emplace_back(find_nest_cells());
-        Colony *colony = &colonies[colonies.size() - 1];
+        Colony *colony = new Colony(find_nest_cells());
+        colonies.push_back(colony);
+        double average_x = 0;
+        double average_y = 0;
         for (Cell *cell : colony->get_cells())
         {
+            average_x += cell->get_location().x;
+            average_y += cell->get_location().y;
             cell->set_nest(colony);
+            cell->nest_pheromons[colony] = 1;
         }
+        average_x /= colony->get_cells().size();
+        average_y /= colony->get_cells().size();
+
+        double max_square_distance = (SPACE_WIDTH - 0.5) * (SPACE_WIDTH - 0.5) + (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
+        for (Cell *cell : map)
+            if (cell->get_nest_pheromons(colony) != 1)
+                cell->nest_pheromons[colony] = cell->get_location().square_distance_to(average_x, average_y) / max_square_distance;
     }
 }
 
 Cell *Grid::get_cell(int x, int y)
 {
     return (x >= X_MIN && x <= X_MAX && y >= Y_MIN && y <= Y_MAX) ? map[(y - Y_MIN) * SPACE_WIDTH + x - X_MIN] : NULL;
+}
+
+Cell *Grid::get_cell(Coordinates location)
+{
+    return map[(location.y - Y_MIN) * SPACE_WIDTH + location.x - X_MIN];
 }

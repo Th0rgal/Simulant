@@ -1,4 +1,5 @@
 #include "space.hpp"
+#include "math.h"
 
 Coordinates::Coordinates(int x, int y) : x(x), y(y)
 {
@@ -12,15 +13,9 @@ Coordinates::Coordinates(int x, int y) : x(x), y(y)
     if (SPACE_HEIGHT % 2 == 0)
         y_max--;
     if (x < x_min or x > x_max)
-    {
-        std::cout << "THOMAS est un connard x = " << x << ", xMin = " << x_min << ", xMax = " << x_max << std::endl;
-        throw std::invalid_argument("Incorect value for coordinates");
-    }
+        throw std::invalid_argument("Incorect value for x coordinate");
     if (y < y_min or y > y_max)
-    {
-        std::cout << "THOMAS est un gros connard" << std::endl;
-        throw std::invalid_argument("Incorect value for coordinates");
-    }
+        throw std::invalid_argument("Incorect value for y coordinate");
 }
 
 std::size_t std::hash<Coordinates>::operator()(const Coordinates &coordinates) const noexcept
@@ -47,6 +42,16 @@ Coordinates Coordinates::operator+(const Vector &other) const
 Coordinates Coordinates::operator-(const Vector &other) const
 {
     return Coordinates{x - other.x, y - other.y};
+}
+
+double Coordinates::square_distance_to(double other_x, double other_y)
+{
+    return (x - other_x) * (x - other_x) + (y - other_y) * (y - other_y);
+}
+
+double Coordinates::distance_to(double other_x, double other_y)
+{
+    return sqrt(square_distance_to(other_x, other_y));
 }
 
 std::vector<Coordinates> Coordinates::get_neighbors()

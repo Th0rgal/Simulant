@@ -56,8 +56,10 @@ struct Coordinates
 
     const int x;
     const int y;
-    int get_x_max() const;
-    int get_y_max() const;
+
+    double distance_to(double x, double y);
+    double square_distance_to(double x, double y);
+    std::vector<Coordinates> get_neighbors();
 
     /**
      * to compare two Coordinates objects (required for set)
@@ -70,7 +72,6 @@ struct Coordinates
     bool operator!=(const Coordinates &other) const;
     Coordinates operator+(const Vector &other) const;
     Coordinates operator-(const Vector &other) const;
-    std::vector<Coordinates> get_neighbors();
 };
 
 std::ostream &operator<<(std::ostream &flux, const Coordinates &c);
