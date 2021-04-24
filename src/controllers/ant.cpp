@@ -31,7 +31,11 @@ Coordinates Ant::find_move()
     return neighbors[random_index(0, neighbors.size()-1)];
 }
 
-Colony::Colony(std::array<Cell *, 4> c) : cells(c)
+Colony::Colony(std::array<Cell, 4> cells) : cells(cells)
 {
 
+}
+
+std::array<Cell, 4> Colony::get_cells() {
+    return cells;
 }
