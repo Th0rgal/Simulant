@@ -53,6 +53,11 @@ Ant *Cell::get_ant()
     return ant;
 }
 
+void Cell::add_sugar()
+{
+    sugar = true;
+}
+
 double Cell::get_nest_pheromons(const Colony *colony)
 {
     if (nest_pheromons.find(colony) == nest_pheromons.end())
@@ -65,7 +70,8 @@ std::array<Cell *, 4> Grid::find_nest_cells()
 {
     int x = (random_index(X_MIN, 0) + SPACE_WIDTH / 4) * 2;
     int y = (random_index(Y_MIN, 0) + SPACE_HEIGHT / 4) * 2;
-    std::array<Cell *, 4> output = {get_cell(x, y), get_cell(x + 1, y), get_cell(x, y + 1), get_cell(x + 1, y + 1)};
+    std::array<Cell *, 4> output = {get_cell(x, y), get_cell(x + 1, y),
+                                    get_cell(x, y + 1), get_cell(x + 1, y + 1)};
     for (Cell *cell : output)
         if (cell == NULL || cell->is_nest())
             return find_nest_cells();
@@ -81,17 +87,21 @@ Grid::Grid(size_t colonies_amount)
     {
         Colony *colony = new Colony(find_nest_cells());
         colonies.push_back(colony);
-        double max_square_distance = (SPACE_WIDTH - 0.5) * (SPACE_WIDTH - 0.5) + (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
+        double max_square_distance = (SPACE_WIDTH - 0.5) *
+                                         (SPACE_WIDTH - 0.5) +
+                                     (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
         for (Cell *cell : map)
             if (cell->get_nest_pheromons(colony) != 1)
-                cell->nest_pheromons[colony] = 1 - cell->get_location()
-                                                           .distance_to(colony->centroid_x, colony->centroid_y) /
-                                                       std::sqrt(max_square_distance);
-        spawn_ants(colony, colony->centroid_x - 1.5, colony->centroid_y - 1.5);
+                cell->nest_pheromons[colony] =
+                    1 - cell->get_location()
+                                .distance_to(colony->centroid_x, colony->centroid_y) /
+                            std::sqrt(max_square_distance);
+        summon_ants(colony);
     }
+    summon_sugar();
 }
 
-void Grid::spawn_ants(Colony *colony, int x, int y)
+void Grid::summon_ants(Colony *colony)
 {
     auto fetch_cell = [&](size_t perm, int x, int y, int i) {
         switch (perm)
@@ -106,6 +116,8 @@ void Grid::spawn_ants(Colony *colony, int x, int y)
             return get_cell(x, y + i);
         }
     };
+    int x = colony->centroid_x - 1.5;
+    int y = colony->centroid_y - 1.5;
     Cell *cell = get_cell(x, y);
     if (cell != NULL && !cell->is_nest() && (!cell->has_ant() || flip_a_coin()))
         cell->set_ant(new Ant(colony, cell->get_location()));
@@ -113,15 +125,44 @@ void Grid::spawn_ants(Colony *colony, int x, int y)
         for (int i = 1; i < 4; i++)
         {
             Cell *cell = fetch_cell(permutation, x, y, i);
-            if (cell == NULL || cell->is_nest() || (cell->has_ant() && flip_a_coin())) // to keep nest conflicts fair
+            // to keep nest conflicts fair
+            if (cell == NULL || cell->is_nest() || (cell->has_ant() && flip_a_coin()))
                 continue;
             cell->set_ant(new Ant(colony, cell->get_location()));
         }
 }
 
+void Grid::summon_sugar()
+{
+    double best_distance = -1;
+    Cell *best_cell;
+    for (size_t i = 0; i < 10; i++)
+    {
+        Cell *cell = find_empty_cell();
+        double distance = 0;
+        for (Colony *colony : colonies)
+            distance += cell->location.distance_to(colony->centroid_x, colony->centroid_y);
+        distance /= colonies.size();
+        if (distance > best_distance)
+        {
+            best_distance = distance;
+            best_cell = cell;
+        }
+    }
+    best_cell->add_sugar();
+}
+
+Cell *Grid::find_empty_cell()
+{
+    Cell *cell = get_cell(random_index(X_MIN, X_MAX), random_index(Y_MIN, Y_MAX));
+    return cell->is_void() ? find_empty_cell() : cell;
+}
+
 Cell *Grid::get_cell(int x, int y) const
 {
-    return (x >= X_MIN && x <= X_MAX && y >= Y_MIN && y <= Y_MAX) ? map[(y - Y_MIN) * SPACE_WIDTH + x - X_MIN] : NULL;
+    return (x >= X_MIN && x <= X_MAX && y >= Y_MIN && y <= Y_MAX)
+               ? map[(y - Y_MIN) * SPACE_WIDTH + x - X_MIN]
+               : NULL;
 }
 
 Cell *Grid::get_cell(Coordinates location) const
