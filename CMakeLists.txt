@@ -13,6 +13,8 @@ set(SRCS
 
     src/models/space.cpp
     src/models/grid.cpp
+
+    src/view/view.cpp
 )
 
 set(HEADERS
@@ -23,6 +25,8 @@ set(HEADERS
     src/models/space.hpp
     src/models/grid.hpp
     src/models/grid.tpp
+
+    src/view/view.hpp
 )
 
 set(TESTS

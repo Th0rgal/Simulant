@@ -52,7 +52,7 @@ public:
     Cell get_cell(int x, int y);
 
 private:
-    std::array<Cell, 4>  Grid::find_nest_cells();
+    //std::array<Cell, 4>  Grid::find_nest_cells();
     std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
     std::vector<Colony> colonies;
 };

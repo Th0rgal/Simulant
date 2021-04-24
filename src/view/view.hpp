@@ -11,11 +11,25 @@ public:
     View(int w, int h);
     ~View();
 
+    void    init_grid();
     void    disp_map(std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT>  map);
     bool    event_manager();
     void    show_grid();
 
 private:
-    SDL_Window *window;
-    SDL_Renderer *render;
+    SDL_Window      *window;
+    SDL_Renderer    *render;
+    int             window_w;
+    int             window_h;
+    int             cell_w;
+    int             cell_h;
+    int             grid_w;
+    int             grid_h;
+    int             grid_x;
+    int             grid_y;
+
+    SDL_Rect        top;
+    SDL_Rect        right;
+    SDL_Rect        left;
+    SDL_Rect        down;
 };
