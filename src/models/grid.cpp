@@ -5,24 +5,56 @@ Cell::Cell(Coordinates location) : location(location)
 {
 }
 
-Coordinates Cell::get_location() const {
+bool Cell::is_void()
+{
+    return !sugar && !is_nest() && !has_ant();
+}
+
+Coordinates Cell::get_location() const
+{
     return location;
 }
 
-void Cell::set_nest(Colony &colony) {
-
+void Cell::set_nest(Colony *colony)
+{
+    nest = colony;
 }
 
-bool Cell::is_void()
+bool Cell::is_nest()
 {
-    return !sugar && sugar_pheromon == 0 && nest_pheromon == 0 && ant == NULL;
+    return nest != NULL;
+}
+
+Colony *Cell::get_nest()
+{
+    return nest;
+}
+
+bool Cell::has_ant()
+{
+    return ant != NULL;
+}
+
+void Cell::set_ant(Ant *new_ant)
+{
+    ant = new_ant;
+}
+
+void Cell::remove_ant()
+{
+    ant = NULL;
+}
+
+Ant *Cell::get_ant()
+{
+    return ant;
 }
 
 // find a void top left cell of a nest square (2x2 cell)
 std::array<Cell *, 4> Grid::find_nest_cells()
 {
-    int x = (random_index(X_MIN, 0) + SPACE_WIDTH/4) * 2;
-    int y = (random_index(Y_MIN, 0) + SPACE_HEIGHT/4) * 2;
+    int x = (random_index(X_MIN, 0) + SPACE_WIDTH / 4) * 2;
+    int y = (random_index(Y_MIN, 0) + SPACE_HEIGHT / 4) * 2;
     std::array<Cell *, 4> output = {get_cell(x, y), get_cell(x + 1, y), get_cell(x, y + 1), get_cell(x + 1, y + 1)};
     for (Cell *cell : output)
         if (cell == NULL)
@@ -38,8 +70,8 @@ Grid::Grid(size_t colonies_amount)
     for (colonies_amount++; colonies_amount > 1; colonies_amount--)
     {
         colonies.emplace_back(find_nest_cells());
-        Colony &colony = colonies[colonies.size() - 1];
-        for (Cell *cell : colony.get_cells())
+        Colony *colony = &colonies[colonies.size() - 1];
+        for (Cell *cell : colony->get_cells())
         {
             cell->set_nest(colony);
         }

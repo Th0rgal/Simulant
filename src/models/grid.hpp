@@ -24,18 +24,22 @@ public:
     void reduce_sugar_pheromon();
 
     bool is_nest();
-    void set_nest(Colony &colony);
+    void set_nest(Colony *colony);
+    Colony* get_nest();
+
     unsigned short get_nest_pheromons();
 
-    ssize_t get_ant_index();
-    void set_ant(size_t antIndex);
+    bool has_ant();
+    void set_ant(Ant *ant);
     void remove_ant();
+    Ant *get_ant();
 
 private:
     Coordinates location;
     bool sugar;
     unsigned short sugar_pheromon = 0;
     unsigned short nest_pheromon = 0;
+    Colony *nest = NULL;
     Ant *ant = NULL;
 };
 
