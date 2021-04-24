@@ -44,6 +44,7 @@ void Cell::set_ant(Ant *new_ant)
 
 void Cell::remove_ant()
 {
+    delete ant;
     ant = NULL;
 }
 
@@ -66,7 +67,7 @@ std::array<Cell *, 4> Grid::find_nest_cells()
     int y = (random_index(Y_MIN, 0) + SPACE_HEIGHT / 4) * 2;
     std::array<Cell *, 4> output = {get_cell(x, y), get_cell(x + 1, y), get_cell(x, y + 1), get_cell(x + 1, y + 1)};
     for (Cell *cell : output)
-        if (cell == NULL)
+        if (cell == NULL || cell->is_nest())
             return find_nest_cells();
     return output;
 };
@@ -86,6 +87,9 @@ Grid::Grid(size_t colonies_amount)
         {
             centroid_x += cell->get_location().x;
             centroid_y += cell->get_location().y;
+            if (cell->has_ant())
+                cell->remove_ant();
+
             cell->set_nest(colony);
             cell->nest_pheromons[colony] = 1;
         }
@@ -117,15 +121,13 @@ void Grid::spawn_ants(Colony *colony, int x, int y)
         }
     };
     Cell *cell = get_cell(x, y);
-    if (cell)
-    {
+    if (cell != NULL && !cell->is_nest() && (!cell->has_ant() || flip_a_coin()))
         cell->set_ant(new Ant(colony, cell->get_location()));
-    }
     for (size_t permutation = 0; permutation <= 3; permutation++)
         for (int i = 1; i < 4; i++)
         {
             Cell *cell = fetch_cell(permutation, x, y, i);
-            if (cell == NULL)
+            if (cell == NULL || cell->is_nest() || (cell->has_ant() && flip_a_coin())) // to keep nest conflicts fair
                 continue;
             cell->set_ant(new Ant(colony, cell->get_location()));
         }

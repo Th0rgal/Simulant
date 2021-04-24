@@ -11,3 +11,9 @@ double random_double(double lower, double higher)
 {
     return std::uniform_real_distribution<double>(lower, higher)(gen);
 }
+
+bool flip_a_coin()
+{
+    std::bernoulli_distribution dist;
+    return dist(gen);
+}
