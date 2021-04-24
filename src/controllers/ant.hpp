@@ -13,13 +13,13 @@ class Colony;
 class Ant
 {
 public:
-    Ant(Colony* colony, Coordinates coordinates);
+    Ant(Colony *colony, Coordinates coordinates);
     Coordinates get_location();
     bool has_sugar();
     void add_sugar();
     void remove_sugar();
     Coordinates find_move();
-    const Colony* colony; 
+    const Colony *colony;
 
 private:
     Coordinates location;
@@ -29,13 +29,15 @@ private:
 class Colony
 {
 public:
-    Colony(std::array<Cell*, 4> cells);
+    Colony(std::array<Cell *, 4> cells);
     template <class Function>
     void map_ants(Function &&function);
-    std::array<Cell*, 4> get_cells();
+    std::array<Cell *, 4> get_cells();
+    double centroid_x;
+    double centroid_y;
 
 private:
-    const std::array<Cell*, 4> cells;
+    const std::array<Cell *, 4> cells;
     std::vector<Ant> ants;
 };
 

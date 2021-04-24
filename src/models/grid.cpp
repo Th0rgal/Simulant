@@ -81,27 +81,13 @@ Grid::Grid(size_t colonies_amount)
     {
         Colony *colony = new Colony(find_nest_cells());
         colonies.push_back(colony);
-        double centroid_x = 0;
-        double centroid_y = 0;
-        for (Cell *cell : colony->get_cells())
-        {
-            centroid_x += cell->get_location().x;
-            centroid_y += cell->get_location().y;
-            if (cell->has_ant())
-                cell->remove_ant();
-
-            cell->set_nest(colony);
-            cell->nest_pheromons[colony] = 1;
-        }
-        centroid_x /= colony->get_cells().size();
-        centroid_y /= colony->get_cells().size();
         double max_square_distance = (SPACE_WIDTH - 0.5) * (SPACE_WIDTH - 0.5) + (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
         for (Cell *cell : map)
             if (cell->get_nest_pheromons(colony) != 1)
-                cell->nest_pheromons[colony] = 1 - cell->get_location().distance_to(centroid_x, centroid_y) / std::sqrt(max_square_distance);
-        //get_cell(centroid_x - 0.5, centroid_y - 0.5)->set_ant(new Ant(colony, Coordinates(centroid_x -0.5, centroid_y - 0.5)));
-        //cell->set_ant(new Ant(colony, Coordinates(cell->get_location())));
-        spawn_ants(colony, centroid_x - 1.5, centroid_y - 1.5);
+                cell->nest_pheromons[colony] = 1 - cell->get_location()
+                                                           .distance_to(colony->centroid_x, colony->centroid_y) /
+                                                       std::sqrt(max_square_distance);
+        spawn_ants(colony, colony->centroid_x - 1.5, colony->centroid_y - 1.5);
     }
 }
 

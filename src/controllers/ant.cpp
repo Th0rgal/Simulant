@@ -1,7 +1,8 @@
 #include "controllers/ant.hpp"
 #include "controllers/random.hpp"
+#include "models/grid.hpp"
 
-Ant::Ant(Colony* colony, Coordinates coordinates) : colony(colony), location(coordinates), sugar(false)
+Ant::Ant(Colony *colony, Coordinates coordinates) : colony(colony), location(coordinates), sugar(false)
 {
 }
 
@@ -33,6 +34,17 @@ Coordinates Ant::find_move()
 
 Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
 {
+    for (Cell *cell : cells)
+    {
+        centroid_x += cell->get_location().x;
+        centroid_y += cell->get_location().y;
+        if (cell->has_ant())
+            cell->remove_ant();
+        cell->set_nest(this);
+        cell->nest_pheromons[this] = 1;
+    }
+    centroid_x /= cells.size();
+    centroid_y /= cells.size();
 }
 
 std::array<Cell *, 4> Colony::get_cells()
