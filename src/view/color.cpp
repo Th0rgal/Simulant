@@ -4,18 +4,20 @@
 //https://stackoverflow.com/a/6930407
 rgb hsv2rgb(hsv in)
 {
-    double      hh, p, q, t, ff;
-    long        i;
-    rgb         out;
+    double hh, p, q, t, ff;
+    long i;
+    rgb out;
 
-    if(in.s <= 0.0) {       // < is bogus, just shuts up warnings
+    if (in.s <= 0.0)
+    { // < is bogus, just shuts up warnings
         out.r = in.v;
         out.g = in.v;
         out.b = in.v;
         return out;
     }
     hh = in.h;
-    if(hh >= 360.0) hh = 0.0;
+    if (hh >= 360.0)
+        hh = 0.0;
     hh /= 60.0;
     i = (long)hh;
     ff = hh - i;
@@ -23,7 +25,8 @@ rgb hsv2rgb(hsv in)
     q = in.v * (1.0 - (in.s * ff));
     t = in.v * (1.0 - (in.s * (1.0 - ff)));
 
-    switch(i) {
+    switch (i)
+    {
     case 0:
         out.r = in.v;
         out.g = t;
@@ -57,9 +60,16 @@ rgb hsv2rgb(hsv in)
         out.b = q;
         break;
     }
-    return out;     
+    return out;
 }
 
-rgb     generate_random_tint(double s, double v) {
-    return (hsv2rgb(hsv{random_double(0, 360), s, v}));
+double create_base_tint()
+{
+    return random_double(0, 360);
+}
+
+rgb get_tint(size_t index, size_t size, double base_tint, double s, double v)
+{
+    double tint = ((int)(base_tint + (360.0 / size) * index) % 360);
+    return (hsv2rgb(hsv{tint, s, v}));
 }

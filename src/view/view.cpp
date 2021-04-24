@@ -158,10 +158,9 @@ void View::disp_grid(const Grid &grid)
     show_grid();
     std::map<const Colony *, rgb> m;
 
-    for (Colony *colony : grid.colonies)
-    {
-        m[colony] = generate_random_tint(0.35, 0.93);
-    }
+    double base_tint = create_base_tint();
+    for (size_t i = 0; i < grid.colonies.size(); i++)
+        m[grid.colonies[i]] = get_tint(i, grid.colonies.size(), base_tint, 0.35, 0.93);
 
     for (Cell *cell : grid.map)
     {
