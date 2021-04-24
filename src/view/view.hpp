@@ -15,6 +15,8 @@ public:
     void    disp_grid(const Grid  &grid);
     bool    event_manager();
     void    show_grid();
+    void    draw_cell(Coordinates& c, uint8_t r, uint8_t g, uint8_t b);
+
 
 private:
     SDL_Window      *window;

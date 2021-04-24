@@ -96,30 +96,48 @@ bool    View::event_manager() {
 }
 
 void    View::show_grid() {
-    SDL_SetRenderDrawColor(render, 0, 0, 0, 0xFF);
+    //2C3A47
+    SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
     SDL_RenderFillRect(render, &right);
     SDL_RenderFillRect(render, &left);
     SDL_RenderFillRect(render, &top);
     SDL_RenderFillRect(render, &down);
 
-    SDL_SetRenderDrawColor(render, 0xFF, 0, 0, 0xFF);
+    //SDL_SetRenderDrawColor(render, 0xFF, 0, 0, 0xFF);
     for (int i = 0; i < SPACE_HEIGHT; i++) {
-        for (int j = 0; j < SPACE_HEIGHT; j++) {
+        for (int j = 0; j < SPACE_WIDTH; j++) {
             SDL_Rect rect = {j * cell_w + grid_x , i * cell_h + grid_y, cell_w, cell_h};
             SDL_RenderDrawRect(render, &rect);
         }
     }
 }
 
+void    View::draw_cell(Coordinates& c, uint8_t r, uint8_t g, uint8_t b) {
+    int x = (c.x - X_MIN) * cell_w;
+    int y = (c.y - Y_MIN) * cell_h;
+    int w = cell_w;
+    int h = cell_h;
+    SDL_Rect    rect = {x, y, w, h};
+    
+    SDL_SetRenderDrawColor(render, r, g, b, 255);
+    SDL_RenderFillRect(render, &rect);
+}
+
 void    View::disp_grid(const Grid &grid) {
-    SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(render, 0x0F, 0x11, 0x22, 0xFF);
     SDL_RenderClear(render);
 
+    show_grid();
 
     for (Cell* cell : grid.map) {
-        //std::cout << cell->get_location() << std::endl;
+        Coordinates c = cell->get_location();
+        //if (cell->has_sugar()) {
+        //    draw_cell(c, 0xFF, 0xFF, 0xFF);
+        //}
+        if (cell->is_nest()) {
+            draw_cell(c, 0x9A, 0xEC, 0xDB);;
+        }
     }
-    show_grid();
 
     SDL_RenderPresent(render);
 
