@@ -15,6 +15,8 @@ set(SRCS
     src/models/grid.cpp
 
     src/view/view.cpp
+    src/view/color.cpp
+    src/view/circle.cpp
 )
 
 set(HEADERS
