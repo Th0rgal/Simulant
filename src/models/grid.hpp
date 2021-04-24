@@ -66,6 +66,7 @@ private:
     std::array<Cell *, 4> find_nest_cells();
     std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
     std::vector<Colony *> colonies;
+    void spawn_ants(Colony* colony, int start_x, int start_y);
 
     friend class View;
 };

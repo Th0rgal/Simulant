@@ -1,7 +1,7 @@
 #include "controllers/ant.hpp"
 #include "controllers/random.hpp"
 
-Ant::Ant(Coordinates coordinates) : location(coordinates), sugar(false)
+Ant::Ant(Colony* colony, Coordinates coordinates) : colony(colony), location(coordinates), sugar(false)
 {
 }
 

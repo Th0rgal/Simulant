@@ -79,23 +79,50 @@ Grid::Grid(size_t colonies_amount)
     {
         Colony *colony = new Colony(find_nest_cells());
         colonies.push_back(colony);
-        double average_x = 0;
-        double average_y = 0;
+        double centroid_x = 0;
+        double centroid_y = 0;
         for (Cell *cell : colony->get_cells())
         {
-            average_x += cell->get_location().x;
-            average_y += cell->get_location().y;
+            centroid_x += cell->get_location().x;
+            centroid_y += cell->get_location().y;
             cell->set_nest(colony);
             cell->nest_pheromons[colony] = 1;
         }
-        average_x /= colony->get_cells().size();
-        average_y /= colony->get_cells().size();
+        centroid_x /= colony->get_cells().size();
+        centroid_y /= colony->get_cells().size();
 
         double max_square_distance = (SPACE_WIDTH - 0.5) * (SPACE_WIDTH - 0.5) + (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
         for (Cell *cell : map)
             if (cell->get_nest_pheromons(colony) != 1)
-                cell->nest_pheromons[colony] = cell->get_location().square_distance_to(average_x, average_y) / max_square_distance;
+                cell->nest_pheromons[colony] = 1 - cell->get_location().square_distance_to(centroid_x, centroid_y) / max_square_distance;
+
+        spawn_ants(colony, centroid_x - 1, centroid_y - 1);
     }
+}
+
+void Grid::spawn_ants(Colony *colony, int x, int y)
+{
+    auto fetch_cell = [&](size_t perm, int x, int y, int i) {
+        switch (perm)
+        {
+        case 0:
+            return get_cell(x + i, y);
+        case 1:
+            return get_cell(x + 3, y + i);
+        case 2:
+            return get_cell(x + i, y + 3);
+        default:
+            return get_cell(x, y + i);
+        }
+    };
+    for (size_t permutation = 0; permutation <= 3; permutation++)
+        for (int i = 1; i < 4; i++)
+        {
+            Cell *cell = fetch_cell(permutation, x, y, i);
+            if (cell == NULL)
+                continue;
+            cell->set_ant(new Ant(colony, Coordinates(cell->get_location())));
+        }
 }
 
 Cell *Grid::get_cell(int x, int y)

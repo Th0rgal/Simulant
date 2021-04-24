@@ -8,15 +8,18 @@
 
 class Cell;
 
+class Colony;
+
 class Ant
 {
 public:
-    Ant(Coordinates coordinates);
+    Ant(Colony* colony, Coordinates coordinates);
     Coordinates get_location();
     bool has_sugar();
     void add_sugar();
     void remove_sugar();
     Coordinates find_move();
+    const Colony* colony; 
 
 private:
     Coordinates location;
