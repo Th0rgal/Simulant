@@ -8,6 +8,7 @@ class Game
 public:
     Game();
     void start();
+    void restart();
 
 private:
     void loop(unsigned long delay);

@@ -91,7 +91,7 @@ View::~View()
     SDL_Quit();
 }
 
-bool View::event_manager()
+Event View::event_manager()
 {
     bool close_requested = false;
     SDL_Event event;
@@ -102,14 +102,14 @@ bool View::event_manager()
         switch (event.type)
         {
         case SDL_QUIT:
-            close_requested = true;
-            break;
+            return Event::close_request;
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
             case SDLK_ESCAPE:
-                close_requested = true;
-                break;
+                return Event::close_request;
+            case SDLK_SPACE:
+                return Event::restart;
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
@@ -118,7 +118,7 @@ bool View::event_manager()
             mouse_y = event.button.y;
         }
     }
-    return close_requested;
+    return Event::none;
 }
 
 void View::draw_cell_rect(Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)

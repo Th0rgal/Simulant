@@ -8,6 +8,13 @@
 #include "models/grid.hpp"
 #include "models/action.hpp"
 
+
+enum struct Event {
+    close_request,
+    restart,
+    none
+};
+
 struct rgb{
     double r;       // a fraction between 0 and 1
     double g;       // a fraction between 0 and 1
@@ -27,7 +34,7 @@ public:
     ~View();
 
     void    init_grid();
-    bool    event_manager();
+    Event   event_manager();
 
     void    draw_cell_rect(Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
     void    draw_cell_circle(Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
