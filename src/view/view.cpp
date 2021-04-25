@@ -273,9 +273,23 @@ void View::update_pheromons(const Grid &grid)
 void    View::update_entities(const Grid &grid, double delta_time) {
     SDL_SetRenderTarget(render, entities_texture);
     
-    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_NONE);
-    SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_NONE);
-    
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
+
+    for (Cell *cell : grid.map)
+    {
+        Coordinates c = cell->get_location();
+        if (cell->is_nest())
+        {
+            rgb color = m[cell->get_nest()];
+            draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, 255);
+        }
+        if (cell->has_sugar())
+        {
+            draw_cell_rect(c, 0xFF, 0xFF, 0xFF, 0xFF);
+        }
+    }
+
     for (Action action : delta)
     {
         if (action.type == ActionType::AntMove)
@@ -286,9 +300,6 @@ void    View::update_entities(const Grid &grid, double delta_time) {
             double x = to->get_location().x * delta_time + from->get_location().x * (1 - delta_time);
             double y = to->get_location().y * delta_time + from->get_location().y * (1 - delta_time);;
 
-            draw_cell_rect(from->get_location(), 0, 0, 0, 0);
-            draw_cell_rect(to->get_location(), 0, 0, 0, 0);
-
             //std::cout << from->get_location() << ", " << to->get_location() << std::endl;
             Ant *a = to->get_ant();
             if (a) {
@@ -297,8 +308,6 @@ void    View::update_entities(const Grid &grid, double delta_time) {
             }
         }
     }
-    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
-    SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
     SDL_SetRenderTarget(render, NULL);
 }
 

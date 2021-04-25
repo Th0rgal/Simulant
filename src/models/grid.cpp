@@ -120,8 +120,11 @@ void Grid::summon_ants(Colony *colony)
     int x = colony->centroid_x - 1.5;
     int y = colony->centroid_y - 1.5;
     Cell *cell = get_cell(x, y);
-    if (cell != NULL && !cell->is_nest())
-        cell->set_ant(new Ant(colony, cell->get_location()));
+    if (cell != NULL && !cell->is_nest()) {
+        Ant *new_ant = new Ant(colony, cell->get_location());
+        cell->set_ant(new_ant);
+        colony->add_ant(new_ant);
+    }
     for (size_t permutation = 0; permutation <= 3; permutation++)
         for (int i = 1; i < 4; i++)
         {
