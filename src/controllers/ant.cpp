@@ -26,9 +26,9 @@ void Ant::remove_sugar()
     sugar = false;
 }
 
-void Ant::move(Cell *old_cell, Cell *new_cell)
+void Ant::move(Grid &grid, Cell *new_cell)
 {
-    old_cell->set_ant(NULL);
+    grid.get_cell(location)->set_ant(NULL);
     new_cell->set_ant(this);
     location = new_cell->get_location();
 }
@@ -45,8 +45,10 @@ std::vector<Coordinates> Ant::find_moves(Grid &grid)
     for (const Coordinates &neighbor : neighbors)
     {
         Cell *cell = grid.get_cell(neighbor);
-        if (!cell->is_nest() && (!cell->has_ant() || cell->get_ant()->colony != colony))
+        if (!cell->is_nest() && !cell->has_ant())
+        {
             output.push_back(neighbor);
+        }
     }
     return neighbors;
 }
@@ -64,7 +66,8 @@ Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
     centroid_y /= cells.size();
 }
 
-Colony::~Colony() {
+Colony::~Colony()
+{
     for (Ant *ant : ants)
         delete (ant);
 }
@@ -77,7 +80,9 @@ std::array<Cell *, 4> Colony::get_cells()
 void Colony::remove_ant(Grid &grid, size_t ant_id)
 {
     Ant *ant = ants[ant_id];
-    grid.get_cell(ant->get_location())->set_ant(NULL);
+    Cell *cell = grid.get_cell(ant->get_location());
+    if (cell->get_ant() == ant)
+        cell->set_ant(NULL);
     delete ant;
     if (ant_id < ants.size())
         ants.erase(ants.begin() + ant_id);

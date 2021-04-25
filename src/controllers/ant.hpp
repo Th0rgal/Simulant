@@ -19,7 +19,7 @@ public:
     bool has_sugar();
     void add_sugar();
     void remove_sugar();
-    void move(Cell *old_cell, Cell *new_cell);
+    void move(Grid &grid, Cell *new_cell);
     std::vector<Coordinates> find_moves(Grid &grid);
     Colony *get_colony();
 

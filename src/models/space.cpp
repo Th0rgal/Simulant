@@ -62,10 +62,14 @@ double Coordinates::square_distance_to(Coordinates location)
 std::vector<Coordinates> Coordinates::get_neighbors()
 {
     std::vector<Coordinates> coordinates;
-    for (int i = x - 1; i <= x + 1; i++)
-        for (int j = y - 1; j <= y + 1; j++)
-            if ((i != x || j != y) && i >= X_MIN && i <= X_MAX && j >= Y_MIN && j <= Y_MAX)
-                coordinates.emplace_back(i, j);
+    if (y - 1 >= Y_MIN)
+        coordinates.emplace_back(x, y - 1);
+    if (y + 1 <= Y_MAX)
+        coordinates.emplace_back(x, y + 1);
+    if (x - 1 >= X_MIN)
+        coordinates.emplace_back(x - 1, y);
+    if (x + 1 <= X_MAX)
+        coordinates.emplace_back(x + 1, y);
     return coordinates;
 }
 
