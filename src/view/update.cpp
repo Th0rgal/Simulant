@@ -9,11 +9,13 @@ void    View::update(double time, const Grid& grid) {
         y_grid += Y_MIN;
 
         Cell *cell = grid.get_cell(x_grid, y_grid);
-        if (cell->is_nest()) {
+        if (cell and cell->is_nest()) {
             disp_pheromons[cell->get_nest()] = !disp_pheromons[cell->get_nest()];
             update_pheromons(grid);
         }
     }
+
+
 
     SDL_RenderCopy(render, grid_texture, NULL, NULL);
     SDL_RenderCopy(render, pheromons_texture, NULL, NULL);

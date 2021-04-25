@@ -37,6 +37,20 @@ View::View(int w, int h)
     init_grid();
 }
 
+View::~View()
+{
+    SDL_DestroyRenderer(render);
+    SDL_DestroyWindow(window);
+
+    m.clear();
+    disp_pheromons.clear();
+    SDL_DestroyTexture(grid_texture);
+    SDL_DestroyTexture(entities_texture);
+    SDL_DestroyTexture(pheromons_texture);
+
+    SDL_Quit();
+}
+
 void View::init_grid()
 {
     int cell_size = std::min(window_w / SPACE_WIDTH, window_h / SPACE_HEIGHT);
@@ -84,12 +98,6 @@ void View::init_grid()
     }
 }
 
-View::~View()
-{
-    SDL_DestroyRenderer(render);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-}
 
 Event View::event_manager()
 {
@@ -121,7 +129,7 @@ Event View::event_manager()
     return Event::none;
 }
 
-void View::draw_cell_rect(Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+void View::draw_cell_rect(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     int x = (c.x - X_MIN) * cell_w + grid_x;
     int y = (c.y - Y_MIN) * cell_h + grid_y;
@@ -132,7 +140,7 @@ void View::draw_cell_rect(Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8
     SDL_RenderFillRect(render, &rect);
 }
 
-void View::draw_cell_circle(Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     int x = (c.x - X_MIN) * cell_w + cell_w / 2 + grid_x;
     int y = (c.y - Y_MIN) * cell_h + cell_h / 2 + grid_y;
@@ -151,9 +159,10 @@ void    View::init_grid(const Grid &grid) {
     entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
     pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
-    SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_ADD);
 
     double base_tint = create_base_tint();
+
     for (size_t i = 0; i < grid.colonies.size(); i++)
     {
         m[grid.colonies[i]] = get_tint(i, grid.colonies.size(), base_tint, 0.35, 0.93);
@@ -177,8 +186,6 @@ void    View::init_grid(const Grid &grid) {
     SDL_SetRenderTarget(render, NULL);
     init_entities(grid);
     update_pheromons(grid);
-
-
 }
 
 void    View::init_entities(const Grid &grid) {
@@ -228,4 +235,36 @@ void    View::update_pheromons(const Grid &grid) {
         }
     }
     SDL_SetRenderTarget(render, NULL);
+}
+
+void    View::update_entities(const Grid &grid) {
+    SDL_SetRenderTarget(render, pheromons_texture);
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
+
+    SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_NONE);
+    for (Action action : delta) {
+        if (action.type == ActionType::ant_move) {
+            Cell *from = action.state_begin[0];
+            Cell *to = action.state_begin[1];
+
+            draw_cell_rect(from->get_location(), 0, 0, 0, 0);
+            draw_cell_rect(to->get_location(), 0, 0, 0, 0);
+            //do the animation
+        }
+    }
+    SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_BLEND);
+}
+
+
+void    View::clear() {
+    std::cout << "je detruit une map de taille : " << m.size() << std::endl;
+    
+    m.clear();
+    disp_pheromons.clear();
+    SDL_DestroyTexture(grid_texture);
+    SDL_DestroyTexture(entities_texture);
+    SDL_DestroyTexture(pheromons_texture);
+
+
 }

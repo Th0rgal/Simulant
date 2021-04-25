@@ -8,7 +8,7 @@ enum struct ActionType {
     sugar_consume,
 };
 
-class Action {
+struct Action {
     ActionType type;
     std::vector<Cell*> state_begin;
     std::vector<Cell*> state_end;

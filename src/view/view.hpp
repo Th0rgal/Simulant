@@ -36,12 +36,15 @@ public:
     void    init_grid();
     Event   event_manager();
 
-    void    draw_cell_rect(Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-    void    draw_cell_circle(Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    void    clear();
+
+    void    draw_cell_rect(const Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    void    draw_cell_circle(const Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
     void    init_grid(const Grid &grid);
     void    init_entities(const Grid &grid);
     void    update_pheromons(const Grid &grid);
+    void    update_entities(const Grid &grid);
 
     void    update(double time, const Grid &grid);
     void    update_map(std::vector<Action> d);

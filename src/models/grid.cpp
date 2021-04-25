@@ -3,7 +3,7 @@
 #include "algorithm"
 #include "math.h"
 
-Cell::Cell(Coordinates location) : location(location), sugar(false)
+Cell::Cell(Coordinates location) : location(location), sugar(false), ant(NULL), nest(NULL)
 {
 }
 
