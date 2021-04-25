@@ -26,13 +26,28 @@ void Ant::remove_sugar()
     sugar = false;
 }
 
-Coordinates Ant::find_move()
+void Ant::move(Cell *new_cell)
 {
-    std::cout << "location:" << location << std::endl;
+    new_cell->set_ant(this);
+    location = new_cell->get_location();
+}
+
+Colony *Ant::get_colony()
+{
+    return colony;
+}
+
+std::vector<Coordinates> Ant::find_moves(Grid &grid)
+{
     std::vector<Coordinates> neighbors = location.get_neighbors();
+    std::vector<Coordinates> output;
     for (const Coordinates &neighbor : neighbors)
-        std::cout << "neighbord:" << neighbor << std::endl;
-    return neighbors[random_index(0, neighbors.size() - 1)];
+    {
+        Cell *cell = grid.get_cell(neighbor);
+        if (!cell->is_nest() && (!cell->has_ant() || cell->get_ant()->colony != colony))
+            output.push_back(neighbor);
+    }
+    return neighbors;
 }
 
 Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
@@ -67,6 +82,14 @@ void Colony::remove_ant(Grid &grid, size_t ant_id)
     delete ant;
     if (ant_id < ants.size())
         ants.erase(ants.begin() + ant_id);
+}
+
+size_t Colony::find_ant_index(Ant *ant)
+{
+    for (size_t i = 0; i < ants.size(); i++)
+        if (ant == ants[i])
+            return i;
+    throw std::invalid_argument("This ant does not belong to the colony");
 }
 
 void Colony::add_ant(Ant *ant)
