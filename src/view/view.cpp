@@ -257,21 +257,25 @@ void View::update_pheromons(const Grid &grid)
         {
             if (disp_pheromons[colony])
             {
+                std::cout << "update_pheromons" << std::endl;
                 double alpha = cell->get_nest_pheromons(colony);
                 rgb color = m[colony];
                 draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, std::max(0.0, alpha * 255 - 100));
             }
         }
     }
+
+    std::cout << "jai update le p" << std::endl;
+
     SDL_SetRenderTarget(render, NULL);
 }
 
 void    View::update_entities(const Grid &grid, double delta_time) {
-    SDL_SetRenderTarget(render, pheromons_texture);
-    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
-    SDL_RenderClear(render);
-
-    SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_NONE);
+    SDL_SetRenderTarget(render, entities_texture);
+    
+    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_NONE);
+    SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_NONE);
+    
     for (Action action : delta)
     {
         if (action.type == ActionType::AntMove)
@@ -293,7 +297,8 @@ void    View::update_entities(const Grid &grid, double delta_time) {
             }
         }
     }
-    SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
     SDL_SetRenderTarget(render, NULL);
 }
 

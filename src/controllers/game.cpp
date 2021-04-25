@@ -58,8 +58,6 @@ void Game::loop(unsigned long delay)
             Action a;
             Cell *next_cell = grid.get_cell(possible_moves[random_index(0, possible_moves.size() - 1)]); // todo: use pheromons
             
-            std::cout << grid.get_cell(ant->get_location())->get_location() << ", " << next_cell->get_location() << std::endl;
-
             a.type = ActionType::AntMove;
             a.updated.push_back(grid.get_cell(ant->get_location()));
             a.updated.push_back(next_cell); 

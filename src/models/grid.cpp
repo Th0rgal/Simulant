@@ -14,6 +14,7 @@ bool Cell::is_void()
 
 Coordinates Cell::get_location() const
 {
+
     return location;
 }
 
