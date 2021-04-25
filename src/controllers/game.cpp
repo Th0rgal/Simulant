@@ -50,15 +50,12 @@ void Game::start()
 void Game::loop(unsigned long delay)
 {
     delta.clear();
-    std::cout << delta.size() << std::endl;
     grid.map_ants([&](size_t i, Ant *ant) {
         std::vector<Coordinates> possible_moves = ant->find_moves(grid);
         if (!possible_moves.empty())
         {
             Action a;
             Cell *next_cell = grid.get_cell(possible_moves[random_index(0, possible_moves.size() - 1)]); // todo: use pheromons
-            
-            std::cout << grid.get_cell(ant->get_location())->get_location() << ", " << next_cell->get_location() << std::endl;
 
             a.type = ActionType::AntMove;
             a.updated.push_back(grid.get_cell(ant->get_location()));
@@ -79,5 +76,4 @@ void Game::loop(unsigned long delay)
             // }
         }
     });
-    std::cout << delta.size() << std::endl;
 }
