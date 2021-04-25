@@ -43,6 +43,8 @@ set(LIBS
     SDL2_image
 )
 
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+
 add_executable(simulant src/main.cpp ${SRCS} ${HEADERS})
 target_compile_features(simulant PRIVATE cxx_std_17)
 target_include_directories(simulant PUBLIC src/)

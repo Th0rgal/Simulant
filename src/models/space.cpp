@@ -64,15 +64,14 @@ std::vector<Coordinates> Coordinates::get_neighbors()
     std::vector<Coordinates> coordinates;
 
     int x_start = std::max(X_MIN, x - 1);
-    int x_end = std::max(Y_MIN, y - 1);
-    int y_start = std::min(X_MAX, x + 1);
+    int y_start = std::max(Y_MIN, y - 1);
+    int x_end = std::min(X_MAX, x + 1);
     int y_end = std::min(Y_MAX, y + 1);
 
     for (int i = x_start; i < x_end; i++)
-    {
         for (int j = y_start; j < y_end; j++)
-            coordinates.emplace_back(i, j);
-    }
+            if (i != x || j != y)
+                coordinates.emplace_back(i, j);
     return coordinates;
 }
 
