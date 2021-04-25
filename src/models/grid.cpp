@@ -42,12 +42,6 @@ void Cell::set_ant(Ant *new_ant)
     ant = new_ant;
 }
 
-void Cell::remove_ant()
-{
-    delete ant;
-    ant = NULL;
-}
-
 Ant *Cell::get_ant()
 {
     return ant;
@@ -101,8 +95,9 @@ Grid::Grid(size_t colonies_amount)
                     1 - cell->get_location()
                                 .distance_to(colony->centroid_x, colony->centroid_y) /
                             std::sqrt(max_square_distance);
-        summon_ants(colony);
     }
+    for (Colony *colony : colonies)
+        summon_ants(colony);
     summon_sugars(colonies.size());
 }
 
@@ -124,16 +119,17 @@ void Grid::summon_ants(Colony *colony)
     int x = colony->centroid_x - 1.5;
     int y = colony->centroid_y - 1.5;
     Cell *cell = get_cell(x, y);
-    if (cell != NULL && !cell->is_nest() && (!cell->has_ant() || flip_a_coin()))
+    if (cell != NULL && !cell->is_nest())
         cell->set_ant(new Ant(colony, cell->get_location()));
     for (size_t permutation = 0; permutation <= 3; permutation++)
         for (int i = 1; i < 4; i++)
         {
             Cell *cell = fetch_cell(permutation, x, y, i);
-            // to keep nest conflicts fair
-            if (cell == NULL || cell->is_nest() || (cell->has_ant() && flip_a_coin()))
+            if (cell == NULL || cell->is_nest() || cell->has_ant())
                 continue;
-            cell->set_ant(new Ant(colony, cell->get_location()));
+            Ant *new_ant = new Ant(colony, cell->get_location());
+            cell->set_ant(new_ant);
+            colony->add_ant(new_ant);
         }
 }
 

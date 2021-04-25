@@ -4,7 +4,8 @@
 #include "models/space.hpp"
 #include <vector>
 #include <array>
-// #include "models/grid.hpp"
+
+class Grid;
 
 class Cell;
 
@@ -35,10 +36,12 @@ public:
     std::array<Cell *, 4> get_cells();
     double centroid_x;
     double centroid_y;
+    void remove_ant(Grid &grid, size_t ant_id);
+    void add_ant(Ant *ant);
 
 private:
     const std::array<Cell *, 4> cells;
-    std::vector<Ant> ants;
+    std::vector<Ant *> ants;
 };
 
 #include "controllers/ant.tpp"

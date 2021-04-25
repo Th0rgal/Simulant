@@ -29,7 +29,6 @@ public:
 
     bool has_ant();
     void set_ant(Ant *ant);
-    void remove_ant();
     Ant *get_ant();
 
     double get_nest_pheromons(const Colony *colony);
@@ -70,7 +69,7 @@ private:
     std::vector<Colony *> colonies;
     void summon_ants(Colony *colony);
     void summon_sugars(size_t amount);
-    Cell* find_empty_cell();
+    Cell *find_empty_cell();
 
     friend class View;
 };
