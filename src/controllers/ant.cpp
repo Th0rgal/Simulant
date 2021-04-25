@@ -46,11 +46,9 @@ std::vector<Coordinates> Ant::find_moves(Grid &grid)
     {
         Cell *cell = grid.get_cell(neighbor);
         if (!cell->is_nest() && !cell->has_ant())
-        {
             output.push_back(neighbor);
-        }
     }
-    return neighbors;
+    return output;
 }
 
 Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)

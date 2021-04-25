@@ -54,18 +54,11 @@ void Game::loop(unsigned long delay)
         if (std::find(killed.begin(), killed.end(), ant) == killed.end())
         {
             std::vector<Coordinates> possible_moves = ant->find_moves(grid);
-
-            std::cout << "Location: " << ant->get_location() << std::endl;
-            for (Coordinates &coordinate : possible_moves)
-                std::cout << coordinate << " ";
-            std::cout << std::endl;
-
             if (!possible_moves.empty())
             {
                 Cell *next_cell = grid.get_cell(possible_moves[random_index(0, possible_moves.size() - 1)]); // todo: use pheromons
                 if (next_cell->has_ant())
                 {
-                    std::cout << (ant->get_colony() == next_cell->get_ant()->get_colony()) << std::endl;
                     killed.push_back(next_cell->get_ant());
                     ant->move(grid, next_cell);
                 }
