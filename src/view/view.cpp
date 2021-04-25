@@ -244,9 +244,9 @@ void    View::update_entities(const Grid &grid) {
 
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_NONE);
     for (Action action : delta) {
-        if (action.type == ActionType::ant_move) {
-            Cell *from = action.state_begin[0];
-            Cell *to = action.state_begin[1];
+        if (action.type == ActionType::AntMove) {
+            Cell *from = action.updated[0];
+            Cell *to = action.updated[1];
 
             draw_cell_rect(from->get_location(), 0, 0, 0, 0);
             draw_cell_rect(to->get_location(), 0, 0, 0, 0);
