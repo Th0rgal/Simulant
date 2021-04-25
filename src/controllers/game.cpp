@@ -64,12 +64,12 @@ void Game::loop(unsigned long delay)
                 }
                 else
                 {
-                    ant->move(grid, next_cell);
                     Action action;
                     action.type = ActionType::AntMove;
                     action.updated.push_back(grid.get_cell(ant->get_location()));
                     action.updated.push_back(next_cell);
                     delta.push_back(action);
+                    ant->move(grid, next_cell);
                 }
             }
         }
