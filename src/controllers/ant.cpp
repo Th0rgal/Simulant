@@ -65,10 +65,8 @@ Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
 }
 
 Colony::~Colony() {
-    std::cout << "je me detruit" << std::endl;
-    for (Ant *ant : ants) {
+    for (Ant *ant : ants)
         delete (ant);
-    }
 }
 
 std::array<Cell *, 4> Colony::get_cells()

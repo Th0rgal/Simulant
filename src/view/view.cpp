@@ -304,8 +304,6 @@ void    View::update_entities(const Grid &grid, double delta_time) {
 
 void View::clear()
 {
-    std::cout << "je detruit une map de taille : " << m.size() << std::endl;
-
     m.clear();
     disp_pheromons.clear();
     SDL_DestroyTexture(grid_texture);
