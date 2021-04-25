@@ -31,6 +31,7 @@ class Colony
 {
 public:
     Colony(std::array<Cell *, 4> cells);
+    ~Colony();
     template <class Function>
     void map_ants(Function &&function);
     std::array<Cell *, 4> get_cells();

@@ -183,4 +183,5 @@ void Grid::clear()
         delete cell;
     for (Colony *colony : colonies)
         delete colony;
+    colonies.clear();
 }

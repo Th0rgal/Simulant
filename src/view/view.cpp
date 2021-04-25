@@ -140,6 +140,17 @@ void View::draw_cell_rect(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b,
     SDL_RenderFillRect(render, &rect);
 }
 
+void View::draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+    int x = (x_rect - X_MIN) * cell_w + grid_x;
+    int y = (y_rect - Y_MIN) * cell_h + grid_y;
+    int w = cell_w;
+    int h = cell_h;
+    SDL_Rect rect = {x, y, w, h};
+    SDL_SetRenderDrawColor(render, r, g, b, a);
+    SDL_RenderFillRect(render, &rect);
+}
+
 void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     int x = (c.x - X_MIN) * cell_w + cell_w / 2 + grid_x;
@@ -152,6 +163,20 @@ void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t 
     SDL_RenderFillCircle(render, x, y, rayon);
     //SDL_RenderFillRect(render, &rect);
 }
+
+void View::draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+    int x = (x_rect - X_MIN) * cell_w + cell_w / 2 + grid_x;
+    int y = (y_rect - Y_MIN) * cell_h + cell_h / 2 + grid_y;
+    int rayon = cell_w / 4;
+
+    //void DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius)
+    //std::cout << a << std::endl;
+    SDL_SetRenderDrawColor(render, r, g, b, a);
+    SDL_RenderFillCircle(render, x, y, rayon);
+    //SDL_RenderFillRect(render, &rect);
+}
+
 
 void    View::init_grid(const Grid &grid) {
     grid_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
@@ -237,7 +262,7 @@ void    View::update_pheromons(const Grid &grid) {
     SDL_SetRenderTarget(render, NULL);
 }
 
-void    View::update_entities(const Grid &grid) {
+void    View::update_entities(const Grid &grid, double delta_time) {
     SDL_SetRenderTarget(render, pheromons_texture);
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
@@ -248,9 +273,15 @@ void    View::update_entities(const Grid &grid) {
             Cell *from = action.updated[0];
             Cell *to = action.updated[1];
 
+            double x = to->get_location().x * delta_time + from->get_location().x * (1 - delta_time);
+            double y = to->get_location().y * delta_time + from->get_location().y * (1 - delta_time);;
+
             draw_cell_rect(from->get_location(), 0, 0, 0, 0);
             draw_cell_rect(to->get_location(), 0, 0, 0, 0);
-            //do the animation
+
+            Ant *a = to->get_ant();
+            rgb color = m[a->colony];
+            draw_cell_circle(x, y, color.r * 255, color.g * 255, color.b * 255, 255);
         }
     }
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_BLEND);

@@ -43,6 +43,6 @@ void Game::loop(unsigned long delay)
 {
     std::cout << delay << std::endl;
     grid.map_ants([&](Ant *ant) {
-        std::cout << ant->find_move() << std::endl;
+        //std::cout << ant->find_move() << std::endl;
     });
 }

@@ -39,12 +39,16 @@ public:
     void    clear();
 
     void    draw_cell_rect(const Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    void    draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+
     void    draw_cell_circle(const Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    void    draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+
 
     void    init_grid(const Grid &grid);
     void    init_entities(const Grid &grid);
     void    update_pheromons(const Grid &grid);
-    void    update_entities(const Grid &grid);
+    void    update_entities(const Grid &grid, double delta_time);
 
     void    update(double time, const Grid &grid);
     void    update_map(std::vector<Action> d);
