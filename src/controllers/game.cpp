@@ -59,6 +59,11 @@ void Game::loop(unsigned long delay)
                 Cell *next_cell = grid.get_cell(possible_moves[random_index(0, possible_moves.size() - 1)]); // todo: use pheromons
                 if (next_cell->has_ant())
                 {
+                    Action action;
+                    action.type = ActionType::AntMove;
+                    action.updated.push_back(grid.get_cell(ant->get_location()));
+                    action.updated.push_back(next_cell);
+                    delta.push_back(action);
                     killed.push_back(next_cell->get_ant());
                     ant->move(grid, next_cell);
                 }
