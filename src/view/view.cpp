@@ -33,7 +33,7 @@ View::View(int w, int h)
     SDL_GL_GetDrawableSize(window, &window_w, &window_h);
 
     scale_high_dpi = window_w / (double)w;
-    
+
     init_grid();
 }
 
@@ -98,7 +98,6 @@ void View::init_grid()
     }
 }
 
-
 Event View::event_manager()
 {
     bool close_requested = false;
@@ -153,7 +152,8 @@ void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t 
     //SDL_RenderFillRect(render, &rect);
 }
 
-void    View::init_grid(const Grid &grid) {
+void View::init_grid(const Grid &grid)
+{
     grid_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(grid_texture, SDL_BLENDMODE_BLEND);
     entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
@@ -188,7 +188,8 @@ void    View::init_grid(const Grid &grid) {
     update_pheromons(grid);
 }
 
-void    View::init_entities(const Grid &grid) {
+void View::init_entities(const Grid &grid)
+{
     SDL_SetRenderTarget(render, entities_texture);
 
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
@@ -205,29 +206,33 @@ void    View::init_entities(const Grid &grid) {
         if (cell->has_ant())
         {
             Ant *a = cell->get_ant();
-            rgb color = m[a->colony];
+            rgb color = m[a->get_colony()];
             draw_cell_circle(c, color.r * 255, color.g * 255, color.b * 255, 255);
         }
-        if (cell->has_sugar()) {
+        if (cell->has_sugar())
+        {
             draw_cell_rect(c, 0xFF, 0xFF, 0xFF, 0xFF);
 
-           //(c, 0xFF, 0xFF, 0xFF);
+            //(c, 0xFF, 0xFF, 0xFF);
         }
     }
     SDL_SetRenderTarget(render, NULL);
 }
 
-void    View::update_pheromons(const Grid &grid) {
+void View::update_pheromons(const Grid &grid)
+{
     SDL_SetRenderTarget(render, pheromons_texture);
 
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
 
-    for (Cell *cell : grid.map) {
+    for (Cell *cell : grid.map)
+    {
         Coordinates c = cell->get_location();
         for (Colony *colony : grid.colonies)
         {
-            if (disp_pheromons[colony]) {
+            if (disp_pheromons[colony])
+            {
                 double alpha = cell->get_nest_pheromons(colony);
                 rgb color = m[colony];
                 draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, std::max(0.0, alpha * 255 - 100));
@@ -237,14 +242,17 @@ void    View::update_pheromons(const Grid &grid) {
     SDL_SetRenderTarget(render, NULL);
 }
 
-void    View::update_entities(const Grid &grid) {
+void View::update_entities(const Grid &grid)
+{
     SDL_SetRenderTarget(render, pheromons_texture);
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
 
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_NONE);
-    for (Action action : delta) {
-        if (action.type == ActionType::AntMove) {
+    for (Action action : delta)
+    {
+        if (action.type == ActionType::AntMove)
+        {
             Cell *from = action.updated[0];
             Cell *to = action.updated[1];
 
@@ -256,15 +264,13 @@ void    View::update_entities(const Grid &grid) {
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_BLEND);
 }
 
-
-void    View::clear() {
+void View::clear()
+{
     std::cout << "je detruit une map de taille : " << m.size() << std::endl;
-    
+
     m.clear();
     disp_pheromons.clear();
     SDL_DestroyTexture(grid_texture);
     SDL_DestroyTexture(entities_texture);
     SDL_DestroyTexture(pheromons_texture);
-
-
 }

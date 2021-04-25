@@ -19,12 +19,14 @@ public:
     bool has_sugar();
     void add_sugar();
     void remove_sugar();
-    Coordinates find_move();
-    const Colony *colony;
+    void move(Cell *new_location);
+    std::vector<Coordinates> find_moves(Grid &grid);
+    Colony *get_colony();
 
 private:
     Coordinates location;
     bool sugar;
+    Colony *colony;
 };
 
 class Colony
@@ -38,6 +40,7 @@ public:
     double centroid_y;
     void remove_ant(Grid &grid, size_t ant_id);
     void add_ant(Ant *ant);
+    size_t find_ant_index(Ant *);
 
 private:
     const std::array<Cell *, 4> cells;

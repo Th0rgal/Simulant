@@ -54,8 +54,8 @@ struct Coordinates
 {
     Coordinates(int x, int y);
 
-    const int x;
-    const int y;
+    int x;
+    int y;
 
     double square_distance_to(Coordinates location);
     double distance_to(double x, double y);
