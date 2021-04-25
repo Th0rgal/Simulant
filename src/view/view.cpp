@@ -176,8 +176,8 @@ void View::draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, 
     //SDL_RenderFillRect(render, &rect);
 }
 
-
-void    View::init_grid(const Grid &grid) {
+void View::init_grid(const Grid &grid)
+{
     grid_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(grid_texture, SDL_BLENDMODE_BLEND);
     entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
@@ -257,7 +257,6 @@ void View::update_pheromons(const Grid &grid)
         {
             if (disp_pheromons[colony])
             {
-                std::cout << "update_pheromons" << std::endl;
                 double alpha = cell->get_nest_pheromons(colony);
                 rgb color = m[colony];
                 draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, std::max(0.0, alpha * 255 - 100));
@@ -265,14 +264,13 @@ void View::update_pheromons(const Grid &grid)
         }
     }
 
-    std::cout << "jai update le p" << std::endl;
-
     SDL_SetRenderTarget(render, NULL);
 }
 
-void    View::update_entities(const Grid &grid, double delta_time) {
+void View::update_entities(const Grid &grid, double delta_time)
+{
     SDL_SetRenderTarget(render, entities_texture);
-    
+
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
 
@@ -298,11 +296,13 @@ void    View::update_entities(const Grid &grid, double delta_time) {
             Cell *to = action.updated[1];
 
             double x = to->get_location().x * delta_time + from->get_location().x * (1 - delta_time);
-            double y = to->get_location().y * delta_time + from->get_location().y * (1 - delta_time);;
+            double y = to->get_location().y * delta_time + from->get_location().y * (1 - delta_time);
+            ;
 
             //std::cout << from->get_location() << ", " << to->get_location() << std::endl;
             Ant *a = to->get_ant();
-            if (a) {
+            if (a)
+            {
                 rgb color = m[a->get_colony()];
                 draw_cell_circle(x, y, color.r * 255, color.g * 255, color.b * 255, 255);
             }
