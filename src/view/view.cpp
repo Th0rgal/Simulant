@@ -285,12 +285,16 @@ void    View::update_entities(const Grid &grid, double delta_time) {
             draw_cell_rect(from->get_location(), 0, 0, 0, 0);
             draw_cell_rect(to->get_location(), 0, 0, 0, 0);
 
+            //std::cout << from->get_location() << ", " << to->get_location() << std::endl;
             Ant *a = to->get_ant();
-            rgb color = m[a->get_colony()];
-            draw_cell_circle(x, y, color.r * 255, color.g * 255, color.b * 255, 255);
+            if (a) {
+                rgb color = m[a->get_colony()];
+                draw_cell_circle(x, y, color.r * 255, color.g * 255, color.b * 255, 255);
+            }
         }
     }
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderTarget(render, NULL);
 }
 
 void View::clear()

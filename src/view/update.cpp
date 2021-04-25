@@ -1,6 +1,9 @@
 #include "view/view.hpp"
 
 void    View::update(double time, const Grid& grid) {
+    SDL_SetRenderDrawColor(render, 0, 0 ,0 ,0);
+    SDL_RenderClear(render);
+    
     if (clicked) {
         int x_grid = (mouse_x * scale_high_dpi - grid_x) / cell_w;
         int y_grid = (mouse_y * scale_high_dpi - grid_y) / cell_h;
@@ -15,7 +18,7 @@ void    View::update(double time, const Grid& grid) {
         }
     }
 
-
+    update_entities(grid, time);
 
     SDL_RenderCopy(render, grid_texture, NULL, NULL);
     SDL_RenderCopy(render, pheromons_texture, NULL, NULL);

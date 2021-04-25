@@ -14,4 +14,5 @@ private:
     void loop(unsigned long delay);
     View view;
     Grid grid;
+    std::vector<Action> delta;
 };

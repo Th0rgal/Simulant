@@ -26,8 +26,9 @@ void Ant::remove_sugar()
     sugar = false;
 }
 
-void Ant::move(Cell *new_cell)
+void Ant::move(Cell *old_cell, Cell *new_cell)
 {
+    old_cell->set_ant(NULL);
     new_cell->set_ant(this);
     location = new_cell->get_location();
 }

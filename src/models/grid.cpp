@@ -185,3 +185,8 @@ void Grid::clear()
         delete colony;
     colonies.clear();
 }
+
+void Grid::set_ant(Ant *ant, Coordinates coordinates) {
+    int pos = coordinates.x * coordinates.y * SPACE_WIDTH;
+    
+}

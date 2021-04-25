@@ -61,6 +61,7 @@ public:
     void map_ants(Function &&function);
     Cell *get_cell(int x, int y) const;
     Cell *get_cell(Coordinates location) const;
+    void set_ant(Ant *ant, Coordinates coordinates);
     void clear();
 
 private:
