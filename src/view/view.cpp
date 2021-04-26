@@ -225,13 +225,13 @@ void View::init_entities(const Grid &grid)
         if (cell->is_nest())
         {
             rgb color = m[cell->get_nest()];
-            draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, 255);
+            draw_cell_rect(c, color.r, color.g, color.b, color.a);
         }
         if (cell->has_ant())
         {
             Ant *a = cell->get_ant();
             rgb color = m[a->get_colony()];
-            draw_cell_circle(c, color.r * 255, color.g * 255, color.b * 255, 255);
+            draw_cell_circle(c, color.r, color.g, color.b, color.a);
         }
         if (cell->has_sugar())
         {
@@ -259,7 +259,7 @@ void View::update_pheromons(const Grid &grid)
             {
                 double alpha = cell->get_nest_pheromons(colony);
                 rgb color = m[colony];
-                draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, std::max(0.0, alpha * 255 - 100));
+                draw_cell_rect(c, color.r, color.g, color.b, std::max(0.0, alpha * 255 - 100));
             }
         }
     }
@@ -280,7 +280,7 @@ void View::update_entities(const Grid &grid, double delta_time)
         if (cell->is_nest())
         {
             rgb color = m[cell->get_nest()];
-            draw_cell_rect(c, color.r * 255, color.g * 255, color.b * 255, 255);
+            draw_cell_rect(c, color.r, color.g, color.b, color.a);
         }
         if (cell->has_sugar())
         {
@@ -304,7 +304,7 @@ void View::update_entities(const Grid &grid, double delta_time)
             if (a)
             {
                 rgb color = m[a->get_colony()];
-                draw_cell_circle(x, y, color.r * 255, color.g * 255, color.b * 255, 255);
+                draw_cell_circle(x, y, color.r, color.g, color.b, color.a);
             }
         }
     }

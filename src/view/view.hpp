@@ -7,24 +7,13 @@
 
 #include "models/grid.hpp"
 #include "models/action.hpp"
+#include "view/color.hpp"
 
 
 enum struct Event {
     close_request,
     restart,
     none
-};
-
-struct rgb{
-    double r;       // a fraction between 0 and 1
-    double g;       // a fraction between 0 and 1
-    double b;       // a fraction between 0 and 1
-};
-
-struct hsv{
-    double h;// angle in degrees
-    double s;// a fraction between 0 and 1
-    double v;// a fraction between 0 and 1
 };
 
 class View {
@@ -93,7 +82,3 @@ private:
 
 void    DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius);
 void    SDL_RenderFillCircle(SDL_Renderer * renderer, int x, int y, int radius);
-
-rgb     hsv2rgb(hsv in);
-double  create_base_tint();
-rgb get_tint(size_t index, size_t size, double base_tint, double s, double v);
