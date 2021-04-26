@@ -65,9 +65,10 @@ public:
     void clear();
 
 private:
-    std::array<Cell *, 4> find_nest_cells();
     std::array<Cell *, SPACE_WIDTH * SPACE_HEIGHT> map;
     std::vector<Colony *> colonies;
+    
+    std::array<Cell *, 4> find_nest_cells();
     void summon_ants(Colony *colony);
     void summon_sugars(size_t amount);
     Cell *find_empty_cell();

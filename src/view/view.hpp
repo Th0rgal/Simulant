@@ -53,6 +53,7 @@ public:
     void    update(double time, const Grid &grid);
     void    update_map(std::vector<Action> d);
 
+    void    renderAll();
 
 
 

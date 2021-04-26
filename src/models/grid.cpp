@@ -82,60 +82,78 @@ Grid::Grid(size_t colonies_amount)
 {
     for (int i = 0; i < SPACE_WIDTH * SPACE_HEIGHT; i++)
         map[i] = new Cell(Coordinates(X_MIN + i % SPACE_WIDTH, Y_MIN + i / SPACE_WIDTH));
-
     for (colonies_amount++; colonies_amount > 1; colonies_amount--)
     {
         Colony *colony = new Colony(find_nest_cells());
+        
         colonies.push_back(colony);
         double max_square_distance = (SPACE_WIDTH - 0.5) *
-                                         (SPACE_WIDTH - 0.5) +
-                                     (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
-        for (Cell *cell : map)
-            if (cell->get_nest_pheromons(colony) != 1)
-                cell->nest_pheromons[colony] =
-                    1 - cell->get_location()
-                                .distance_to(colony->centroid_x, colony->centroid_y) /
-                            std::sqrt(max_square_distance);
+                                        (SPACE_WIDTH - 0.5) +
+                                        (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
+        for (Cell *cell : map) {
+            if (cell->get_nest_pheromons(colony) != 1) {
+                cell->nest_pheromons[colony] = 
+                    1 - cell->get_location().distance_to(colony->centroid_x, colony->centroid_y) 
+                    / std::sqrt(max_square_distance);
+            }
+        }
     }
     for (Colony *colony : colonies)
         summon_ants(colony);
     summon_sugars(colonies.size());
 }
 
-void Grid::summon_ants(Colony *colony)
-{
-    auto fetch_cell = [&](size_t perm, int x, int y, int i) {
-        switch (perm)
-        {
-        case 0:
-            return get_cell(x + i, y);
-        case 1:
-            return get_cell(x + 3, y + i);
-        case 2:
-            return get_cell(x + i, y + 3);
-        default:
-            return get_cell(x, y + i);
+void Grid::summon_ants(Colony *colony) {
+    int x = colony->left_corner_x - 1;
+    int y = colony->left_corner_y - 1;
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            Cell *cell = get_cell(x + i, y + j);
+            if (cell != NULL && !cell->is_nest()) {
+                Ant *new_ant = new Ant(colony, cell->get_location());
+                cell->set_ant(new_ant);
+                colony->add_ant(new_ant);
+            }
         }
-    };
-    int x = colony->centroid_x - 1.5;
-    int y = colony->centroid_y - 1.5;
-    Cell *cell = get_cell(x, y);
-    if (cell != NULL && !cell->is_nest()) {
-        Ant *new_ant = new Ant(colony, cell->get_location());
-        cell->set_ant(new_ant);
-        colony->add_ant(new_ant);
     }
-    for (size_t permutation = 0; permutation <= 3; permutation++)
-        for (int i = 1; i < 4; i++)
-        {
-            Cell *cell = fetch_cell(permutation, x, y, i);
-            if (cell == NULL || cell->is_nest() || cell->has_ant())
-                continue;
-            Ant *new_ant = new Ant(colony, cell->get_location());
-            cell->set_ant(new_ant);
-            colony->add_ant(new_ant);
-        }
+    std::cout << "new ant generator" << std::endl;
 }
+
+// void Grid::summon_ants(Colony *colony)
+// {
+//     auto fetch_cell = [&](size_t perm, int x, int y, int i) {
+//         switch (perm)
+//         {
+//         case 0:
+//             return get_cell(x + i, y);
+//         case 1:
+//             return get_cell(x + 3, y + i);
+//         case 2:
+//             return get_cell(x + i, y + 3);
+//         default:
+//             return get_cell(x, y + i);
+//         }
+//     };
+//     int x = colony->centroid_x - 1.5;
+//     int y = colony->centroid_y - 1.5;
+//     Cell *cell = get_cell(x, y);
+//     if (cell != NULL && !cell->is_nest()) {
+//         Ant *new_ant = new Ant(colony, cell->get_location());
+//         cell->set_ant(new_ant);
+//         colony->add_ant(new_ant);
+//     }
+//     for (size_t permutation = 0; permutation <= 3; permutation++)
+//         for (int i = 1; i < 4; i++)
+//         {
+//             Cell *cell = fetch_cell(permutation, x, y, i);
+//             if (cell == NULL || cell->is_nest() || cell->has_ant())
+//                 continue;
+//             Ant *new_ant = new Ant(colony, cell->get_location());
+//             cell->set_ant(new_ant);
+//             colony->add_ant(new_ant);
+//         }
+// }
 
 void Grid::summon_sugars(size_t amount)
 {

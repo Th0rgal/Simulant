@@ -15,9 +15,12 @@ void Game::restart()
     grid.clear();
     grid = Grid(3);
 
+    delta.clear();
+
     view.clear();
 
     view.init_grid(grid);
+    view.renderAll();
 }
 
 void Game::start()
@@ -25,6 +28,7 @@ void Game::start()
     unsigned long minimal_delay = 1e9; // one second
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     view.init_grid(grid);
+    view.renderAll();
     Event event;
 
     while ((event = view.event_manager()) != Event::close_request)
@@ -37,10 +41,10 @@ void Game::start()
         if (delay < minimal_delay)
         {
             view.update(delay / (double)minimal_delay, grid);
+            view.renderAll();
             continue;
         }
-        //view.init_entities(grid);
-        loop(delay);
+        //loop(delay);
         view.update_map(delta);
         previousTime = std::chrono::high_resolution_clock::now();
     }

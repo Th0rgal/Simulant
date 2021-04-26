@@ -39,6 +39,10 @@ public:
     std::array<Cell *, 4> get_cells();
     double centroid_x;
     double centroid_y;
+
+    int left_corner_x;
+    int left_corner_y;
+
     void remove_ant(Grid &grid, size_t ant_id);
     void add_ant(Ant *ant);
     size_t find_ant_index(Ant *);

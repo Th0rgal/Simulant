@@ -315,6 +315,7 @@ void View::clear()
 {
     m.clear();
     disp_pheromons.clear();
+    delta.clear();
     SDL_DestroyTexture(grid_texture);
     SDL_DestroyTexture(entities_texture);
     SDL_DestroyTexture(pheromons_texture);

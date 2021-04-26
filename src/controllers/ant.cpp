@@ -53,6 +53,9 @@ std::vector<Coordinates> Ant::find_moves(Grid &grid)
 
 Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
 {
+    left_corner_x = cells[0]->get_location().x;
+    left_corner_y = cells[0]->get_location().y;
+
     for (Cell *cell : cells)
     {
         centroid_x += cell->get_location().x;
