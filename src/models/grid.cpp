@@ -117,7 +117,6 @@ void Grid::summon_ants(Colony *colony) {
             }
         }
     }
-    std::cout << "new ant generator" << std::endl;
 }
 
 // void Grid::summon_ants(Colony *colony)

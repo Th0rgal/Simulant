@@ -29,8 +29,8 @@ void    View::update(double time, const Grid& grid) {
             update_pheromons(grid);
         }
     }
-
-    //update_entities(grid, time);
+    if (delta.size() > 0)
+        update_entities(grid, time);
 }
 
 void    View::update_map(std::vector<Action> d) {

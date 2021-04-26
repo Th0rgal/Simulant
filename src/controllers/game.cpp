@@ -44,7 +44,7 @@ void Game::start()
             view.renderAll();
             continue;
         }
-        //loop(delay);
+        loop(delay);
         view.update_map(delta);
         previousTime = std::chrono::high_resolution_clock::now();
     }
