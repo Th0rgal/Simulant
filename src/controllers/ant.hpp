@@ -18,7 +18,7 @@ public:
     Coordinates get_location();
     bool has_sugar();
     void add_sugar();
-    void remove_sugar();
+    void deposit_sugar();
     void move(Grid &grid, Cell *new_cell);
     std::vector<Coordinates> find_moves(Grid &grid);
     Colony *get_colony();
@@ -43,6 +43,9 @@ public:
     int left_corner_x;
     int left_corner_y;
 
+    void add_sugar();
+    size_t spawn_ants();
+
     void remove_ant(Grid &grid, size_t ant_id);
     void add_ant(Ant *ant);
     size_t find_ant_index(Ant *);
@@ -50,6 +53,7 @@ public:
 private:
     const std::array<Cell *, 4> cells;
     std::vector<Ant *> ants;
+    size_t sugar;
 };
 
 #include "controllers/ant.tpp"

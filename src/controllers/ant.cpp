@@ -21,9 +21,10 @@ void Ant::add_sugar()
     sugar = true;
 }
 
-void Ant::remove_sugar()
+void Ant::deposit_sugar()
 {
     sugar = false;
+    colony->add_sugar();
 }
 
 void Ant::move(Grid &grid, Cell *new_cell)
@@ -100,4 +101,15 @@ size_t Colony::find_ant_index(Ant *ant)
 void Colony::add_ant(Ant *ant)
 {
     ants.push_back(ant);
+}
+
+void Colony::add_sugar()
+{
+    sugar += 1;
+}
+
+size_t Colony::spawn_ants()
+{
+    return sugar / 10;
+    sugar %= 10;
 }

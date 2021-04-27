@@ -71,6 +71,13 @@ void Game::loop(unsigned long delay)
                     killed.push_back(next_cell->get_ant());
                     ant->move(grid, next_cell);
                 }
+                else if (!ant->has_sugar() && next_cell->has_sugar())
+                {
+                    ant->add_sugar();
+                }
+                else if (ant->has_sugar() && next_cell->is_nest())
+                {
+                }
                 else
                 {
                     Action action;
@@ -81,6 +88,13 @@ void Game::loop(unsigned long delay)
                     ant->move(grid, next_cell);
                 }
             }
+        }
+    });
+
+    grid.map_colony([&](Colony *colony) {
+        for (size_t i = colony->spawn_ants() + 1; i > 0; i--)
+        {
+            // todo: spawn ant
         }
     });
 
