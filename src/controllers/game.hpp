@@ -11,8 +11,8 @@ public:
     void restart();
 
 private:
-    void loop(unsigned long delay);
     View view;
     Grid grid;
     std::vector<Action> delta;
+    void loop(unsigned long delay);
 };

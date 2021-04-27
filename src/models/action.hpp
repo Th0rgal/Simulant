@@ -5,11 +5,12 @@
 
 enum struct ActionType {
     AntMove,
-    Kill,
+    AntDeath,
     SugarConsume,
 };
 
 struct Action {
     ActionType type;
-    std::vector<Cell*> updated;
+    std::vector<Coordinates> updated;
+    Colony* colony;
 };

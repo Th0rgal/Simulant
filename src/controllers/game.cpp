@@ -50,6 +50,17 @@ void Game::start()
     }
 }
 
+Action move_ant(Grid &grid, Ant *ant, Cell *cell)
+{
+    Action action;
+    action.type = ActionType::AntMove;
+    action.updated.push_back(ant->get_location());
+    action.updated.push_back(cell->get_location());
+    action.colony = ant->get_colony();
+    ant->move(grid, cell);
+    return action;
+}
+
 void Game::loop(unsigned long delay)
 {
     delta.clear();
@@ -61,32 +72,27 @@ void Game::loop(unsigned long delay)
             if (!possible_moves.empty())
             {
                 Cell *next_cell = grid.get_cell(possible_moves[random_index(0, possible_moves.size() - 1)]); // todo: use pheromons
+
+                // fight
                 if (next_cell->has_ant())
                 {
-                    Action action;
-                    action.type = ActionType::Kill;
-                    action.updated.push_back(grid.get_cell(ant->get_location()));
-                    action.updated.push_back(next_cell);
-                    delta.push_back(action);
-                    killed.push_back(next_cell->get_ant());
-                    ant->move(grid, next_cell);
+                    // me move the attacker to the new case on the screen
+                    delta.push_back(move_ant(grid, ant, next_cell));
+                    // then we chose a losing ant and kill it
+                    Ant *died_ant = flip_a_coin() ? next_cell->get_ant() : ant;
+                    killed.push_back(died_ant);
                 }
+
+                // let's take sugar
                 else if (!ant->has_sugar() && next_cell->has_sugar())
-                {
                     ant->add_sugar();
-                }
+
+                // let's deposit sugar
                 else if (ant->has_sugar() && next_cell->is_nest())
-                {
-                }
-                else
-                {
-                    Action action;
-                    action.type = ActionType::AntMove;
-                    action.updated.push_back(grid.get_cell(ant->get_location()));
-                    action.updated.push_back(next_cell);
-                    delta.push_back(action);
-                    ant->move(grid, next_cell);
-                }
+                    ant->deposit_sugar();
+
+                else // juste move
+                    delta.push_back(move_ant(grid, ant, next_cell));
             }
         }
     });
@@ -101,6 +107,13 @@ void Game::loop(unsigned long delay)
     for (Ant *ant : killed)
     {
         Colony *colony = ant->get_colony();
+
+        Action action;
+        action.type = ActionType::AntDeath;
+        action.updated.push_back(ant->get_location());
+        action.colony = colony;
+        delta.push_back(action);
+
         colony->remove_ant(grid, colony->find_ant_index(ant));
     }
 }

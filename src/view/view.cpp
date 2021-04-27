@@ -290,33 +290,15 @@ void View::update_entities(const Grid &grid, double delta_time)
 
     for (Action action : delta)
     {
-        switch (action.type)
+        if (action.type == ActionType::AntMove)
         {
-        case ActionType::AntMove:
-            Cell *to = action.updated[1];
-            Ant *ant = to->get_ant();
-            if (ant != NULL)
-            {
-                Cell *from = action.updated[0];
-                double x = to->get_location().x * delta_time + from->get_location().x * (1 - delta_time);
-                double y = to->get_location().y * delta_time + from->get_location().y * (1 - delta_time);
-                rgb color = m[ant->get_colony()];
-                draw_cell_circle(x, y, color.r, color.g, color.b, color.a);
-            }
-            break;
-
-        case ActionType::Kill:
-            to = action.updated[1];
-            ant = to->get_ant();
-            if (ant != NULL)
-            {
-                Cell *from = action.updated[0];
-                double x = to->get_location().x * delta_time + from->get_location().x * (1 - delta_time);
-                double y = to->get_location().y * delta_time + from->get_location().y * (1 - delta_time);
-                rgb color = m[ant->get_colony()];
-                draw_cell_circle(x, y, color.r, color.g, color.b, color.a);
-            }
-            break;
+            double x = action.updated[1].x * delta_time + action.updated[0].x * (1 - delta_time);
+            double y = action.updated[1].y * delta_time + action.updated[0].y * (1 - delta_time);
+            rgb color = m[action.colony];
+            draw_cell_circle(x, y, color.r, color.g, color.b, color.a);
+        }
+        else if (action.type == ActionType::AntDeath)
+        {
         }
     }
     SDL_SetRenderTarget(render, NULL);
