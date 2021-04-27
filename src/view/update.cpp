@@ -20,9 +20,6 @@ void    View::update(double time, const Grid& grid) {
 
         x_grid += X_MIN;
         y_grid += Y_MIN;
-
-        std::cout << "Cliked at {" << x_grid << ", " << y_grid << "}" << std::endl;
-
         Cell *cell = grid.get_cell(x_grid, y_grid);
         if (cell and cell->is_nest()) {
             disp_pheromons[cell->get_nest()] = !disp_pheromons[cell->get_nest()];
