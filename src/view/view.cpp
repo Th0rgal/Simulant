@@ -118,7 +118,7 @@ Event View::event_manager()
             case SDLK_SPACE:
                 return Event::restart;
             default:
-                return;
+                break;
             }
 
         case SDL_MOUSEBUTTONDOWN:
