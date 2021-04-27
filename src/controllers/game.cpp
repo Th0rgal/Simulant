@@ -106,14 +106,13 @@ void Game::loop(unsigned long delay)
 
     for (Ant *ant : killed)
     {
-        Colony *colony = ant->get_colony();
-
         Action action;
         action.type = ActionType::AntDeath;
         action.updated.push_back(ant->get_location());
-        action.colony = colony;
+        // winner's colony
+        action.colony = grid.get_cell(ant->get_location())->get_ant()->get_colony();
         delta.push_back(action);
-
+        Colony *colony = ant->get_colony();
         colony->remove_ant(grid, colony->find_ant_index(ant));
     }
 }
