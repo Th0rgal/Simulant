@@ -5,6 +5,7 @@
 
 enum struct ActionType {
     AntMove,
+    Kill,
     SugarConsume,
 };
 

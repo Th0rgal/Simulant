@@ -64,7 +64,7 @@ void Game::loop(unsigned long delay)
                 if (next_cell->has_ant())
                 {
                     Action action;
-                    action.type = ActionType::AntMove;
+                    action.type = ActionType::Kill;
                     action.updated.push_back(grid.get_cell(ant->get_location()));
                     action.updated.push_back(next_cell);
                     delta.push_back(action);
