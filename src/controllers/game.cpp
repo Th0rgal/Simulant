@@ -50,12 +50,12 @@ void Game::start()
     }
 }
 
-Action move_ant_on_screen(Grid &grid, Ant *ant, Cell *cell)
+Action move_ant_on_screen(Grid &grid, Ant *ant, Coordinates location)
 {
     Action action;
     action.type = ActionType::AntMove;
     action.updated.push_back(ant->get_location());
-    action.updated.push_back(cell->get_location());
+    action.updated.push_back(location);
     action.colony = ant->get_colony();
     return action;
 }
@@ -77,7 +77,7 @@ void Game::loop(unsigned long delay)
                 if (next_cell->has_ant())
                 {
                     // me move the attacker to the new case on the screen
-                    delta.push_back(move_ant_on_screen(grid, ant, next_cell));
+                    delta.push_back(move_ant_on_screen(grid, ant, next_cell->get_location()));
 
                     if (flip_a_coin())
                     {
@@ -93,20 +93,37 @@ void Game::loop(unsigned long delay)
 
                 // let's take sugar
                 else if (!ant->has_sugar() && next_cell->has_sugar())
+                {
                     ant->add_sugar();
+                    delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
+                }
 
                 // let's deposit sugar
                 else if (ant->has_sugar() && next_cell->is_nest())
+                {
                     ant->deposit_sugar();
+                    delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
+                }
+
+                else if (next_cell->is_nest() && next_cell->get_nest() == ant->get_colony())
+                {
+                    delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
+                }
 
                 // juste move
                 else
                 {
-                    delta.push_back(move_ant_on_screen(grid, ant, next_cell));
+                    delta.push_back(move_ant_on_screen(grid, ant, next_cell->get_location()));
                     ant->move(grid, next_cell);
                 }
             }
+            else
+            {
+                delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
+            }
         }
+        else
+            delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
     });
 
     grid.map_colony([&](Colony *colony) {
