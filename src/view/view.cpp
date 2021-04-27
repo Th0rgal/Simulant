@@ -117,8 +117,10 @@ Event View::event_manager()
                 return Event::close_request;
             case SDLK_SPACE:
                 return Event::restart;
+            default:
+                return;
             }
-            break;
+
         case SDL_MOUSEBUTTONDOWN:
             clicked = true;
             mouse_x = event.button.x;
@@ -194,19 +196,16 @@ void View::init_grid(const Grid &grid)
     }
 
     SDL_SetRenderTarget(render, grid_texture);
-
     SDL_SetRenderDrawColor(render, 15, 17, 34, 0xFF);
     SDL_RenderClear(render);
-
     SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
     for (int i = 0; i < SPACE_HEIGHT; i++)
-    {
         for (int j = 0; j < SPACE_WIDTH; j++)
         {
             SDL_Rect rect = {j * cell_w + grid_x, i * cell_h + grid_y, cell_w, cell_h};
             SDL_RenderDrawRect(render, &rect);
         }
-    }
+
     SDL_SetRenderTarget(render, NULL);
     init_entities(grid);
     update_pheromons(grid);
@@ -221,21 +220,20 @@ void View::init_entities(const Grid &grid)
 
     for (Cell *cell : grid.map)
     {
-        Coordinates c = cell->get_location();
         if (cell->is_nest())
         {
             rgb color = m[cell->get_nest()];
-            draw_cell_rect(c, color.r, color.g, color.b, color.a);
+            draw_cell_rect(cell->get_location(), color.r, color.g, color.b, color.a);
         }
         if (cell->has_ant())
         {
             Ant *a = cell->get_ant();
             rgb color = m[a->get_colony()];
-            draw_cell_circle(c, color.r, color.g, color.b, color.a);
+            draw_cell_circle(cell->get_location(), color.r, color.g, color.b, color.a);
         }
         if (cell->has_sugar())
         {
-            draw_cell_rect(c, 0xFF, 0xFF, 0xFF, 0xFF);
+            draw_cell_rect(cell->get_location(), 0xFF, 0xFF, 0xFF, 0xFF);
 
             //(c, 0xFF, 0xFF, 0xFF);
         }
@@ -254,14 +252,12 @@ void View::update_pheromons(const Grid &grid)
     {
         Coordinates c = cell->get_location();
         for (Colony *colony : grid.colonies)
-        {
             if (disp_pheromons[colony])
             {
                 double alpha = cell->get_nest_pheromons(colony);
                 rgb color = m[colony];
                 draw_cell_rect(c, color.r, color.g, color.b, std::max(0.0, alpha * 255 - 100));
             }
-        }
     }
 
     SDL_SetRenderTarget(render, NULL);
@@ -270,23 +266,17 @@ void View::update_pheromons(const Grid &grid)
 void View::update_entities(const Grid &grid, double delta_time)
 {
     SDL_SetRenderTarget(render, entities_texture);
-
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
 
     for (Cell *cell : grid.map)
-    {
-        Coordinates c = cell->get_location();
         if (cell->is_nest())
         {
             rgb color = m[cell->get_nest()];
-            draw_cell_rect(c, color.r, color.g, color.b, color.a);
+            draw_cell_rect(cell->get_location(), color.r, color.g, color.b, color.a);
         }
-        if (cell->has_sugar())
-        {
-            draw_cell_rect(c, 0xFF, 0xFF, 0xFF, 0xFF);
-        }
-    }
+        else if (cell->has_sugar())
+            draw_cell_rect(cell->get_location(), 0xFF, 0xFF, 0xFF, 0xFF);
 
     for (Action action : delta)
     {
