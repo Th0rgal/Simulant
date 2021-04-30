@@ -77,9 +77,9 @@ void Game::loop(unsigned long delay)
                 if (next_cell->has_ant())
                 {
                     // me move the attacker to the new case on the screen
-                    delta.push_back(move_ant(grid, ant, next_cell));
                     // then we chose a losing ant and kill it
                     Ant *died_ant = flip_a_coin() ? next_cell->get_ant() : ant;
+                    delta.push_back(move_ant(grid, ant, next_cell));
                     killed.push_back(died_ant);
                 }
 

@@ -34,6 +34,8 @@ View::View(int w, int h)
 
     scale_high_dpi = window_w / (double)w;
 
+    //SDL_Surface *surface = SDL_GetWindowSurface(window); || might be usefull to record the game
+
     init_grid();
 }
 

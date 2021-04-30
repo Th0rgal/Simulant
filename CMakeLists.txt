@@ -18,6 +18,7 @@ set(SRCS
     src/view/color.cpp
     src/view/circle.cpp
     src/view/update.cpp
+    src/view/hud.cpp
 )
 
 set(HEADERS
@@ -30,6 +31,8 @@ set(HEADERS
     src/models/grid.tpp
 
     src/view/view.hpp
+    src/view/color.hpp
+    src/view/hud.hpp
 )
 
 set(TESTS
@@ -40,6 +43,7 @@ set(TESTS
 
 set(LIBS
     SDL2
+    SDL2_ttf
     SDL2_image
 )
 
