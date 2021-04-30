@@ -21,6 +21,7 @@ View::View(bool fullScreen)
     scale_high_dpi = window_w / (double)w;
 
     init_grid();
+    init_hud();
 }
 
 View::View(int w, int h)
@@ -37,6 +38,7 @@ View::View(int w, int h)
     //SDL_Surface *surface = SDL_GetWindowSurface(window); || might be usefull to record the game
 
     init_grid();
+    init_hud();
 }
 
 View::~View()
@@ -105,7 +107,7 @@ void    View::init_hud() {
 
     hud.create_menu("Pause");
 
-    hud.add_rect_draw("Pause", "premier test", {400,400,0,0}, {0xFF,0xFF,0xFF,0xFF}, "pas de route LOL", 42);
+    hud.add_rect_draw("Pause", "premier test", {400,400,0,0}, {0xFF,0xFF,0xFF,0xFF}, "ressources/circular-medium.woff2", 42);
 }
 
 Event View::event_manager()

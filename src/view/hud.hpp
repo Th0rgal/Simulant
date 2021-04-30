@@ -31,6 +31,10 @@ class RectDraw {
             SDL_SetRenderTarget(renderer, NULL);
 
             TTF_Font *font = TTF_OpenFont(font_route.c_str(), font_size);
+            if (!font)
+                std::cerr << "THOMAS NTM" << std::endl;
+            else
+                std::cout << "ETONNANT" << std::endl;
 
             SDL_Color color_sdl = {0, 0, 0, 0xFF};
 
