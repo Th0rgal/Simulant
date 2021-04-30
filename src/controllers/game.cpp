@@ -6,7 +6,7 @@
 
 //std::vector<Action> delta;
 
-Game::Game() : grid(10), view(false) // 3 colonie
+Game::Game() : grid(4), view(false) // 3 colonie
 {
 }
 
@@ -50,14 +50,13 @@ void Game::start()
     }
 }
 
-Action move_ant(Grid &grid, Ant *ant, Cell *cell)
+Action move_ant_on_screen(Grid &grid, Ant *ant, Coordinates location)
 {
     Action action;
     action.type = ActionType::AntMove;
     action.updated.push_back(ant->get_location());
-    action.updated.push_back(cell->get_location());
+    action.updated.push_back(location);
     action.colony = ant->get_colony();
-    ant->move(grid, cell);
     return action;
 }
 
@@ -65,8 +64,9 @@ void Game::loop(unsigned long delay)
 {
     delta.clear();
     std::vector<Ant *> killed;
+    std::vector<Ant *> in_fight;
     grid.map_ants([&](size_t i, Ant *ant) {
-        if (std::find(killed.begin(), killed.end(), ant) == killed.end())
+        if (std::find(killed.begin(), killed.end(), ant) == killed.end() && std::find(in_fight.begin(), in_fight.end(), ant) == in_fight.end())
         {
             std::vector<Coordinates> possible_moves = ant->find_moves(grid);
             if (!possible_moves.empty())
@@ -77,24 +77,53 @@ void Game::loop(unsigned long delay)
                 if (next_cell->has_ant())
                 {
                     // me move the attacker to the new case on the screen
-                    // then we chose a losing ant and kill it
-                    Ant *died_ant = flip_a_coin() ? next_cell->get_ant() : ant;
-                    delta.push_back(move_ant(grid, ant, next_cell));
-                    killed.push_back(died_ant);
+                    delta.push_back(move_ant_on_screen(grid, ant, next_cell->get_location()));
+
+                    if (flip_a_coin())
+                    {
+                        killed.push_back(next_cell->get_ant());
+                        ant->move(grid, next_cell);
+                    }
+                    else
+                    {
+                        killed.push_back(ant);
+                        in_fight.push_back(next_cell->get_ant());
+                    }
                 }
 
                 // let's take sugar
                 else if (!ant->has_sugar() && next_cell->has_sugar())
+                {
                     ant->add_sugar();
+                    delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
+                }
 
                 // let's deposit sugar
                 else if (ant->has_sugar() && next_cell->is_nest())
+                {
                     ant->deposit_sugar();
+                    delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
+                }
 
-                else // juste move
-                    delta.push_back(move_ant(grid, ant, next_cell));
+                else if (next_cell->is_nest() && next_cell->get_nest() == ant->get_colony())
+                {
+                    delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
+                }
+
+                // juste move
+                else
+                {
+                    delta.push_back(move_ant_on_screen(grid, ant, next_cell->get_location()));
+                    ant->move(grid, next_cell);
+                }
+            }
+            else
+            {
+                delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
             }
         }
+        else
+            delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
     });
 
     grid.map_colony([&](Colony *colony) {
