@@ -6,6 +6,9 @@ project(simulant VERSION 0.0.1)
 find_package(doctest REQUIRED)
 include(doctest)
 
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+
 set(SRCS
     src/controllers/ant.cpp
     src/controllers/game.cpp
