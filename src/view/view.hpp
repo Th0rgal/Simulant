@@ -8,6 +8,7 @@
 #include "models/grid.hpp"
 #include "models/action.hpp"
 #include "view/color.hpp"
+#include "view/hud.hpp"
 
 
 enum struct Event {
@@ -23,6 +24,7 @@ public:
     ~View();
 
     void    init_grid();
+    void    init_hud();
     Event   event_manager();
 
     void    clear();
@@ -76,8 +78,9 @@ private:
     std::map<const Colony *, rgb> m;
     std::map<const Colony *, bool> disp_pheromons;
 
-
     std::vector<Action> delta;
+
+    HUD             hud;
 };
 
 void    DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius);

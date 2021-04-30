@@ -100,6 +100,14 @@ void View::init_grid()
     }
 }
 
+void    View::init_hud() {
+    hud.init_hud(render);
+
+    hud.create_menu("Pause");
+
+    hud.add_rect_draw("Pause", "premier test", {400,400,0,0}, {0xFF,0xFF,0xFF,0xFF}, "pas de route LOL", 42);
+}
+
 Event View::event_manager()
 {
     bool close_requested = false;

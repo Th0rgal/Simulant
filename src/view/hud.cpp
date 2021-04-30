@@ -2,8 +2,8 @@
 
 Menu::Menu(SDL_Renderer *rend) : render(rend), hidden(false) {}
 
-void Menu::add_rect_draw(std::string text, SDL_Rect rect, rgb color) {
-    buttons.emplace_back(render, text, rect, color);
+void Menu::add_rect_draw(std::string text, SDL_Rect rect, rgb color, std::string font_route, int font_size) {
+    UI.emplace_back(render, text, rect, color, font_route, font_size);
 }
 
 void Menu::hide() {
@@ -19,14 +19,21 @@ void Menu::render_menu() const {
 }
 
 
-HUD::HUD(SDL_Renderer *rend) : render(rend) {
-    //TTF_Init();
+HUD::HUD() {
+    TTF_Init();
+}
+
+HUD::~HUD() {
+    TTF_Quit();
+}
+
+void    HUD::init_hud(SDL_Renderer *rend) {
+    render = rend;
 }
 
 bool    HUD::exist(std::string name) const {
     if (menus.find(name) == menus.end()) {
         return false;
-        //throw std::invalid_argument("The menu " + name + " doesn't exist");
     }
     return true;
 }
@@ -38,14 +45,15 @@ void    HUD::create_menu(std::string name) {
 
     Menu menu(render);
 
-    menus.insert({name, menu});
+    menus.emplace(name, menu);
+    //menus.insert({name, menu});
     //menus[name] = menu;
 }
 
-void    HUD::add_rect_draw(std::string name, std::string text, SDL_Rect rect, rgb color) {
+void    HUD::add_rect_draw(std::string name, std::string text, SDL_Rect rect, rgb color, std::string font_route, int font_size) {
     if (!exist(name))
         throw std::invalid_argument("The menu " + name + " doesn't exist");
-    menus.find(name)->second.add_rect_draw(text, rect, color);
+    menus.find(name)->second.add_rect_draw(text, rect, color, font_route, font_size);
 }
 
 void    HUD::hide_menu(std::string name) {
