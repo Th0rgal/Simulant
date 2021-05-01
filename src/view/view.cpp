@@ -126,6 +126,8 @@ void    View::init_hud() {
         [&]() {
             end = true;
         });
+
+    hud.hide_menu("Pause");
 }
 
 Event View::event_manager()
