@@ -172,6 +172,13 @@ Cell *Grid::find_empty_cell()
     return !cell->is_void() ? find_empty_cell() : cell;
 }
 
+Cell *Grid::get_cell(const Vector &vector) const
+{
+    return (vector.x >= X_MIN && vector.x <= X_MAX && vector.y >= Y_MIN && vector.y <= Y_MAX)
+               ? map[(vector.y - Y_MIN) * SPACE_WIDTH + vector.x - X_MIN]
+               : NULL;
+}
+
 Cell *Grid::get_cell(int x, int y) const
 {
     return (x >= X_MIN && x <= X_MAX && y >= Y_MIN && y <= Y_MAX)
@@ -203,6 +210,30 @@ void Grid::spawn_ants(Colony *colony, size_t amount)
 
     for (size_t i = amount + 1; i > 1; i--)
     {
-        std::cout << "ant spawned" << std::endl;
+        Vector start = Vector{colony->left_corner_x, colony->left_corner_y};
+        int side_length = 0;
+        Cell *search;
+        while (search == NULL || !search->is_void())
+            for (int i = 0; i <= side_length; i++)
+            {
+                start -= Vector{1, 1};
+                side_length += 2;
+                search = get_cell(start + Vector{i, 0});
+                if (search != NULL && search->is_void())
+                    break;
+                search = get_cell(start + Vector{side_length + 1, i});
+                if (search != NULL && search->is_void())
+                    break;
+                search = get_cell(start + Vector{i, side_length + 1});
+                if (search != NULL && search->is_void())
+                    break;
+                search = get_cell(start + Vector{0, i});
+                if (search != NULL && search->is_void())
+                    break;
+            }
+
+        Ant *new_ant = new Ant(colony, search->get_location());
+        search->set_ant(new_ant);
+        colony->add_ant(new_ant);
     }
 }
