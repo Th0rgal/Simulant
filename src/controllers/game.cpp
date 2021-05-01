@@ -64,7 +64,7 @@ Coordinates chose(std::map<Coordinates, double> possible_moves)
 {
     double stop = random_double(0, 1);
     for (auto iterator = possible_moves.begin(); iterator != possible_moves.end(); iterator++)
-        if (stop -= iterator->second < 0)
+        if ((stop -= iterator->second) < 0)
             return iterator->first;
     throw std::runtime_error("an unexpected event occured: no plausible coordinates could be determined");
 }

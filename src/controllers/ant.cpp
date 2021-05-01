@@ -42,28 +42,18 @@ Colony *Ant::get_colony()
 std::map<Coordinates, double> Ant::find_moves(Grid &grid)
 {
     std::vector<Coordinates> neighbors = location.get_neighbors();
-    std::map<Coordinates, double> output;
-    double maximum = 0;
+    std::vector<Cell *> possible_cells;
     for (const Coordinates &neighbor : neighbors)
     {
         Cell *cell = grid.get_cell(neighbor);
-        if ((!cell->has_sugar()))
-        {
-            double score = cell->get_nest_pheromons(colony);
-            output[neighbor] = score;
-            maximum += score;
-        }
-        else if (!has_sugar() && (!cell->has_ant() || cell->get_ant()->colony != colony))
-        {
-            double score = 1 - cell->get_nest_pheromons(colony);
-            output[neighbor] = score;
-            maximum += score;
-        }
+        if ((!cell->has_sugar() || !has_sugar()) && (!cell->has_ant() || cell->get_ant()->colony != colony))
+            possible_cells.push_back(cell);
     }
-    for (auto iterator = output.begin(); iterator != output.end(); iterator++)
-    {
-        iterator->second /= maximum;
-    }
+
+    std::map<Coordinates, double> output;
+    for (Cell *cell : possible_cells)
+        output[cell->get_location()] = 1.0 / possible_cells.size();
+
     return output;
 }
 
