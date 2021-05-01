@@ -43,11 +43,26 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid)
 {
     std::vector<Coordinates> neighbors = location.get_neighbors();
     std::map<Coordinates, double> output;
+    double maximum = 0;
     for (const Coordinates &neighbor : neighbors)
     {
         Cell *cell = grid.get_cell(neighbor);
-        if ((!cell->has_sugar() || !has_sugar()) && (!cell->has_ant() || cell->get_ant()->colony != colony))
-            output[neighbor] = 0.0;
+        if ((!cell->has_sugar()))
+        {
+            double score = cell->get_nest_pheromons(colony);
+            output[neighbor] = score;
+            maximum += score;
+        }
+        else if (!has_sugar() && (!cell->has_ant() || cell->get_ant()->colony != colony))
+        {
+            double score = 1 - cell->get_nest_pheromons(colony);
+            output[neighbor] = score;
+            maximum += score;
+        }
+    }
+    for (auto iterator = output.begin(); iterator != output.end(); iterator++)
+    {
+        iterator->second /= maximum;
     }
     return output;
 }
