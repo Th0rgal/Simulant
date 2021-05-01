@@ -16,7 +16,7 @@ rgb::rgb() : r(255), g(255), b(255), a(255) {}
 
 rgb::rgb(double r_in, double g_in, double b_in, double alpha) : r(r_in * 255), g(g_in * 255), b(b_in * 255), a(alpha * 255) {}
 
-rgb::rgb(int r_in, int g_in, int b_in, int alpha) : r(r_in), g(b_in), b(b_in), a(alpha) {}
+rgb::rgb(int r_in, int g_in, int b_in, int alpha) : r(r_in), g(g_in), b(b_in), a(alpha) {}
 
 //https://stackoverflow.com/a/6930407
 rgb::rgb(hsv c, int alpha) : a(alpha) {

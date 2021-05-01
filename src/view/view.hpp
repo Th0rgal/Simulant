@@ -10,7 +10,6 @@
 #include "view/color.hpp"
 #include "view/hud.hpp"
 
-
 enum struct Event {
     close_request,
     restart,
@@ -46,8 +45,6 @@ public:
 
     void    renderAll();
 
-
-
 private:
     SDL_Window      *window;
     SDL_Renderer    *render;
@@ -73,12 +70,13 @@ private:
     SDL_Texture     *entities_texture;
     SDL_Texture     *pheromons_texture;
 
-    double          scale_high_dpi;
 
     std::map<const Colony *, rgb> m;
     std::map<const Colony *, bool> disp_pheromons;
 
     std::vector<Action> delta;
+
+    bool            end;
 
     HUD             hud;
 };

@@ -1,6 +1,8 @@
 #include "view/view.hpp"
 #include <algorithm>
 
+double scale_high_dpi = 0;
+
 View::View(bool fullScreen)
 {
     int w;
@@ -22,6 +24,8 @@ View::View(bool fullScreen)
 
     init_grid();
     init_hud();
+
+    end = false;
 }
 
 View::View(int w, int h)
@@ -39,6 +43,8 @@ View::View(int w, int h)
 
     init_grid();
     init_hud();
+
+    end = false;
 }
 
 View::~View()
@@ -102,12 +108,24 @@ void View::init_grid()
     }
 }
 
+// void Colony::map_ants(Function &&function)
+// {
+//     for (size_t i = 0; i < ants.size(); i++)
+//         function(i, ants[i]);
+// }
+
 void    View::init_hud() {
     hud.init_hud(render);
 
     hud.create_menu("Pause");
 
-    hud.add_rect_draw("Pause", "premier test", {400,400,0,0}, {0xFF,0xFF,0xFF,0xFF}, "ressources/circular-medium.woff2", 42);
+    hud.add_rect_draw("Pause", "premier test", {100,100,300,300}, {0xFF,0xFF,0xFF,0xFF}, "ressources/Marianne-Regular.otf", 42);
+    
+    //hud.hide_menu("Pause");
+    hud.add_button("Pause", "Deuxieme test", {500, 500, 300, 300}, {0,0xFF,0,0xFF}, "ressources/Marianne-Regular.otf", 21, 
+        [&]() {
+            end = true;
+        });
 }
 
 Event View::event_manager()
@@ -139,6 +157,8 @@ Event View::event_manager()
             mouse_y = event.button.y;
         }
     }
+    if (end)
+        return Event::close_request;
     return Event::none;
 }
 

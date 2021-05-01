@@ -3,7 +3,12 @@
 Menu::Menu(SDL_Renderer *rend) : render(rend), hidden(false) {}
 
 void Menu::add_rect_draw(std::string text, SDL_Rect rect, rgb color, std::string font_route, int font_size) {
-    UI.emplace_back(render, text, rect, color, font_route, font_size);
+
+    RectDraw *new_ui = new RectDraw(render, text, rect, color, font_route, font_size);
+
+    UI.push_back(new_ui);
+
+    //UI.emplace_back(render, text, rect, color, font_route, font_size);
 }
 
 void Menu::hide() {
@@ -15,8 +20,29 @@ void Menu::show() {
 }
 
 void Menu::render_menu() const {
-    //TODO
+    if (!hidden) {
+        for (const RectDraw* draw : UI) {
+            draw->render();
+        }
+    }
 }
+
+void Menu::use() {
+    if (!hidden) {
+        for (RectDraw* draw : UI) {
+            draw->use();
+        }
+    }
+}
+
+void Menu::update() {
+    if (!hidden) {
+        for (RectDraw* draw : UI) {
+            draw->update();
+        }
+    }
+}
+
 
 
 HUD::HUD() {
@@ -70,5 +96,17 @@ void    HUD::show_menu(std::string name) {
 void    HUD::render_menus() const {
     for (auto const& x : menus) {
         x.second.render_menu();
+    }
+}
+
+void    HUD::use() {
+    for (auto& x : menus) {
+        x.second.use();
+    }
+}
+
+void    HUD::update() {
+    for (auto& x : menus) {
+        x.second.update();
     }
 }
