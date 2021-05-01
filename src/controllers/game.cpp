@@ -109,14 +109,10 @@ void Game::loop(unsigned long delay)
                 }
 
                 // let's deposit sugar
-                else if (ant->has_sugar() && next_cell->is_nest())
-                {
-                    ant->deposit_sugar();
-                    delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
-                }
-
                 else if (next_cell->is_nest() && next_cell->get_nest() == ant->get_colony())
                 {
+                    if (ant->has_sugar())
+                        ant->deposit_sugar();
                     delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
                 }
 
@@ -134,12 +130,7 @@ void Game::loop(unsigned long delay)
             delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
     });
 
-    grid.map_colony([&](Colony *colony) {
-        for (size_t i = colony->spawn_ants() + 1; i > 0; i--)
-        {
-            // todo: spawn ant
-        }
-    });
+    grid.map_colony([&](Colony *colony) { colony->spawn_ants(); });
 
     for (Ant *ant : killed)
     {

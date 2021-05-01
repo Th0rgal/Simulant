@@ -45,7 +45,7 @@ public:
     int left_corner_y;
 
     void add_sugar();
-    size_t spawn_ants();
+    void spawn_ants();
 
     void remove_ant(Grid &grid, size_t ant_id);
     void add_ant(Ant *ant);
@@ -54,7 +54,9 @@ public:
 private:
     const std::array<Cell *, 4> cells;
     std::vector<Ant *> ants;
-    size_t sugar;
+    size_t sugar = 0;
+
+    void spawn_ant();
 };
 
 #include "controllers/ant.tpp"
