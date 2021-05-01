@@ -140,17 +140,10 @@ void Colony::add_sugar()
     sugar += 1;
 }
 
-void Colony::spawn_ants()
+size_t Colony::spawn_ants()
 {
 
     size_t to_spawn = sugar / 1;
     sugar %= 1;
-
-    for (size_t i = to_spawn + 1; i > 1; i--)
-        spawn_ant();
-}
-
-void Colony::spawn_ant()
-{
-    std::cout << "Ant spawned" << std::endl;
+    return to_spawn;
 }

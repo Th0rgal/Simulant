@@ -197,3 +197,12 @@ void Grid::set_ant(Ant *ant, Coordinates coordinates)
 {
     int pos = coordinates.x * coordinates.y * SPACE_WIDTH;
 }
+
+void Grid::spawn_ants(Colony *colony, size_t amount)
+{
+
+    for (size_t i = amount + 1; i > 1; i--)
+    {
+        std::cout << "ant spawned" << std::endl;
+    }
+}

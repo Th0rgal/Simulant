@@ -130,7 +130,7 @@ void Game::loop(unsigned long delay)
             delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
     });
 
-    grid.map_colony([&](Colony *colony) { colony->spawn_ants(); });
+    grid.map_colony([&](Colony *colony) { grid.spawn_ants(colony, colony->spawn_ants()); });
 
     for (Ant *ant : killed)
     {
