@@ -22,8 +22,6 @@ class RectDraw {
 
     public:
         RectDraw(SDL_Renderer *rend, std::string t, SDL_Rect r, rgb color, std::string font_route, int font_size) : renderer(rend), text(t), rect(r) {
-            
-            std::cout << color.r << ", " << color.g << ", " << color.b << ", " << color.a << std::endl;
 
             texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, r.w, r.h);
             SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
