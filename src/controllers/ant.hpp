@@ -1,9 +1,10 @@
 #pragma once
 
-#include <sys/types.h>
 #include "models/space.hpp"
+#include <sys/types.h>
 #include <vector>
 #include <array>
+#include <map>
 
 class Grid;
 
@@ -20,7 +21,7 @@ public:
     void add_sugar();
     void deposit_sugar();
     void move(Grid &grid, Cell *new_cell);
-    std::vector<Coordinates> find_moves(Grid &grid);
+    std::map<Coordinates, double> find_moves(Grid &grid);
     Colony *get_colony();
 
 private:

@@ -39,15 +39,15 @@ Colony *Ant::get_colony()
     return colony;
 }
 
-std::vector<Coordinates> Ant::find_moves(Grid &grid)
+std::map<Coordinates, double> Ant::find_moves(Grid &grid)
 {
     std::vector<Coordinates> neighbors = location.get_neighbors();
-    std::vector<Coordinates> output;
+    std::map<Coordinates, double> output;
     for (const Coordinates &neighbor : neighbors)
     {
         Cell *cell = grid.get_cell(neighbor);
         if ((!cell->has_sugar() || !has_sugar()) && (!cell->has_ant() || cell->get_ant()->colony != colony))
-            output.push_back(neighbor);
+            output[neighbor] = 0.0;
     }
     return output;
 }

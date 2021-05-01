@@ -44,7 +44,7 @@ Coordinates Coordinates::operator-(const Vector &other) const
     return Coordinates{x - other.x, y - other.y};
 }
 
-double Coordinates::square_distance_to(double other_x, double other_y)
+double Coordinates::square_distance_to(double other_x, double other_y) const
 {
     return (x - other_x) * (x - other_x) + (y - other_y) * (y - other_y);
 }
@@ -57,6 +57,15 @@ double Coordinates::distance_to(double other_x, double other_y)
 double Coordinates::square_distance_to(Coordinates location)
 {
     return square_distance_to(location.x, location.y);
+}
+
+bool Coordinates::operator<(const Coordinates &other) const
+{
+    double module = square_distance_to(0.0, 0.0);
+    double other_module = other.square_distance_to(0.0, 0.0);
+    if (module < other_module || (module == other_module && atan2(x, y) < atan2(other.x, other.y)))
+        return true;
+    return false;
 }
 
 std::vector<Coordinates> Coordinates::get_neighbors()
