@@ -66,7 +66,8 @@ Coordinates chose(std::map<Coordinates, double> possible_moves)
     for (auto iterator = possible_moves.begin(); iterator != possible_moves.end(); iterator++)
         if ((stop -= iterator->second) < 0)
             return iterator->first;
-    throw std::runtime_error("an unexpected event occured: no plausible coordinates could be determined");
+
+    return std::next(possible_moves.begin(), random_index(0, possible_moves.size() - 1))->first;
 }
 
 void Game::loop(unsigned long delay)
