@@ -113,13 +113,18 @@ void Game::loop(unsigned long delay, size_t current_block)
                 else if (next_cell->is_nest() && next_cell->get_nest() == ant->get_colony())
                 {
                     if (ant->has_sugar())
+                    {
+                        grid.get_cell(ant->get_location())->add_sugar_pheromon();
                         ant->deposit_sugar();
+                    }
                     delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
                 }
 
                 // juste move
                 else
                 {
+                    if (ant->has_sugar())
+                        grid.get_cell(ant->get_location())->add_sugar_pheromon();
                     delta.push_back(move_ant_on_screen(grid, ant, next_cell->get_location()));
                     ant->move(grid, next_cell);
                 }
