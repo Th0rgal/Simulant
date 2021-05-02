@@ -41,7 +41,7 @@ public:
 
 private:
     Coordinates location;
-    bool sugar;
+    bool sugar = false;
     double sugar_pheromons = 0;
     std::map<const Colony *, double> nest_pheromons;
     Colony *nest = NULL;

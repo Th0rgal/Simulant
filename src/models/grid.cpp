@@ -80,8 +80,9 @@ void Cell::reduce_sugar_pheromon()
     sugar_pheromons *= 0.9;
 }
 
-void Cell::update(size_t current_block) {
-    sugar_pheromons *= std::pow(0.9, current_block-last_block);
+void Cell::update(size_t current_block)
+{
+    sugar_pheromons *= std::pow(0.9, current_block - last_block);
 }
 
 // find a void top left cell of a nest square (2x2 cell)
@@ -120,7 +121,7 @@ Grid::Grid(size_t colonies_amount)
     }
     for (Colony *colony : colonies)
         summon_ants(colony);
-    summon_sugars(colonies.size()*5);
+    summon_sugars(colonies.size() * 5);
 }
 
 void Grid::summon_ants(Colony *colony)
@@ -207,7 +208,7 @@ Cell *Grid::get_cell(int x, int y) const
 
 Cell *Grid::get_cell(Coordinates location, size_t current_block) const
 {
-    Cell* cell = map[(location.y - Y_MIN) * SPACE_WIDTH + location.x - X_MIN];
+    Cell *cell = map[(location.y - Y_MIN) * SPACE_WIDTH + location.x - X_MIN];
     if (current_block != 0)
         cell->update(current_block);
     return cell;
