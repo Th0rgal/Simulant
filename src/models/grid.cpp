@@ -65,6 +65,21 @@ double Cell::get_nest_pheromons(const Colony *colony)
     return nest_pheromons[colony];
 }
 
+double Cell::get_sugar_pheromons()
+{
+    return sugar_pheromons;
+}
+
+void Cell::add_sugar_pheromon()
+{
+    sugar_pheromons += 1;
+}
+
+void Cell::reduce_sugar_pheromon()
+{
+    sugar_pheromons *= 0.9;
+}
+
 // find a void top left cell of a nest square (2x2 cell)
 std::array<Cell *, 4> Grid::find_nest_cells()
 {

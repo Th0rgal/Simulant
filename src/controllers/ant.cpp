@@ -48,19 +48,22 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid)
 {
     std::vector<Coordinates> neighbors = location.get_neighbors();
     std::vector<Cell *> possible_cells;
-    double min_pheromon = 1;
-    double max_pheromon = 0;
+    double min_nest_pheromon = 1;
+    double max_nest_pheromon = 0;
+
+    double min_sugar_pheromon = 1;
+    double max_sugar_pheromon = 0;
     for (const Coordinates &neighbor : neighbors)
     {
         Cell *cell = grid.get_cell(neighbor);
         if ((!cell->has_sugar() || !has_sugar()) && (!cell->has_ant() || cell->get_ant()->colony != colony))
         {
             possible_cells.push_back(cell);
-            double pheromon = cell->get_nest_pheromons(colony);
-            if (pheromon < min_pheromon)
-                min_pheromon = pheromon;
-            if (pheromon > max_pheromon)
-                max_pheromon = pheromon;
+            double nest_pheromon = cell->get_nest_pheromons(colony);
+            if (nest_pheromon < min_nest_pheromon)
+                min_nest_pheromon = nest_pheromon;
+            if (nest_pheromon > min_nest_pheromon)
+                max_nest_pheromon = nest_pheromon;
         }
     }
 
@@ -72,13 +75,13 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid)
         double score = 0.1; // the base score: used to increase randomness
         if (has_sugar())
         {
-            score += fixed_min_max(cell->get_nest_pheromons(colony), min_pheromon, max_pheromon);
+            score += fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon);
             if (cell->is_nest())
                 score += 10;
         }
         else
         {
-            score += 1 - fixed_min_max(cell->get_nest_pheromons(colony), min_pheromon, max_pheromon); // normalement on devrait ici chercher le sucre
+            score += 1 - fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon); // normalement on devrait ici chercher le sucre
             if (cell->has_sugar())
                 score += 10;
         }

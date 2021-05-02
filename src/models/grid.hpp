@@ -53,7 +53,6 @@ class Grid
 {
 public:
     Grid(size_t colonies_amount); //construit la map
-    void linearize_nest_pheromons();
     void reduce_sugar_pheromons();
     template <class Function>
     void map_colony(Function &&function);
