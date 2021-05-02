@@ -44,7 +44,7 @@ double fixed_min_max(double x, double min, double max)
     return (max - min > 0) ? (x - min) / (max - min) : 0;
 }
 
-std::map<Coordinates, double> Ant::find_moves(Grid &grid)
+std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
 {
     std::vector<Coordinates> neighbors = location.get_neighbors();
     std::vector<Cell *> possible_cells;
@@ -55,7 +55,7 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid)
     double max_sugar_pheromon = 0;
     for (const Coordinates &neighbor : neighbors)
     {
-        Cell *cell = grid.get_cell(neighbor);
+        Cell *cell = grid.get_cell(neighbor, current_block);
         if ((!cell->has_sugar() || !has_sugar()) && (!cell->has_ant() || cell->get_ant()->colony != colony))
         {
             possible_cells.push_back(cell);

@@ -26,6 +26,7 @@ void Game::restart()
 void Game::start()
 {
     unsigned long minimal_delay = 1e9; // one second
+    size_t current_block = 0;
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     view.init_grid(grid);
     view.renderAll();
@@ -44,7 +45,7 @@ void Game::start()
             view.renderAll();
             continue;
         }
-        loop(delay);
+        loop(delay, ++current_block);
         view.update_map(delta);
         previousTime = std::chrono::high_resolution_clock::now();
     }
@@ -70,7 +71,7 @@ Coordinates chose(std::map<Coordinates, double> possible_moves)
     return std::next(possible_moves.begin(), random_index(0, possible_moves.size() - 1))->first;
 }
 
-void Game::loop(unsigned long delay)
+void Game::loop(unsigned long delay, size_t current_block)
 {
     delta.clear();
     std::vector<Ant *> killed;
@@ -78,7 +79,7 @@ void Game::loop(unsigned long delay)
     grid.map_ants([&](size_t i, Ant *ant) {
         if (std::find(killed.begin(), killed.end(), ant) == killed.end() && std::find(in_fight.begin(), in_fight.end(), ant) == in_fight.end())
         {
-            std::map<Coordinates, double> possible_moves = ant->find_moves(grid);
+            std::map<Coordinates, double> possible_moves = ant->find_moves(grid, current_block);
             if (!possible_moves.empty())
             {
                 Cell *next_cell = grid.get_cell(chose(possible_moves)); // todo: use pheromons
