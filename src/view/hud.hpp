@@ -153,32 +153,48 @@ class Menu {
         void render_menu() const;
         void use();
         void update();
+
+        bool is_hidden();
 };
+
+struct Double_rect {
+    double x;
+    double y;
+    double w;
+    double h;
+};
+
 
 class HUD {
     private:
         SDL_Renderer                    *render;
+        SDL_Window                      *window;
         std::map<std::string, Menu>     menus;
 
     public:
         HUD();
         ~HUD();
 
-        void    init_hud(SDL_Renderer *rend);
+        void    init_hud(SDL_Window *window, SDL_Renderer *rend);
 
         bool    exist(std::string name) const;
         void    create_menu(std::string name);
         template <class Function>
-        void    add_button(std::string name, std::string text, SDL_Rect rect, rgb color, std::string font_route, int font_size, Function f) {
+        void    add_button(std::string name, std::string text, Double_rect rect, rgb color, std::string font_route, int font_size, Function f) {
+            int w, h;
+            SDL_GL_GetDrawableSize(window, &w, &h);
+            SDL_Rect sdl_rect = {static_cast<int>(rect.x * w), static_cast<int>(rect.y * h), static_cast<int>(rect.w * w), static_cast<int>(rect.h * h)};
             if (!exist(name))
                 throw std::invalid_argument("The menu " + name + " doesn't exist");
-            menus.find(name)->second.add_button(text, rect, color, font_route, font_size, f);
+            menus.find(name)->second.add_button(text, sdl_rect, color, font_route, font_size, f);
         }
-        void    add_rect_draw(std::string name, std::string text, SDL_Rect rect, rgb color, std::string font_route, int font_size);
+        void    add_rect_draw(std::string name, std::string text, Double_rect rect, rgb color, std::string font_route, int font_size);
         void    hide_menu(std::string name);
         void    show_menu(std::string name);
 
         void    render_menus() const;
         void    use();
         void    update();
+
+        bool    menu_is_hidden(std::string name);
 };

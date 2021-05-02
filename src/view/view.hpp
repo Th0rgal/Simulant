@@ -77,6 +77,7 @@ private:
     std::vector<Action> delta;
 
     bool            end;
+    bool            restart;
 
     HUD             hud;
 };

@@ -26,6 +26,7 @@ View::View(bool fullScreen)
     init_hud();
 
     end = false;
+    restart = false;
 }
 
 View::View(int w, int h)
@@ -45,6 +46,7 @@ View::View(int w, int h)
     init_hud();
 
     end = false;
+    restart = false;
 }
 
 View::~View()
@@ -115,16 +117,19 @@ void View::init_grid()
 // }
 
 void    View::init_hud() {
-    hud.init_hud(render);
+    hud.init_hud(window, render);
 
     hud.create_menu("Pause");
-
-    hud.add_rect_draw("Pause", "premier test", {100,100,300,300}, {0xFF,0xFF,0xFF,0xFF}, "ressources/Marianne-Regular.otf", 42);
+    hud.add_rect_draw("Pause", "", {0,0,1,1}, {0xFF,0xFF,0xFF,0x50}, "ressources/Marianne-Regular.otf", 42);
     
-    //hud.hide_menu("Pause");
-    hud.add_button("Pause", "Deuxieme test", {500, 500, 300, 300}, {0,0xFF,0,0xFF}, "ressources/Marianne-Regular.otf", 21, 
+    //hud.add_rect_draw("Pause", "premier test", {0,0,0.10,0.10}, {0xFF,0xFF,0xFF,0xFF}, "ressources/Marianne-Regular.otf", 42);
+    hud.add_button("Pause", "Exit", {0.90, 0.80, 0.10, 0.10}, {0,0xFF,0,0xFF}, "ressources/Marianne-Regular.otf", 21, 
         [&]() {
             end = true;
+        });
+    hud.add_button("Pause", "Restart", {0.90, 0.90, 0.10, 0.10}, {0,0xFF,0,0xFF}, "ressources/Marianne-Regular.otf", 21, 
+        [&]() {
+            restart = true;
         });
 
     hud.hide_menu("Pause");
@@ -145,13 +150,21 @@ Event View::event_manager()
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
-            case SDLK_ESCAPE:
-                return Event::close_request;
+            case SDLK_ESCAPE: {
+                if (hud.menu_is_hidden("Pause")) {
+                    hud.show_menu("Pause");
+                } else {
+                    hud.hide_menu("Pause");
+                }
+                break;
+                //return Event::close_request;
+            }
             case SDLK_SPACE:
                 return Event::restart;
             default:
                 break;
             }
+            break;
 
         case SDL_MOUSEBUTTONDOWN:
             clicked = true;
@@ -161,6 +174,10 @@ Event View::event_manager()
     }
     if (end)
         return Event::close_request;
+    if (restart) {
+        restart = false;
+        return Event::restart;
+    }
     return Event::none;
 }
 
