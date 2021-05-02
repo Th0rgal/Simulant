@@ -120,7 +120,7 @@ Grid::Grid(size_t colonies_amount)
     }
     for (Colony *colony : colonies)
         summon_ants(colony);
-    summon_sugars(colonies.size());
+    summon_sugars(colonies.size()*5);
 }
 
 void Grid::summon_ants(Colony *colony)

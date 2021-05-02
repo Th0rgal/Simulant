@@ -64,6 +64,12 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
                 min_nest_pheromon = nest_pheromon;
             if (nest_pheromon > min_nest_pheromon)
                 max_nest_pheromon = nest_pheromon;
+
+            double sugar_pheromon = cell->get_sugar_pheromons();
+            if (sugar_pheromon < min_sugar_pheromon)
+                min_sugar_pheromon = sugar_pheromon;
+            if (sugar_pheromon > min_sugar_pheromon)
+                max_sugar_pheromon = sugar_pheromon;
         }
     }
 
@@ -72,7 +78,7 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
     double total_score = 0;
     for (Cell *cell : possible_cells)
     {
-        double score = 0.1; // the base score: used to increase randomness
+        double score = 0.01; // the base score: used to increase randomness
         if (has_sugar())
         {
             score += fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon);
@@ -81,7 +87,8 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
         }
         else
         {
-            score += 1 - fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon); // normalement on devrait ici chercher le sucre
+            score += (1 - fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon)) * 0.1;
+            score *= fixed_min_max(cell->get_sugar_pheromons(), min_sugar_pheromon, max_sugar_pheromon);
             if (cell->has_sugar())
                 score += 10;
         }

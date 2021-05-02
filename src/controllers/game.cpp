@@ -25,7 +25,7 @@ void Game::restart()
 
 void Game::start()
 {
-    unsigned long minimal_delay = 1e9; // one second
+    unsigned long minimal_delay = 2e8; // one second
     size_t current_block = 0;
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     view.init_grid(grid);
