@@ -5,7 +5,7 @@ void    View::renderAll() {
     SDL_RenderClear(render);
 
 
-    SDL_RenderCopy(render, grid_texture, NULL, NULL);
+    SDL_RenderCopy(render, background_texture, NULL, NULL);
     SDL_RenderCopy(render, pheromons_texture, NULL, NULL);
     SDL_RenderCopy(render, entities_texture, NULL, NULL);
     
@@ -31,6 +31,9 @@ void    View::update(double time, const Grid& grid) {
             update_pheromons(grid);
         }
         hud.use();
+    }
+    if (double_clicked) {
+
     }
     if (delta.size() > 0)
         update_entities(grid, time);

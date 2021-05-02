@@ -63,10 +63,13 @@ private:
     SDL_Rect        down;
 
     bool            clicked;
+    bool            double_clicked;
     int             mouse_x;
     int             mouse_y;
 
     SDL_Texture     *grid_texture;
+
+    SDL_Texture     *background_texture;
     SDL_Texture     *entities_texture;
     SDL_Texture     *pheromons_texture;
 
@@ -80,6 +83,8 @@ private:
     bool            restart;
 
     HUD             hud;
+
+    SDL_Rect        zoom;
 };
 
 void    DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius);
