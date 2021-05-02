@@ -59,7 +59,7 @@ struct Coordinates
 
     double square_distance_to(Coordinates location);
     double distance_to(double x, double y);
-    double square_distance_to(double x, double y);
+    double square_distance_to(double x, double y) const;
     std::vector<Coordinates> get_neighbors();
 
     /**
@@ -71,6 +71,7 @@ struct Coordinates
      **/
     bool operator==(const Coordinates &other) const;
     bool operator!=(const Coordinates &other) const;
+    bool operator<(const Coordinates &other) const;
     Coordinates operator+(const Vector &other) const;
     Coordinates operator-(const Vector &other) const;
 };

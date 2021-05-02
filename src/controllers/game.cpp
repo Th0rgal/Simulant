@@ -60,6 +60,16 @@ Action move_ant_on_screen(Grid &grid, Ant *ant, Coordinates location)
     return action;
 }
 
+Coordinates chose(std::map<Coordinates, double> possible_moves)
+{
+    double stop = random_double(0, 1);
+    for (auto iterator = possible_moves.begin(); iterator != possible_moves.end(); iterator++)
+        if ((stop -= iterator->second) < 0)
+            return iterator->first;
+
+    return std::next(possible_moves.begin(), random_index(0, possible_moves.size() - 1))->first;
+}
+
 void Game::loop(unsigned long delay)
 {
     delta.clear();
@@ -68,10 +78,10 @@ void Game::loop(unsigned long delay)
     grid.map_ants([&](size_t i, Ant *ant) {
         if (std::find(killed.begin(), killed.end(), ant) == killed.end() && std::find(in_fight.begin(), in_fight.end(), ant) == in_fight.end())
         {
-            std::vector<Coordinates> possible_moves = ant->find_moves(grid);
+            std::map<Coordinates, double> possible_moves = ant->find_moves(grid);
             if (!possible_moves.empty())
             {
-                Cell *next_cell = grid.get_cell(possible_moves[random_index(0, possible_moves.size() - 1)]); // todo: use pheromons
+                Cell *next_cell = grid.get_cell(chose(possible_moves)); // todo: use pheromons
 
                 // fight
                 if (next_cell->has_ant())
@@ -99,14 +109,10 @@ void Game::loop(unsigned long delay)
                 }
 
                 // let's deposit sugar
-                else if (ant->has_sugar() && next_cell->is_nest())
-                {
-                    ant->deposit_sugar();
-                    delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
-                }
-
                 else if (next_cell->is_nest() && next_cell->get_nest() == ant->get_colony())
                 {
+                    if (ant->has_sugar())
+                        ant->deposit_sugar();
                     delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
                 }
 
@@ -118,20 +124,13 @@ void Game::loop(unsigned long delay)
                 }
             }
             else
-            {
                 delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
-            }
         }
         else
             delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
     });
 
-    grid.map_colony([&](Colony *colony) {
-        for (size_t i = colony->spawn_ants() + 1; i > 0; i--)
-        {
-            // todo: spawn ant
-        }
-    });
+    grid.map_colony([&](Colony *colony) { grid.spawn_ants(colony, colony->spawn_ants()); });
 
     for (Ant *ant : killed)
     {
