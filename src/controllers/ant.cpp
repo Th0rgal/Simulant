@@ -71,7 +71,11 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid)
     {
         double score = 0.1; // the base score: used to increase randomness
         if (has_sugar())
+        {
             score += fixed_min_max(cell->get_nest_pheromons(colony), min_pheromon, max_pheromon);
+            if (cell->is_nest())
+                score += 10;
+        }
         else
         {
             score += 1 - fixed_min_max(cell->get_nest_pheromons(colony), min_pheromon, max_pheromon); // normalement on devrait ici chercher le sucre
