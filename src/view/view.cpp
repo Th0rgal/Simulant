@@ -65,7 +65,7 @@ View::~View()
 
 void View::init_grid()
 {
-    int cell_size = std::min(window_w / SPACE_WIDTH, window_h / SPACE_HEIGHT);
+    cell_size = std::min(window_w / SPACE_WIDTH, window_h / SPACE_HEIGHT);
 
     std::cout << cell_size << std::endl;
     cell_w = cell_size;
@@ -109,7 +109,7 @@ void View::init_grid()
         down.w = window_w;
         down.h = diff / 2;
     }
-    double zoom_in = 8.0 / scale_high_dpi;
+    double zoom_in = 4.0 / scale_high_dpi;
     dest_rect = {grid_x, grid_y, grid_w, grid_h};
     grid_w *= zoom_in;
     grid_h *= zoom_in;
@@ -286,7 +286,7 @@ void View::init_grid(const Grid &grid)
     {
         for (int j = 0; j < SPACE_WIDTH; j++)
         {
-            SDL_Rect rect = {j * cell_w / 4 + grid_x, i * cell_h / 4 + grid_y, cell_w, cell_h};
+            SDL_Rect rect = {j * cell_size + grid_x, i * cell_size + grid_y, cell_size, cell_size};
             SDL_RenderDrawRect(render, &rect);
         }
     }

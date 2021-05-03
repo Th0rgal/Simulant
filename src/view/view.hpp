@@ -50,12 +50,14 @@ private:
     SDL_Renderer    *render;
     int             window_w;
     int             window_h;
+    int             cell_size; 
     int             cell_w;
     int             cell_h;
     int             grid_w;
     int             grid_h;
     int             grid_x;
     int             grid_y;
+
 
     SDL_Rect        top;
     SDL_Rect        right;
