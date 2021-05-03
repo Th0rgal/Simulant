@@ -13,7 +13,7 @@ View::View(bool fullScreen)
         window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 800, SDL_WINDOW_ALLOW_HIGHDPI);
     else
         window = SDL_CreateWindow("Ant", 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_ALLOW_HIGHDPI);
-
+    SDL_Delay(100);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
     SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
 
@@ -33,6 +33,7 @@ View::View(int w, int h)
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_ALLOW_HIGHDPI);
+    SDL_Delay(100);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 
     SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
@@ -75,10 +76,12 @@ void View::init_grid()
 
     grid_w = cell_w * SPACE_WIDTH;
     grid_h = cell_h * SPACE_HEIGHT;
-    if (grid_w < window_w) {
+    if (grid_w < window_w)
+    {
         grid_x = (window_w - grid_w) / 2;
     }
-    if (grid_h < window_h) {
+    if (grid_h < window_h)
+    {
         grid_y = (window_h - grid_h) / 2;
     }
     double zoom_in = 2.0 / scale_high_dpi;
@@ -258,7 +261,7 @@ void View::init_grid(const Grid &grid)
     }
 
     SDL_SetRenderTarget(render, background_texture);
-    SDL_SetRenderDrawColor(render, 0, 0 ,0 ,0);
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
     //SDL_RenderSetScale(render, 2, 2);
@@ -317,20 +320,23 @@ void View::update_pheromons(const Grid &grid, size_t current_block)
     {
         cell->update(current_block);
         Coordinates c = cell->get_location();
-        for (Colony *colony : grid.colonies) {
+        for (Colony *colony : grid.colonies)
+        {
             if (disp_pheromons[colony])
             {
                 double alpha = cell->get_nest_pheromons(colony);
                 rgb color = m[colony];
                 draw_cell_rect(c, color.r, color.g, color.b, std::max(0.0, alpha * 255 - 100));
             }
-            if (cell->get_sugar_pheromons() > 0) {
+            if (cell->get_sugar_pheromons() > 0)
+            {
                 std::cout << cell->get_sugar_pheromons() * 255 << std::endl;
                 int alpha = cell->get_sugar_pheromons() * 255;
-                if (alpha > 255) {
+                if (alpha > 255)
+                {
                     alpha = 255;
                 }
-                rgb color = {1.0,1.0,1.0};
+                rgb color = {1.0, 1.0, 1.0};
                 draw_cell_rect(c, color.r, color.g, color.b, alpha);
             }
         }
