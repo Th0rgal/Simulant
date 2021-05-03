@@ -86,7 +86,7 @@ void    HUD::add_rect_draw(std::string name, std::string text, Double_rect rect,
 
     SDL_Rect sdl_rect = {static_cast<int>(rect.x * w), static_cast<int>(rect.y * h), static_cast<int>(rect.w * w), static_cast<int>(rect.h * h)};
 
-    std::cout << sdl_rect.w << ", " << sdl_rect.h << std::endl;
+    std::cout << sdl_rect.w << ",, " << sdl_rect.h << std::endl;
 
     if (!exist(name))
         throw std::invalid_argument("The menu " + name + " doesn't exist");

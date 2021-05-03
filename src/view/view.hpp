@@ -84,7 +84,8 @@ private:
 
     HUD             hud;
 
-    SDL_Rect        zoom;
+    SDL_Rect        texture_rect;
+    SDL_Rect        dest_rect;
 };
 
 void    DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius);

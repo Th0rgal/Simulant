@@ -67,6 +67,7 @@ void View::init_grid()
 {
     int cell_size = std::min(window_w / SPACE_WIDTH, window_h / SPACE_HEIGHT);
 
+    std::cout << cell_size << std::endl;
     cell_w = cell_size;
     cell_h = cell_size;
     grid_x = 0;
@@ -108,8 +109,9 @@ void View::init_grid()
         down.w = window_w;
         down.h = diff / 2;
     }
-
-    zoom = {grid_x, grid_y, grid_w, grid_h};
+    double zoom_in = 4.0 / scale_high_dpi;
+    texture_rect = {0, 0, static_cast<int>(grid_w * zoom_in), static_cast<int>(grid_h * zoom_in)};
+    dest_rect = {grid_x, grid_y, grid_w, grid_h};
 }
 
 // void Colony::map_ants(Function &&function)
@@ -160,10 +162,7 @@ Event View::event_manager()
                     hud.hide_menu("Pause");
                 }
                 break;
-                //return Event::close_request;
             }
-            case SDLK_SPACE:
-                return Event::restart;
             default:
                 break;
             }
@@ -177,6 +176,16 @@ Event View::event_manager()
             } else {
                 double_clicked = true;
             }
+            break ;
+        case SDL_MOUSEWHEEL:
+            if(event.wheel.y > 0) {
+                std::cout << "scroll mouse up" << std::endl;
+            } else if(event.wheel.y < 0) {
+                std::cout << "scroll mouse down" << std::endl;
+            }
+            break;
+        default:
+            break;
         }
     }
     if (end)
