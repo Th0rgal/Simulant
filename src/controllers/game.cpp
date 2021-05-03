@@ -74,6 +74,20 @@ Coordinates chose(std::map<Coordinates, double> possible_moves)
 void Game::loop(unsigned long delay, size_t current_block)
 {
     delta.clear();
+
+    grid.map_colony([&](Colony *colony) {
+        std::vector<Coordinates> new_ants = spawn_list[colony];
+        std::vector<Coordinates> updated_new_ants;
+        for (Coordinates coordinates : new_ants)
+        {
+            if (grid.get_cell(coordinates)->is_void())
+                grid.spawn_ant(colony, coordinates);
+            else
+                updated_new_ants.push_back(coordinates);
+        }
+        spawn_list[colony] = updated_new_ants;
+    });
+
     std::vector<Ant *> killed;
     std::vector<Ant *> in_fight;
     grid.map_ants([&](size_t i, Ant *ant) {
@@ -115,7 +129,8 @@ void Game::loop(unsigned long delay, size_t current_block)
                     if (ant->has_sugar())
                     {
                         grid.get_cell(ant->get_location())->add_sugar_pheromon();
-                        ant->deposit_sugar();
+                        if (ant->deposit_sugar()) // if an ant spawned
+                            spawn_list[ant->get_colony()].push_back(ant->get_location());
                     }
                     delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
                 }
@@ -135,8 +150,6 @@ void Game::loop(unsigned long delay, size_t current_block)
         else
             delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
     });
-
-    grid.map_colony([&](Colony *colony) { grid.spawn_ants(colony, colony->spawn_ants()); });
 
     for (Ant *ant : killed)
     {

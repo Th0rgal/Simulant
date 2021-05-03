@@ -65,7 +65,7 @@ public:
     Cell *get_cell(int x, int y) const;
     Cell *get_cell(Coordinates location, size_t current_block = 0) const;
     void set_ant(Ant *ant, Coordinates coordinates);
-    void spawn_ants(Colony *colony, size_t amount);
+    void spawn_ant(Colony *colony, Coordinates location);
     void clear();
 
 private:

@@ -19,7 +19,7 @@ public:
     Coordinates get_location();
     bool has_sugar();
     void add_sugar();
-    void deposit_sugar();
+    bool deposit_sugar();
     void move(Grid &grid, Cell *new_cell);
     std::map<Coordinates, double> find_moves(Grid &grid, size_t current_block);
     Colony *get_colony();
@@ -44,8 +44,7 @@ public:
     int left_corner_x;
     int left_corner_y;
 
-    void add_sugar();
-    size_t spawn_ants();
+    bool add_sugar();
 
     void remove_ant(Grid &grid, size_t ant_id);
     void add_ant(Ant *ant);
