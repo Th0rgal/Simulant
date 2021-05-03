@@ -6,8 +6,9 @@ void    View::renderAll() {
 
 
     SDL_RenderCopy(render, background_texture, NULL, NULL);
-    SDL_RenderCopy(render, pheromons_texture, NULL, NULL);
-    SDL_RenderCopy(render, entities_texture, NULL, NULL);
+
+    SDL_RenderCopy(render, pheromons_texture, NULL, &dest_rect);
+    SDL_RenderCopy(render, entities_texture, NULL, &dest_rect);
     
     hud.render_menus();
     

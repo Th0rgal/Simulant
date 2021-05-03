@@ -110,7 +110,10 @@ void View::init_grid()
         down.h = diff / 2;
     }
     double zoom_in = 4.0 / scale_high_dpi;
-    texture_rect = {0, 0, static_cast<int>(grid_w * zoom_in), static_cast<int>(grid_h * zoom_in)};
+    scale_high_dpi = 4;
+    grid_w *= zoom_in;
+    grid_h *= zoom_in;
+    texture_rect = {0, 0, grid_w, grid_h};
     dest_rect = {grid_x, grid_y, grid_w, grid_h};
 }
 
@@ -199,8 +202,8 @@ Event View::event_manager()
 
 void View::draw_cell_rect(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-    int x = (c.x - X_MIN) * cell_w + grid_x;
-    int y = (c.y - Y_MIN) * cell_h + grid_y;
+    int x = (c.x - X_MIN) * cell_w;
+    int y = (c.y - Y_MIN) * cell_h;
     int w = cell_w;
     int h = cell_h;
     SDL_Rect rect = {x, y, w, h};
@@ -210,8 +213,8 @@ void View::draw_cell_rect(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b,
 
 void View::draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-    int x = (x_rect - X_MIN) * cell_w + grid_x;
-    int y = (y_rect - Y_MIN) * cell_h + grid_y;
+    int x = (x_rect - X_MIN) * cell_w;
+    int y = (y_rect - Y_MIN) * cell_h;
     int w = cell_w;
     int h = cell_h;
     SDL_Rect rect = {x, y, w, h};
@@ -221,8 +224,8 @@ void View::draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, ui
 
 void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-    int x = (c.x - X_MIN) * cell_w + cell_w / 2 + grid_x;
-    int y = (c.y - Y_MIN) * cell_h + cell_h / 2 + grid_y;
+    int x = (c.x - X_MIN) * cell_w + cell_w / 2;
+    int y = (c.y - Y_MIN) * cell_h + cell_h / 2;
     int rayon = cell_w / 4;
 
     //void DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius)
@@ -234,8 +237,8 @@ void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t 
 
 void View::draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-    int x = (x_rect - X_MIN) * cell_w + cell_w / 2 + grid_x;
-    int y = (y_rect - Y_MIN) * cell_h + cell_h / 2 + grid_y;
+    int x = (x_rect - X_MIN) * cell_w + cell_w / 2;
+    int y = (y_rect - Y_MIN) * cell_h + cell_h / 2;
     int rayon = cell_w / 4;
 
     //void DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius)
@@ -249,9 +252,9 @@ void View::init_grid(const Grid &grid)
 {
     background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(background_texture, SDL_BLENDMODE_BLEND);
-    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
     SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
-    pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_ADD);
 
     double base_tint = create_base_tint();
