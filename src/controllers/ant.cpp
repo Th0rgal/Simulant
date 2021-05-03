@@ -41,7 +41,7 @@ Colony *Ant::get_colony()
 
 double fixed_min_max(double x, double min, double max)
 {
-    return (max - min > 0) ? (x - min) / (max - min) : 0;
+    return (max - min > 0) ? (x - min) / (max - min) : 1;
 }
 
 std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
@@ -78,7 +78,7 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
     double total_score = 0;
     for (Cell *cell : possible_cells)
     {
-        double score = 0.01; // the base score: used to increase randomness
+        double score = 0; // the base score: used to increase randomness
         if (has_sugar())
         {
             score += fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon);
@@ -87,8 +87,8 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
         }
         else
         {
-            score += (1 - fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon)) * 0.1;
-            score *= fixed_min_max(cell->get_sugar_pheromons(), min_sugar_pheromon, max_sugar_pheromon);
+            score += (1 - fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon)) * 0.45;
+            score += fixed_min_max(cell->get_sugar_pheromons(), min_sugar_pheromon, max_sugar_pheromon) * 0.55;
             if (cell->has_sugar())
                 score += 10;
         }
@@ -98,7 +98,7 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
     }
 
     for (auto iterator = output.begin(); iterator != output.end(); iterator++)
-        iterator->second / total_score;
+        iterator->second /= total_score;
 
     return output;
 }
