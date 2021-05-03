@@ -147,6 +147,9 @@ size_t Colony::find_ant_index(Ant *ant)
         if (ant == ants[i])
             return i;
     std::cout << "ANT:" << ant << std::endl;
+    std::cout << "location:" << ant->get_location() << std::endl;
+    std::cout << "colony:" << ant->get_colony() << std::endl;
+    std::cout << "expected colony:" << this << std::endl;
     throw std::invalid_argument("This ant does not belong to the colony");
 }
 
