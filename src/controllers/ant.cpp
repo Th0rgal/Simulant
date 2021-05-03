@@ -56,7 +56,7 @@ std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
     for (const Coordinates &neighbor : neighbors)
     {
         Cell *cell = grid.get_cell(neighbor, current_block);
-        if ((!cell->has_sugar() || !has_sugar()) && (!cell->has_ant() || cell->get_ant()->colony != colony))
+        if ((cell->is_nest() || cell->get_nest() != colony || has_sugar()) && (!cell->has_sugar() || !has_sugar()) && (!cell->has_ant() || cell->get_ant()->colony != colony))
         {
             possible_cells.push_back(cell);
             double nest_pheromon = cell->get_nest_pheromons(colony);
