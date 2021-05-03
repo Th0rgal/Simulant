@@ -83,6 +83,7 @@ void Cell::reduce_sugar_pheromon()
 void Cell::update(size_t current_block)
 {
     sugar_pheromons *= std::pow(0.9, current_block - last_block);
+    last_block = current_block;
 }
 
 // find a void top left cell of a nest square (2x2 cell)

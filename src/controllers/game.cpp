@@ -41,7 +41,7 @@ void Game::start()
         long delay = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - previousTime).count();
         if (delay < minimal_delay)
         {
-            view.update(delay / (double)minimal_delay, grid);
+            view.update(delay / (double)minimal_delay, grid, current_block);
             view.renderAll();
             continue;
         }

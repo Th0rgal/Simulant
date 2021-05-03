@@ -81,13 +81,17 @@ void View::init_grid()
     if (grid_h < window_h) {
         grid_y = (window_h - grid_h) / 2;
     }
-    double zoom_in = 4.0 / scale_high_dpi;
+    double zoom_in = 2.0 / scale_high_dpi;
     dest_rect = {grid_x, grid_y, grid_w, grid_h};
     grid_w *= zoom_in;
     grid_h *= zoom_in;
-    cell_h *= zoom_in;
     cell_w *= zoom_in;
+    cell_h *= zoom_in;
     texture_rect = {0, 0, grid_w, grid_h};
+    new_w = grid_w;
+    new_h = grid_h;
+    x = 0;
+    y = 0;
 }
 
 // void Colony::map_ants(Function &&function)
@@ -122,6 +126,7 @@ Event View::event_manager()
     SDL_Event event;
     clicked = false;
     double_clicked = false;
+    scroll = 0;
 
     while (SDL_PollEvent(&event))
     {
@@ -162,13 +167,15 @@ Event View::event_manager()
             }
             break;
         case SDL_MOUSEWHEEL:
+            mouse_x = event.button.x;
+            mouse_y = event.button.y;
             if (event.wheel.y > 0)
             {
-                std::cout << "scroll mouse up" << std::endl;
+                scroll = 1;
             }
             else if (event.wheel.y < 0)
             {
-                std::cout << "scroll mouse down" << std::endl;
+                scroll = -1;
             }
             break;
         default:
@@ -207,11 +214,11 @@ void View::draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, ui
     SDL_RenderFillRect(render, &rect);
 }
 
-void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a, double scale)
 {
     int x = (c.x - X_MIN) * cell_w + cell_w / 2;
     int y = (c.y - Y_MIN) * cell_h + cell_h / 2;
-    int rayon = cell_w / 4;
+    int rayon = cell_w * scale;
 
     //void DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius)
     //std::cout << a << std::endl;
@@ -220,11 +227,11 @@ void View::draw_cell_circle(const Coordinates &c, uint8_t r, uint8_t g, uint8_t 
     //SDL_RenderFillRect(render, &rect);
 }
 
-void View::draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+void View::draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, double scale)
 {
     int x = (x_rect - X_MIN) * cell_w + cell_w / 2;
     int y = (y_rect - Y_MIN) * cell_h + cell_h / 2;
-    int rayon = cell_w / 4;
+    int rayon = cell_w * scale;
 
     //void DrawCircle(SDL_Renderer * renderer, int32_t centreX, int32_t centreY, int32_t radius)
     //std::cout << a << std::endl;
@@ -235,7 +242,7 @@ void View::draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, 
 
 void View::init_grid(const Grid &grid)
 {
-    background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
     SDL_SetTextureBlendMode(background_texture, SDL_BLENDMODE_BLEND);
     entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
     SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
@@ -251,20 +258,22 @@ void View::init_grid(const Grid &grid)
     }
 
     SDL_SetRenderTarget(render, background_texture);
-    SDL_SetRenderDrawColor(render, 15, 17, 34, 0xFF);
+    SDL_SetRenderDrawColor(render, 0, 0 ,0 ,0);
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
+    //SDL_RenderSetScale(render, 2, 2);
     for (int i = 0; i < SPACE_HEIGHT; i++)
     {
         for (int j = 0; j < SPACE_WIDTH; j++)
         {
-            SDL_Rect rect = {j * cell_size + grid_x, i * cell_size + grid_y, cell_size, cell_size};
+            SDL_Rect rect = {j * cell_w, i * cell_h, cell_w, cell_h};
             SDL_RenderDrawRect(render, &rect);
         }
     }
+    //SDL_RenderSetScale(render, 1, 1);
     SDL_SetRenderTarget(render, NULL);
     init_entities(grid);
-    update_pheromons(grid);
+    update_pheromons(grid, 0);
 }
 
 void View::init_entities(const Grid &grid)
@@ -297,7 +306,7 @@ void View::init_entities(const Grid &grid)
     SDL_SetRenderTarget(render, NULL);
 }
 
-void View::update_pheromons(const Grid &grid)
+void View::update_pheromons(const Grid &grid, size_t current_block)
 {
     SDL_SetRenderTarget(render, pheromons_texture);
 
@@ -306,14 +315,25 @@ void View::update_pheromons(const Grid &grid)
 
     for (Cell *cell : grid.map)
     {
+        cell->update(current_block);
         Coordinates c = cell->get_location();
-        for (Colony *colony : grid.colonies)
+        for (Colony *colony : grid.colonies) {
             if (disp_pheromons[colony])
             {
                 double alpha = cell->get_nest_pheromons(colony);
                 rgb color = m[colony];
                 draw_cell_rect(c, color.r, color.g, color.b, std::max(0.0, alpha * 255 - 100));
             }
+            if (cell->get_sugar_pheromons() > 0) {
+                std::cout << cell->get_sugar_pheromons() * 255 << std::endl;
+                int alpha = cell->get_sugar_pheromons() * 255;
+                if (alpha > 255) {
+                    alpha = 255;
+                }
+                rgb color = {1.0,1.0,1.0};
+                draw_cell_rect(c, color.r, color.g, color.b, alpha);
+            }
+        }
     }
 
     SDL_SetRenderTarget(render, NULL);
