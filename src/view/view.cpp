@@ -110,7 +110,6 @@ void View::init_grid()
         down.h = diff / 2;
     }
     double zoom_in = 4.0 / scale_high_dpi;
-    scale_high_dpi = 4;
     grid_w *= zoom_in;
     grid_h *= zoom_in;
     texture_rect = {0, 0, grid_w, grid_h};
@@ -123,21 +122,22 @@ void View::init_grid()
 //         function(i, ants[i]);
 // }
 
-void    View::init_hud() {
+void View::init_hud()
+{
     hud.init_hud(window, render);
 
     hud.create_menu("Pause");
-    hud.add_rect_draw("Pause", "", {0,0,1,1}, {0xFF,0xFF,0xFF,0x50}, "ressources/Marianne-Regular.otf", 42);
-    
+    hud.add_rect_draw("Pause", "", {0, 0, 1, 1}, {0xFF, 0xFF, 0xFF, 0x50}, "ressources/Marianne-Regular.otf", 42);
+
     //hud.add_rect_draw("Pause", "premier test", {0,0,0.10,0.10}, {0xFF,0xFF,0xFF,0xFF}, "ressources/Marianne-Regular.otf", 42);
-    hud.add_button("Pause", "Exit", {0.90, 0.80, 0.10, 0.10}, {0,0xFF,0,0xFF}, "ressources/Marianne-Regular.otf", 21, 
-        [&]() {
-            end = true;
-        });
-    hud.add_button("Pause", "Restart", {0.90, 0.90, 0.10, 0.10}, {0,0xFF,0,0xFF}, "ressources/Marianne-Regular.otf", 21, 
-        [&]() {
-            restart = true;
-        });
+    hud.add_button("Pause", "Exit", {0.90, 0.80, 0.10, 0.10}, {0, 0xFF, 0, 0xFF}, "ressources/Marianne-Regular.otf", 21,
+                   [&]() {
+                       end = true;
+                   });
+    hud.add_button("Pause", "Restart", {0.90, 0.90, 0.10, 0.10}, {0, 0xFF, 0, 0xFF}, "ressources/Marianne-Regular.otf", 21,
+                   [&]() {
+                       restart = true;
+                   });
 
     hud.hide_menu("Pause");
 }
@@ -158,10 +158,14 @@ Event View::event_manager()
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym)
             {
-            case SDLK_ESCAPE: {
-                if (hud.menu_is_hidden("Pause")) {
+            case SDLK_ESCAPE:
+            {
+                if (hud.menu_is_hidden("Pause"))
+                {
                     hud.show_menu("Pause");
-                } else {
+                }
+                else
+                {
                     hud.hide_menu("Pause");
                 }
                 break;
@@ -174,16 +178,22 @@ Event View::event_manager()
         case SDL_MOUSEBUTTONDOWN:
             mouse_x = event.button.x;
             mouse_y = event.button.y;
-            if (event.button.clicks == 1) {
+            if (event.button.clicks == 1)
+            {
                 clicked = true;
-            } else {
+            }
+            else
+            {
                 double_clicked = true;
             }
-            break ;
+            break;
         case SDL_MOUSEWHEEL:
-            if(event.wheel.y > 0) {
+            if (event.wheel.y > 0)
+            {
                 std::cout << "scroll mouse up" << std::endl;
-            } else if(event.wheel.y < 0) {
+            }
+            else if (event.wheel.y < 0)
+            {
                 std::cout << "scroll mouse down" << std::endl;
             }
             break;
@@ -193,7 +203,8 @@ Event View::event_manager()
     }
     if (end)
         return Event::close_request;
-    if (restart) {
+    if (restart)
+    {
         restart = false;
         return Event::restart;
     }
@@ -259,7 +270,8 @@ void View::init_grid(const Grid &grid)
 
     double base_tint = create_base_tint();
 
-    for (size_t i = 0; i < grid.colonies.size(); i++) {
+    for (size_t i = 0; i < grid.colonies.size(); i++)
+    {
         m[grid.colonies[i]] = get_tint(i, grid.colonies.size(), base_tint, 0.35, 0.93);
         disp_pheromons[grid.colonies[i]] = false;
     }
@@ -268,8 +280,10 @@ void View::init_grid(const Grid &grid)
     SDL_SetRenderDrawColor(render, 15, 17, 34, 0xFF);
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
-    for (int i = 0; i < SPACE_HEIGHT; i++) {
-        for (int j = 0; j < SPACE_WIDTH; j++) {
+    for (int i = 0; i < SPACE_HEIGHT; i++)
+    {
+        for (int j = 0; j < SPACE_WIDTH; j++)
+        {
             SDL_Rect rect = {j * cell_w + grid_x, i * cell_h + grid_y, cell_w, cell_h};
             SDL_RenderDrawRect(render, &rect);
         }
