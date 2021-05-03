@@ -21,10 +21,10 @@ void Ant::add_sugar()
     sugar = true;
 }
 
-void Ant::deposit_sugar()
+bool Ant::deposit_sugar()
 {
     sugar = false;
-    colony->add_sugar();
+    return colony->add_sugar();
 }
 
 void Ant::move(Grid &grid, Cell *new_cell)
@@ -146,6 +146,7 @@ size_t Colony::find_ant_index(Ant *ant)
     for (size_t i = 0; i < ants.size(); i++)
         if (ant == ants[i])
             return i;
+    std::cout << "ANT:" << ant << std::endl;
     throw std::invalid_argument("This ant does not belong to the colony");
 }
 
@@ -154,15 +155,13 @@ void Colony::add_ant(Ant *ant)
     ants.push_back(ant);
 }
 
-void Colony::add_sugar()
+bool Colony::add_sugar()
 {
     sugar += 1;
-}
-
-size_t Colony::spawn_ants()
-{
-
-    size_t to_spawn = sugar / 1;
-    sugar %= 1;
-    return to_spawn;
+    if (sugar > 1)
+    {
+        sugar -= 1;
+        return true;
+    }
+    return false;
 }

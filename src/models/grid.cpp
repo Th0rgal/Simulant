@@ -228,35 +228,9 @@ void Grid::set_ant(Ant *ant, Coordinates coordinates)
     int pos = coordinates.x * coordinates.y * SPACE_WIDTH;
 }
 
-void Grid::spawn_ants(Colony *colony, size_t amount)
+void Grid::spawn_ant(Colony *colony, Coordinates location)
 {
-
-    for (size_t i = amount + 1; i > 1; i--)
-    {
-        Vector start = Vector{colony->left_corner_x, colony->left_corner_y};
-        int side_length = 0;
-        Cell *search;
-        while (search == NULL || !search->is_void())
-            for (int i = 0; i <= side_length; i++)
-            {
-                start -= Vector{1, 1};
-                side_length += 2;
-                search = get_cell(start + Vector{i, 0});
-                if (search != NULL && search->is_void())
-                    break;
-                search = get_cell(start + Vector{side_length + 1, i});
-                if (search != NULL && search->is_void())
-                    break;
-                search = get_cell(start + Vector{i, side_length + 1});
-                if (search != NULL && search->is_void())
-                    break;
-                search = get_cell(start + Vector{0, i});
-                if (search != NULL && search->is_void())
-                    break;
-            }
-
-        Ant *new_ant = new Ant(colony, search->get_location());
-        search->set_ant(new_ant);
-        colony->add_ant(new_ant);
-    }
+    Ant *new_ant = new Ant(colony, location);
+    get_cell(location)->set_ant(new_ant);
+    colony->add_ant(new_ant);
 }
