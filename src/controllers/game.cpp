@@ -153,6 +153,8 @@ void Game::loop(unsigned long delay, size_t current_block)
 
     for (Ant *ant : killed)
     {
+        if (ant == NULL)
+            continue;
         Action action;
         action.type = ActionType::AntDeath;
         action.updated.push_back(ant->get_location());
