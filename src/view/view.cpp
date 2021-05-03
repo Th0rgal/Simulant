@@ -109,11 +109,13 @@ void View::init_grid()
         down.w = window_w;
         down.h = diff / 2;
     }
-    double zoom_in = 4.0 / scale_high_dpi;
+    double zoom_in = 8.0 / scale_high_dpi;
+    dest_rect = {grid_x, grid_y, grid_w, grid_h};
     grid_w *= zoom_in;
     grid_h *= zoom_in;
+    cell_h *= zoom_in;
+    cell_w *= zoom_in;
     texture_rect = {0, 0, grid_w, grid_h};
-    dest_rect = {grid_x, grid_y, grid_w, grid_h};
 }
 
 // void Colony::map_ants(Function &&function)
@@ -284,7 +286,7 @@ void View::init_grid(const Grid &grid)
     {
         for (int j = 0; j < SPACE_WIDTH; j++)
         {
-            SDL_Rect rect = {j * cell_w + grid_x, i * cell_h + grid_y, cell_w, cell_h};
+            SDL_Rect rect = {j * cell_w / 4 + grid_x, i * cell_h / 4 + grid_y, cell_w, cell_h};
             SDL_RenderDrawRect(render, &rect);
         }
     }

@@ -1,15 +1,28 @@
 #include "view/view.hpp"
 
 void    View::renderAll() {
+    SDL_SetRenderTarget(render, NULL);
+
     SDL_SetRenderDrawColor(render, 0, 0 ,0 ,0);
     SDL_RenderClear(render);
 
 
     SDL_RenderCopy(render, background_texture, NULL, NULL);
 
+    int w, h;
+
+    SDL_GetRendererOutputSize(render, &w, &h);
+
+    std::cout << "--" << w << ", " << h << std::endl;
+    std::cout << texture_rect.w << ", " << texture_rect.h << std::endl;
+    std::cout << dest_rect.w << ", " << dest_rect.h << std::endl;
+
     SDL_RenderCopy(render, pheromons_texture, NULL, &dest_rect);
     SDL_RenderCopy(render, entities_texture, NULL, &dest_rect);
     
+    //SDL_RenderCopy(render, pheromons_texture, &texture_rect, NULL);
+    //SDL_RenderCopy(render, entities_texture, &texture_rect, NULL);
+
     hud.render_menus();
     
     SDL_RenderPresent(render);
