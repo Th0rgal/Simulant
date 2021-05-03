@@ -72,42 +72,14 @@ void View::init_grid()
     cell_h = cell_size;
     grid_x = 0;
     grid_y = 0;
-    right = {0, 0, 0, 0};
-    left = {0, 0, 0, 0};
-    top = {0, 0, 0, 0};
-    down = {0, 0, 0, 0};
 
     grid_w = cell_w * SPACE_WIDTH;
     grid_h = cell_h * SPACE_HEIGHT;
-    if (grid_w < window_w)
-    {
-        int diff = window_w - grid_w;
-        grid_x = diff / 2;
-
-        right.x = window_w - diff / 2;
-        right.y = 0;
-        right.w = diff / 2;
-        right.h = window_h;
-
-        left.x = 0;
-        left.y = 0;
-        left.w = diff / 2;
-        left.h = window_h;
+    if (grid_w < window_w) {
+        grid_x = (window_w - grid_w) / 2;
     }
-    if (grid_h < window_h)
-    {
-        int diff = window_h - grid_h;
-        grid_y = diff / 2;
-
-        top.x = 0;
-        top.y = 0;
-        top.w = window_w;
-        top.h = diff / 2;
-
-        down.x = 0;
-        down.y = window_h - diff / 2;
-        down.w = window_w;
-        down.h = diff / 2;
+    if (grid_h < window_h) {
+        grid_y = (window_h - grid_h) / 2;
     }
     double zoom_in = 4.0 / scale_high_dpi;
     dest_rect = {grid_x, grid_y, grid_w, grid_h};

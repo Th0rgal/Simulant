@@ -13,12 +13,8 @@ void    View::renderAll() {
 
     SDL_GetRendererOutputSize(render, &w, &h);
 
-    std::cout << "--" << w << ", " << h << std::endl;
-    std::cout << texture_rect.w << ", " << texture_rect.h << std::endl;
-    std::cout << dest_rect.w << ", " << dest_rect.h << std::endl;
-
-    SDL_RenderCopy(render, pheromons_texture, NULL, &dest_rect);
-    SDL_RenderCopy(render, entities_texture, NULL, &dest_rect);
+    SDL_RenderCopy(render, pheromons_texture, &texture_rect, &dest_rect);
+    SDL_RenderCopy(render, entities_texture, &texture_rect, &dest_rect);
     
     //SDL_RenderCopy(render, pheromons_texture, &texture_rect, NULL);
     //SDL_RenderCopy(render, entities_texture, &texture_rect, NULL);
