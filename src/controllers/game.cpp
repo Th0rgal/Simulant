@@ -6,7 +6,7 @@
 
 //std::vector<Action> delta;
 
-Game::Game() : grid(4), view(false) // 3 colonie
+Game::Game() : grid(4), view(true) // 3 colonie
 {
 }
 

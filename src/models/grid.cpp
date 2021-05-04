@@ -77,7 +77,7 @@ void Cell::add_sugar_pheromon()
 
 void Cell::reduce_sugar_pheromon()
 {
-    sugar_pheromons *= 0.9;
+    sugar_pheromons *= 0.99;
 }
 
 void Cell::update(size_t current_block)
