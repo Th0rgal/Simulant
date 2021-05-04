@@ -44,63 +44,19 @@ double fixed_min_max(double x, double min, double max)
     return (max - min > 0) ? (x - min) / (max - min) : 1;
 }
 
-std::map<Coordinates, double> Ant::find_moves(Grid &grid, size_t current_block)
+Cell *Ant::find_move(Grid &grid, size_t current_block)
 {
-    std::vector<Coordinates> neighbors = location.get_neighbors();
-    std::vector<Cell *> possible_cells;
-    double min_nest_pheromon = 1;
-    double max_nest_pheromon = 0;
-
-    double min_sugar_pheromon = 1;
-    double max_sugar_pheromon = 0;
-    for (const Coordinates &neighbor : neighbors)
+    if (!has_sugar()) // looking for sugar
     {
-        Cell *cell = grid.get_cell(neighbor, current_block);
-        if ((cell->is_nest() || cell->get_nest() != colony || has_sugar()) && (!cell->has_sugar() || !has_sugar()) && (!cell->has_ant() || cell->get_ant()->colony != colony))
-        {
-            possible_cells.push_back(cell);
-            double nest_pheromon = cell->get_nest_pheromons(colony);
-            if (nest_pheromon < min_nest_pheromon)
-                min_nest_pheromon = nest_pheromon;
-            if (nest_pheromon > min_nest_pheromon)
-                max_nest_pheromon = nest_pheromon;
+        // 1: we follow pheromons
 
-            double sugar_pheromon = cell->get_sugar_pheromons();
-            if (sugar_pheromon < min_sugar_pheromon)
-                min_sugar_pheromon = sugar_pheromon;
-            if (sugar_pheromon > min_sugar_pheromon)
-                max_sugar_pheromon = sugar_pheromon;
-        }
+        // 2: we explore the world
+        return NULL;
     }
-
-    std::map<Coordinates, double> output;
-    double average_probability = 1.0 / possible_cells.size();
-    double total_score = 0;
-    for (Cell *cell : possible_cells)
+    else // back to the nest
     {
-        double score = 0; // the base score: used to increase randomness
-        if (has_sugar())
-        {
-            score += fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon);
-            if (cell->is_nest())
-                score += 10;
-        }
-        else
-        {
-            score += (1 - fixed_min_max(cell->get_nest_pheromons(colony), min_nest_pheromon, max_nest_pheromon)) * 0.45;
-            score += fixed_min_max(cell->get_sugar_pheromons(), min_sugar_pheromon, max_sugar_pheromon) * 0.55;
-            if (cell->has_sugar())
-                score += 10;
-        }
-
-        output[cell->get_location()] = score;
-        total_score += score;
+        return NULL;
     }
-
-    for (auto iterator = output.begin(); iterator != output.end(); iterator++)
-        iterator->second /= total_score;
-
-    return output;
 }
 
 Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)

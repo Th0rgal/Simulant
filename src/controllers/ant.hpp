@@ -21,7 +21,7 @@ public:
     void add_sugar();
     bool deposit_sugar();
     void move(Grid &grid, Cell *new_cell);
-    std::map<Coordinates, double> find_moves(Grid &grid, size_t current_block);
+    Cell* find_move(Grid &grid, size_t current_block);
     Colony *get_colony();
 
 private:
