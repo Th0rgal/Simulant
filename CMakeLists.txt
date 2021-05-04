@@ -23,6 +23,7 @@ set(SRCS
     src/view/circle.cpp
     src/view/update.cpp
     src/view/hud.cpp
+    src/view/render.cpp
 )
 
 set(HEADERS
