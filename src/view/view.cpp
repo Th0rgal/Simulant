@@ -15,8 +15,7 @@ View::View(bool fullScreen)
         window = SDL_CreateWindow("Ant", 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_ALLOW_HIGHDPI);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
     if (!render) {
-        std::cout << "Ok j'ai trouve" << std::endl;
-        exit (0);
+        render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE);
     }
     SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
 
@@ -37,6 +36,9 @@ View::View(int w, int h)
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_ALLOW_HIGHDPI);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE);
+    if (!render) {
+        render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE);
+    }
 
     SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
     SDL_GL_GetDrawableSize(window, &window_w, &window_h);
