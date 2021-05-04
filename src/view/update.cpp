@@ -64,7 +64,6 @@ void View::update_pheromons(const Grid &grid, size_t current_block)
             }
             if (cell->get_sugar_pheromons() > 0)
             {
-                std::cout << cell->get_sugar_pheromons() * 255 << std::endl;
                 int alpha = cell->get_sugar_pheromons() * 255;
                 if (alpha > 255)
                 {

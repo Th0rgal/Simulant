@@ -16,6 +16,7 @@ View::View(bool fullScreen)
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
     if (!render) {
         std::cout << "Ok j'ai trouve" << std::endl;
+        exit (0);
     }
     SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
 
