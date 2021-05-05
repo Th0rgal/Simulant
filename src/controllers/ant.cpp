@@ -1,9 +1,17 @@
 #include "controllers/ant.hpp"
 #include "controllers/random.hpp"
 #include "models/grid.hpp"
+#include "math.h"
 
-Ant::Ant(Colony *colony, Coordinates coordinates) : colony(colony), location(coordinates), sugar(false)
+double random_orientation()
 {
+    std::cout << "NEW ORIENTATION" << std::endl;
+    return random_double(0, 2 * M_PI);
+}
+
+Ant::Ant(Colony *colony, Coordinates coordinates) : colony(colony), location(coordinates), sugar(false), orientation(random_orientation())
+{
+    std::cout << "a new ant was created with orientation:" << orientation << std::endl;
 }
 
 Coordinates Ant::get_location()
@@ -44,19 +52,88 @@ double fixed_min_max(double x, double min, double max)
     return (max - min > 0) ? (x - min) / (max - min) : 1;
 }
 
+struct MetaCell
+{
+    Cell *cell;
+    double square_distance;
+    double orientation;
+};
+
 Cell *Ant::find_move(Grid &grid, size_t current_block)
 {
+    std::vector<MetaCell> cells;
+    Cell *sugar = NULL;
+    bool pheromons = false;
+    for (const Coordinates &coo : location.get_neighbors())
+    {
+        Cell *cell = grid.get_cell(coo, current_block);
+        cells.push_back({cell,
+                         coo.square_distance_to(colony->centroid_x, colony->centroid_y),
+                         atan2(location.x - colony->centroid_x, location.y - colony->centroid_y)});
+        if (cell->has_sugar())
+            sugar = cell;
+        if (cell->get_sugar_pheromons() > 0)
+            pheromons = true;
+    }
+
     if (!has_sugar()) // looking for sugar
     {
-        // 1: we follow pheromons
+        // 1 we found sugar
+        if (sugar != NULL)
+            return sugar;
 
-        // 2: we explore the world
-        return NULL;
+        // 2: we follow pheromons
+        double current_distance = location.square_distance_to(colony->centroid_x, colony->centroid_y);
+        std::vector<MetaCell> distancing;
+
+        if (pheromons)
+        {
+            Cell *farthest = NULL;
+            for (MetaCell meta_cell : cells)
+                if (meta_cell.square_distance > current_distance)
+                {
+                    distancing.push_back(meta_cell);
+                    if (meta_cell.cell->get_sugar_pheromons() > (farthest == NULL ? 0 : farthest->get_sugar_pheromons()))
+                        farthest = meta_cell.cell;
+                }
+            return farthest; // todo handle no farthest
+        }
+        else
+            for (MetaCell meta_cell : cells)
+                if (meta_cell.square_distance > current_distance)
+                    distancing.push_back(meta_cell);
+
+        // 3: we explore the world
+        double best_orientation = 10; // magic value
+        Cell *best_cell = NULL;
+        for (MetaCell cell : distancing)
+        {
+            std::cout << "YOLO" << std::endl;
+            double orientation_shift = abs(cell.orientation - orientation);
+            std::cout << orientation_shift << std::endl;
+            if (orientation_shift < best_orientation)
+            {
+                best_orientation = orientation_shift;
+                best_cell = cell.cell;
+                std::cout << "new cell:" << best_cell << std::endl;
+            }
+        }
+        if (best_cell == NULL)
+        {
+            orientation = random_orientation();
+            return find_move(grid, current_block);
+        }
+        else
+        {
+            return best_cell;
+        }
     }
     else // back to the nest
     {
         return NULL;
     }
+
+    // nothing ? let's get another orientation and retry
 }
 
 Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)

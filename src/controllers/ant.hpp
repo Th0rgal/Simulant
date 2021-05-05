@@ -28,6 +28,7 @@ private:
     Coordinates location;
     bool sugar;
     Colony *colony;
+    double orientation;
 };
 
 class Colony
