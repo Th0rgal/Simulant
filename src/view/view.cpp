@@ -35,7 +35,7 @@ View::View(int w, int h)
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_ALLOW_HIGHDPI);
-    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE);
+    render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
     if (!render) {
         render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE);
     }
