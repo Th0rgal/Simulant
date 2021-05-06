@@ -130,11 +130,14 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
         {
             origin_x = location.x;
             origin_y = location.y;
-            orientation = M_PI - orientation;
+            orientation = random_orientation();
             return find_move(grid, current_block);
         }
         else
         {
+            Coordinates coo = best_cell->cell->get_location();
+            if (coo.x >= X_MAX || coo.x <= X_MAX || coo.y >= Y_MAX || coo.y <= Y_MIN)
+                orientation = random_orientation();
             return best_cell->cell;
         }
     }
