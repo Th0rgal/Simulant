@@ -75,26 +75,16 @@ void View::init_grid()
     std::cout << cell_size << std::endl;
     cell_w = cell_size;
     cell_h = cell_size;
-    grid_x = 0;
-    grid_y = 0;
 
-    grid_w = cell_w * SPACE_WIDTH;
-    grid_h = cell_h * SPACE_HEIGHT;
-    if (grid_w < window_w)
-    {
-        grid_x = (window_w - grid_w) / 2;
-    }
-    if (grid_h < window_h)
-    {
-        grid_y = (window_h - grid_h) / 2;
-    }
+    // grid_w = cell_w * SPACE_WIDTH;
+    // grid_h = cell_h * SPACE_HEIGHT;
+    // if (grid_w < window_w) {
+    // }
+    // if (grid_h < window_h) {
+    // }
     zoom_in = 2.0 / scale_high_dpi;
-    dest_rect = {grid_x, grid_y, grid_w, grid_h};
-    grid_w *= zoom_in;
-    grid_h *= zoom_in;
     cell_w *= zoom_in;
     cell_h *= zoom_in;
-    texture_rect = {0, 0, grid_w, grid_h};
     new_w = cell_size;
     new_h = cell_size;
     x_shift = 0;
@@ -194,11 +184,18 @@ Event View::event_manager()
 
 void View::init_grid(const Grid &grid)
 {
-    background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
+    // background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
+    // SDL_SetTextureBlendMode(background_texture, SDL_BLENDMODE_BLEND);
+    // entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
+    // SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
+    // pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
+    // SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_ADD);
+
+    background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(background_texture, SDL_BLENDMODE_BLEND);
-    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
+    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
-    pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
+    pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_ADD);
 
     double base_tint = create_base_tint();

@@ -8,11 +8,15 @@ void    View::update(double time, const Grid& grid, size_t current_block) {
 
     hud.update();
     if (clicked or double_clicked) {
-        int x_grid = (mouse_x * scale_high_dpi - grid_x) / cell_size + x_shift;
-        int y_grid = (mouse_y * scale_high_dpi - grid_y) / cell_size + y_shift;
+        int x_grid = (mouse_x * scale_high_dpi) / new_w - x_shift;
+        int y_grid = (mouse_y * scale_high_dpi) / new_h - y_shift;
 
         x_grid += X_MIN;
         y_grid += Y_MIN;
+
+        // std::cout << "{--- > " << x_grid << ", " << y_grid << " < ---}" << std::endl;
+        // std::cout << "{--- > " << new_w << ", " << new_h << " < ---}" << std::endl;
+
         Cell *cell = grid.get_cell(x_grid, y_grid);
         if (cell and cell->is_nest()) {
             disp_pheromons[cell->get_nest()] = !disp_pheromons[cell->get_nest()];
@@ -22,8 +26,8 @@ void    View::update(double time, const Grid& grid, size_t current_block) {
     if (double_clicked) {
     }
     if (scroll != 0) {
-        double x_grid = (mouse_x * scale_high_dpi - grid_x) / new_w + x_shift;
-        double y_grid = (mouse_y * scale_high_dpi - grid_y) / new_w + y_shift;
+        double x_grid = (mouse_x * scale_high_dpi) / new_w;
+        double y_grid = (mouse_y * scale_high_dpi) / new_w;
 
         if (scroll == 1) {
             new_w = new_w * 0.9;
@@ -35,16 +39,11 @@ void    View::update(double time, const Grid& grid, size_t current_block) {
         cell_size = static_cast<int>(new_w);
         cell_w = cell_size * zoom_in;
         cell_h = cell_size * zoom_in;
-        double x_grid2 = (mouse_x * scale_high_dpi - grid_x) / new_w + x_shift;
-        double y_grid2 = (mouse_y * scale_high_dpi - grid_y) / new_w + y_shift;
+        double x_grid2 = (mouse_x * scale_high_dpi) / new_w;
+        double y_grid2 = (mouse_y * scale_high_dpi) / new_w;
 
        x_shift -= x_grid - x_grid2;
        y_shift -= y_grid - y_grid2;
-
-        std::cout << "1: " << x_grid << ", " << y_grid << std::endl;
-        x_grid = (mouse_x * scale_high_dpi - grid_x) / cell_size + x_shift;
-        y_grid = (mouse_y * scale_high_dpi - grid_y) / cell_size + y_shift;
-        std::cout << "2: " << x_grid << ", " << y_grid << std::endl;
     }
 
 

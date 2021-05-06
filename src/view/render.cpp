@@ -6,14 +6,9 @@ void    View::renderAll() {
     SDL_SetRenderDrawColor(render, 15, 17, 34, 0xFF);
     SDL_RenderClear(render);
 
-
-    int w, h;
-
-    SDL_GetRendererOutputSize(render, &w, &h);
-
-    SDL_RenderCopy(render, background_texture, &texture_rect, &dest_rect);
-    SDL_RenderCopy(render, pheromons_texture, &texture_rect, &dest_rect);
-    SDL_RenderCopy(render, entities_texture, &texture_rect, &dest_rect);
+    SDL_RenderCopy(render, background_texture, NULL, NULL);
+    SDL_RenderCopy(render, pheromons_texture, NULL, NULL);
+    SDL_RenderCopy(render, entities_texture, NULL, NULL);
     
     //SDL_RenderCopy(render, pheromons_texture, &texture_rect, NULL);
     //SDL_RenderCopy(render, entities_texture, &texture_rect, NULL);
