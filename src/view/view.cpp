@@ -76,19 +76,23 @@ void View::init_grid()
     cell_w = cell_size;
     cell_h = cell_size;
 
-    // grid_w = cell_w * SPACE_WIDTH;
-    // grid_h = cell_h * SPACE_HEIGHT;
-    // if (grid_w < window_w) {
-    // }
-    // if (grid_h < window_h) {
-    // }
+    grid_w = cell_w * SPACE_WIDTH;
+    grid_h = cell_h * SPACE_HEIGHT;
     zoom_in = 2.0 / scale_high_dpi;
     cell_w *= zoom_in;
     cell_h *= zoom_in;
     new_w = cell_size;
     new_h = cell_size;
+
     x_shift = 0;
     y_shift = 0;
+    if (grid_w < window_w) {
+        x_shift = ((window_w - grid_w) / 2) / cell_w;
+    }
+    if (grid_h < window_h) {
+        y_shift = ((window_h - grid_h) / 2) / cell_h;
+    }
+
 }
 
 void View::init_hud()
@@ -161,11 +165,11 @@ Event View::event_manager()
             SDL_GetMouseState(&mouse_x, &mouse_y);
             if (event.wheel.y > 0)
             {
-                scroll = 1;
+                scroll = -1;
             }
             else if (event.wheel.y < 0)
             {
-                scroll = -1;
+                scroll = 1;
             }
             break;
         default:
