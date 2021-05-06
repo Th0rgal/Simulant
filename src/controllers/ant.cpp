@@ -104,33 +104,27 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
             return NULL;
 
         double best_orientation = M_PI; // magic value
-        Cell *best_cell = NULL;
-        std::cout << "orientation de la fourmi: " << orientation << std::endl;
-        for (MetaCell cell : cells)
+        MetaCell *best_cell = NULL;
+        for (MetaCell &cell : cells)
         {
-            std::cout << "orientation de la cellule: " << cell.orientation << std::endl;
             double orientation_shift = abs(cell.orientation - orientation);
             if (orientation_shift > M_PI)
                 orientation_shift = 2 * M_PI - orientation_shift;
 
-            if (orientation_shift < best_orientation)
+            if (orientation_shift < best_orientation || (best_cell != NULL && best_cell->square_distance < current_distance))
             {
                 best_orientation = orientation_shift;
-                std::cout << "nouvelle orientation de la fourmi: " << best_orientation << std::endl;
-                best_cell = cell.cell;
-                std::cout << best_cell->get_location() << std::endl;
+                best_cell = &cell;
             }
         }
         if (best_cell == NULL)
         {
             orientation = random_orientation();
-            std::cout << "new cell" << std::endl;
-            std::cout << 4 << std::endl;
             return find_move(grid, current_block);
         }
         else
         {
-            return best_cell;
+            return best_cell->cell;
         }
     }
     else // back to the nest
