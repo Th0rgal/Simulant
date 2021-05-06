@@ -8,7 +8,12 @@ double random_orientation()
     return random_double(0, 2 * M_PI);
 }
 
-Ant::Ant(Colony *colony, Coordinates coordinates) : colony(colony), location(coordinates), sugar(false), orientation(random_orientation())
+Ant::Ant(Colony *colony, Coordinates coordinates) : colony(colony),
+                                                    location(coordinates),
+                                                    sugar(false),
+                                                    orientation(random_orientation()),
+                                                    origin_x(colony->centroid_x),
+                                                    origin_y(colony->centroid_y)
 {
 }
 
@@ -68,10 +73,10 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
         if (cell->has_ant() && cell->get_ant()->colony == colony)
             continue;
 
-        double angle = atan2(coo.x - colony->centroid_x, coo.y - colony->centroid_y);
+        double angle = atan2(coo.x - origin_x, coo.y - origin_y);
 
         cells.push_back({cell,
-                         coo.square_distance_to(colony->centroid_x, colony->centroid_y),
+                         coo.square_distance_to(origin_x, origin_y),
                          (angle < 0 ? angle + 2 * M_PI : angle)});
 
         if (cell->get_sugar_pheromons() > 0)
@@ -85,8 +90,8 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
             return sugar;
 
         // 2: we follow pheromons
-        double current_distance = location.square_distance_to(colony->centroid_x, colony->centroid_y);
-
+        double current_distance = location.square_distance_to(origin_x, origin_y);
+        std::vector<MetaCell> distancing;
         if (pheromons)
         {
             Cell *farthest = NULL;
@@ -98,6 +103,10 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
                 }
             return farthest; // todo handle no farthest
         }
+        else
+            for (MetaCell meta_cell : cells)
+                if (meta_cell.square_distance > current_distance)
+                    distancing.push_back(meta_cell);
 
         // 3: we explore the world
         if (cells.empty())
@@ -105,13 +114,13 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
 
         double best_orientation = M_PI; // magic value
         MetaCell *best_cell = NULL;
-        for (MetaCell &cell : cells)
+        for (MetaCell &cell : distancing)
         {
             double orientation_shift = abs(cell.orientation - orientation);
             if (orientation_shift > M_PI)
                 orientation_shift = 2 * M_PI - orientation_shift;
 
-            if (orientation_shift < best_orientation || (best_cell != NULL && best_cell->square_distance < current_distance))
+            if (orientation_shift < best_orientation)
             {
                 best_orientation = orientation_shift;
                 best_cell = &cell;
@@ -119,7 +128,9 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
         }
         if (best_cell == NULL)
         {
-            orientation = random_orientation();
+            origin_x = location.x;
+            origin_y = location.y;
+            orientation = M_PI - orientation;
             return find_move(grid, current_block);
         }
         else
