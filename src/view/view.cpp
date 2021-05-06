@@ -88,17 +88,17 @@ void View::init_grid()
     {
         grid_y = (window_h - grid_h) / 2;
     }
-    double zoom_in = 2.0 / scale_high_dpi;
+    zoom_in = 2.0 / scale_high_dpi;
     dest_rect = {grid_x, grid_y, grid_w, grid_h};
     grid_w *= zoom_in;
     grid_h *= zoom_in;
     cell_w *= zoom_in;
     cell_h *= zoom_in;
     texture_rect = {0, 0, grid_w, grid_h};
-    new_w = grid_w;
-    new_h = grid_h;
-    x = 0;
-    y = 0;
+    new_w = cell_size;
+    new_h = cell_size;
+    x_shift = 0;
+    y_shift = 0;
 }
 
 void View::init_hud()
@@ -168,8 +168,7 @@ Event View::event_manager()
             }
             break;
         case SDL_MOUSEWHEEL:
-            mouse_x = event.button.x;
-            mouse_y = event.button.y;
+            SDL_GetMouseState(&mouse_x, &mouse_y);
             if (event.wheel.y > 0)
             {
                 scroll = 1;

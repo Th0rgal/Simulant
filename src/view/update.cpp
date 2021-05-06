@@ -4,10 +4,12 @@ void    View::update(double time, const Grid& grid, size_t current_block) {
     SDL_SetRenderDrawColor(render, 0, 0 ,0 ,0);
     SDL_RenderClear(render);
     
+    update_grid();    
+
     hud.update();
     if (clicked or double_clicked) {
-        int x_grid = (mouse_x * scale_high_dpi - grid_x) / cell_size;
-        int y_grid = (mouse_y * scale_high_dpi - grid_y) / cell_size;
+        int x_grid = (mouse_x * scale_high_dpi - grid_x) / cell_size + x_shift;
+        int y_grid = (mouse_y * scale_high_dpi - grid_y) / cell_size + y_shift;
 
         x_grid += X_MIN;
         y_grid += Y_MIN;
@@ -20,24 +22,32 @@ void    View::update(double time, const Grid& grid, size_t current_block) {
     if (double_clicked) {
     }
     if (scroll != 0) {
+        double x_grid = (mouse_x * scale_high_dpi - grid_x) / new_w + x_shift;
+        double y_grid = (mouse_y * scale_high_dpi - grid_y) / new_w + y_shift;
+
         if (scroll == 1) {
-            new_w = new_w * 0.95;
-            new_h = new_h * 0.95;
+            new_w = new_w * 0.9;
+            new_h = new_h * 0.9;
         } else {
-            new_w = new_w * 1.05;
-            new_h = new_h * 1.05;
+            new_w = new_w * 1.1;
+            new_h = new_h * 1.1;
         }
-        double alpha_x = (mouse_x - dest_rect.x) / (double)dest_rect.w;
-        x = alpha_x * new_w;
+        cell_size = static_cast<int>(new_w);
+        cell_w = cell_size * zoom_in;
+        cell_h = cell_size * zoom_in;
+        double x_grid2 = (mouse_x * scale_high_dpi - grid_x) / new_w + x_shift;
+        double y_grid2 = (mouse_y * scale_high_dpi - grid_y) / new_w + y_shift;
 
-        double alpha_y = (mouse_y - y) / (double)texture_rect.h;
-        y = alpha_y * new_h;
+       x_shift -= x_grid - x_grid2;
+       y_shift -= y_grid - y_grid2;
 
-        texture_rect.w = static_cast<int>(new_w);
-        texture_rect.h = static_cast<int>(new_h);
-        texture_rect.x = static_cast<int>(x);
-        texture_rect.y = static_cast<int>(y);
+        std::cout << "1: " << x_grid << ", " << y_grid << std::endl;
+        x_grid = (mouse_x * scale_high_dpi - grid_x) / cell_size + x_shift;
+        y_grid = (mouse_y * scale_high_dpi - grid_y) / cell_size + y_shift;
+        std::cout << "2: " << x_grid << ", " << y_grid << std::endl;
     }
+
+
     if (delta.size() > 0)
         update_entities(grid, time);
     update_pheromons(grid, current_block);
@@ -111,4 +121,20 @@ void View::update_entities(const Grid &grid, double delta_time)
 
 void    View::update_map(std::vector<Action> d) {
     delta = d;
+}
+
+void    View::update_grid() {
+    SDL_SetRenderTarget(render, background_texture);
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
+    SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
+    for (int i = 0; i < SPACE_HEIGHT; i++)
+    {
+        for (int j = 0; j < SPACE_WIDTH; j++)
+        {
+            SDL_Rect rect = {static_cast<int>((j + x_shift) * cell_w), static_cast<int>((i + y_shift) * cell_h), cell_w, cell_h};
+            SDL_RenderDrawRect(render, &rect);
+        }
+    }
+    SDL_SetRenderTarget(render, NULL);
 }

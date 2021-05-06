@@ -39,6 +39,7 @@ public:
     void    init_entities(const Grid &grid);
     void    update_pheromons(const Grid &grid, size_t current_block);
     void    update_entities(const Grid &grid, double delta_time);
+    void    update_grid();
 
     void    update(double time, const Grid &grid, size_t current_block);
     void    update_map(std::vector<Action> d);
@@ -70,10 +71,11 @@ private:
     int             mouse_x;
     int             mouse_y;
 
+    double          zoom_in;
     double          new_w;
     double          new_h;
-    double          x;
-    double          y;
+    double          x_shift;
+    double          y_shift;
 
     SDL_Texture     *grid_texture;
 
