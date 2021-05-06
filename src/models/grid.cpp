@@ -77,7 +77,7 @@ void Cell::add_sugar_pheromon()
 
 void Cell::update(size_t current_block)
 {
-    sugar_pheromons *= std::pow(0.98, current_block - last_block);
+    sugar_pheromons *= std::pow(0.975, current_block - last_block);
     last_block = current_block;
 }
 

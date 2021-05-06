@@ -61,6 +61,8 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
 {
     std::vector<MetaCell> cells;
     Cell *sugar = NULL;
+    Cell *nest_oriented = NULL;
+
     bool pheromons = false;
     for (const Coordinates &coo : location.get_neighbors())
     {
@@ -81,6 +83,9 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
 
         if (cell->get_sugar_pheromons() > 0)
             pheromons = true;
+
+        if (nest_oriented == NULL || cell->get_nest_pheromons(colony) > nest_oriented->get_nest_pheromons(colony))
+            nest_oriented = cell;
     }
 
     if (!has_sugar()) // looking for sugar
@@ -143,10 +148,8 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
     }
     else // back to the nest
     {
-        return NULL;
+        return nest_oriented;
     }
-
-    // nothing ? let's get another orientation and retry
 }
 
 Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
