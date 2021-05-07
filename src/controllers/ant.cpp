@@ -106,7 +106,8 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
                     if (meta_cell.cell->get_sugar_pheromons() > (farthest == NULL ? 0 : farthest->get_sugar_pheromons()))
                         farthest = meta_cell.cell;
                 }
-            return farthest; // todo handle no farthest
+            if (farthest != NULL)
+                return farthest;
         }
         else
             for (MetaCell meta_cell : cells)
@@ -115,7 +116,10 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
 
         // 3: we explore the world
         if (cells.empty())
+        {
+            std::cout << "EMPTY: " << location << std::endl;
             return NULL;
+        }
 
         double best_orientation = M_PI; // magic value
         MetaCell *best_cell = NULL;
@@ -186,6 +190,7 @@ void Colony::remove_ant(Grid &grid, size_t ant_id)
     if (cell->get_ant() == ant)
         cell->set_ant(NULL);
     delete ant;
+    ant = NULL;
     if (ant_id < ants.size())
         ants.erase(ants.begin() + ant_id);
 }
