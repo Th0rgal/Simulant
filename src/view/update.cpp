@@ -73,7 +73,7 @@ void View::update_pheromons(const Grid &grid, size_t current_block)
             }
             if (cell->get_sugar_pheromons() > 0)
             {
-                int alpha = cell->get_sugar_pheromons() * 255;
+                int alpha = cell->get_sugar_pheromons() * 25;
                 if (alpha > 255)
                 {
                     alpha = 255;
