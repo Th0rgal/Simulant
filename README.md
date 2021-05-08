@@ -6,15 +6,15 @@
 
 
 <h4 align="center">🐜 A C++ simulation of ant colonies.</h4>
-<p align="center">
-    [![Simulant video](https://img.youtube.com/vi/jk-1Q7GsWTM/0.jpg)](https://www.youtube.com/watch?v=jk-1Q7GsWTM)
-</p>
 
 ## Features
 - Support for multiple colonies
 - Real time rendering with SDL2
 - Optimization of the rendering with the graphic card
 - Dynamic updating of entities and pheromones
+
+## Demonstration
+[![Simulant video](https://img.youtube.com/vi/jk-1Q7GsWTM/0.jpg)](https://www.youtube.com/watch?v=jk-1Q7GsWTM)
 
 ## Code conventions
 
