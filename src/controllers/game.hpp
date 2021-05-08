@@ -6,8 +6,28 @@
 class Game
 {
 public:
+    /**
+     * to intialize a Game object
+     * 
+     * @confidence 5: no tests needed
+     * @author Thomas Marchand
+     **/
     Game();
+
+    /**
+     * to start the game
+     * 
+     * @confidence 3: no unit test possible
+     * @author Thomas Marchand
+     **/
     void start();
+
+    /**
+     * to restart the game
+     * 
+     * @confidence 3: no unit test possible
+     * @author Frédéric Becerril
+     **/
     void restart();
 
 private:
@@ -15,9 +35,49 @@ private:
     Grid grid;
     std::vector<Action> delta;
     std::map<Colony *, std::vector<Coordinates>> spawn_list;
-    void loop(unsigned long delay, size_t current_block);
-    void apply_ant_logic(Ant * ant, Cell *next_cell, std::vector<Ant*> &killed, std::vector<Ant*> &in_fight);
 
+    /**
+     * the game loop called every tick
+     * 
+     * @param unsigned long the delay between this and the previous tick
+     * @param size_t the current tick
+     * 
+     * @confidence 4
+     * @author Thomas Marchand
+     **/
+    void loop(unsigned long delay, size_t current_tick);
+
+    /**
+     * the logic applied to an ant at every tick
+     * 
+     * @param Ant* a pointer to the ant
+     * @param Cell* a pointer to its next location (or NULL if it does not move)
+     * @param std::vector<Ant *>& a reference to the killed ants vector
+     * @param std::vector<Ant *>a reference to the "in fight" ants vector
+     * 
+     * @confidence 4
+     * @author Thomas Marchand
+     **/
+    void apply_ant_logic(Ant *ant, Cell *next_cell, std::vector<Ant *> &killed, std::vector<Ant *> &in_fight);
+
+    /**
+     * to display a static ant
+     * 
+     * @param Ant* a pointer to the ant to display
+     * 
+     * @confidence 3: no unit test possible
+     * @author Thomas Marchand
+     **/
     void display_not_moving_ant(Ant *ant);
+
+    /**
+     * to display a moving ant
+     *
+     * @param Ant* a pointer to the ant to display
+     * Coordinates its destination
+     * 
+     * @confidence 3: no unit test possible
+     * @author Thomas Marchand and Frédéric Becerril
+     **/
     void move_ant_on_view(Ant *ant, Coordinates location);
 };

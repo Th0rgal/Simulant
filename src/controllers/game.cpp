@@ -23,7 +23,7 @@ void Game::restart()
 void Game::start()
 {
     unsigned long minimal_delay = 2e8; // one second
-    size_t current_block = 0;
+    size_t current_tick = 0;
     std::chrono::high_resolution_clock::time_point previousTime = std::chrono::high_resolution_clock::now();
     view.init_grid(grid);
     view.renderAll();
@@ -38,17 +38,17 @@ void Game::start()
         long delay = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - previousTime).count();
         if (delay < minimal_delay)
         {
-            view.update(delay / (double)minimal_delay, grid, current_block);
+            view.update(delay / (double)minimal_delay, grid, current_tick);
             view.renderAll();
             continue;
         }
-        loop(delay, ++current_block);
+        loop(delay, ++current_tick);
         view.update_map(delta);
         previousTime = std::chrono::high_resolution_clock::now();
     }
 }
 
-void Game::loop(unsigned long delay, size_t current_block)
+void Game::loop(unsigned long delay, size_t current_tick)
 {
     delta.clear();
 
@@ -71,7 +71,7 @@ void Game::loop(unsigned long delay, size_t current_block)
     std::vector<Ant *> in_fight;
     grid.map_ants([&](size_t i, Ant *ant) {
         if (std::find(killed.begin(), killed.end(), ant) == killed.end() && std::find(in_fight.begin(), in_fight.end(), ant) == in_fight.end())
-            apply_ant_logic(ant, ant->find_move(grid, current_block), killed, in_fight);
+            apply_ant_logic(ant, ant->find_move(grid, current_tick), killed, in_fight);
         else
             display_not_moving_ant(ant);
     });

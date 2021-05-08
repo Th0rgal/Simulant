@@ -42,6 +42,8 @@ set(HEADERS
 
 set(TESTS
     tests/tests.cpp
+    
+    tests/controllers/game.cpp
 
     tests/models/space.cpp
 )
