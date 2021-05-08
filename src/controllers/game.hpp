@@ -40,13 +40,12 @@ private:
     /**
      * the game loop called every tick
      * 
-     * @param unsigned long the delay between this and the previous tick
      * @param size_t the current tick
      * 
      * @confidence 4
      * @author Thomas Marchand
      **/
-    void loop(unsigned long delay, size_t current_tick);
+    void loop(size_t current_tick);
 
     /**
      * the logic applied to an ant at every tick

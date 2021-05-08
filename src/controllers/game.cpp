@@ -3,9 +3,7 @@
 #include <iostream>
 #include <chrono>
 
-std::vector<Action> delta;
-
-Game::Game() : grid(15), view(true) // 3 colonie
+Game::Game() : view(true), grid(15)
 {
 }
 
@@ -33,20 +31,20 @@ void Game::start()
         if (event == Event::restart)
             restart();
 
-        long delay = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - previousTime).count();
+        unsigned long delay = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - previousTime).count();
         if (delay < minimal_delay)
         {
             view.update(delay / (double)minimal_delay, grid, current_tick);
             view.renderAll();
             continue;
         }
-        loop(delay, ++current_tick);
+        loop(++current_tick);
         view.update_map(delta);
         previousTime = std::chrono::high_resolution_clock::now();
     }
 }
 
-void Game::loop(unsigned long delay, size_t current_tick)
+void Game::loop(size_t current_tick)
 {
     delta.clear();
 
@@ -67,7 +65,7 @@ void Game::loop(unsigned long delay, size_t current_tick)
     // perform tour logic
     std::vector<Ant *> killed;
     std::vector<Ant *> in_fight;
-    grid.map_ants([&](size_t i, Ant *ant) {
+    grid.map_ants([&](Ant *ant) {
         if (std::find(killed.begin(), killed.end(), ant) == killed.end() && std::find(in_fight.begin(), in_fight.end(), ant) == in_fight.end())
             apply_ant_logic(ant, ant->find_move(grid, current_tick), killed, in_fight);
         else

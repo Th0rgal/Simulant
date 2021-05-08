@@ -8,12 +8,13 @@ double random_orientation()
     return random_double(0, 2 * M_PI);
 }
 
-Ant::Ant(Colony *colony, Coordinates coordinates) : colony(colony),
-                                                    location(coordinates),
+Ant::Ant(Colony *colony, Coordinates coordinates) : location(coordinates),
                                                     sugar(false),
+                                                    colony(colony),
                                                     orientation(random_orientation()),
                                                     origin_x(colony->centroid_x),
                                                     origin_y(colony->centroid_y)
+
 {
 }
 
@@ -73,10 +74,12 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
     {
         Cell *cell = grid.get_cell(coo, current_block);
         if (cell->has_sugar())
+        {
             if (!has_sugar())
                 sugar = cell;
             else
                 continue;
+        }
         if (cell->has_ant() && cell->get_ant()->colony == colony)
             continue;
 

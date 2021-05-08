@@ -3,7 +3,7 @@
 #include "algorithm"
 #include "math.h"
 
-Cell::Cell(Coordinates location) : location(location), sugar(false), ant(NULL), nest(NULL)
+Cell::Cell(Coordinates location) : location(location), sugar(false), nest(NULL), ant(NULL)
 {
 }
 
@@ -162,7 +162,7 @@ void Grid::summon_sugars(size_t amount)
     for (size_t i = 0; i < amount; i++)
     {
         double best_distance = -1;
-        Cell *best_cell;
+        Cell *best_cell = NULL;
         for (size_t i = 0; i < 7; i++)
         {
             Cell *cell = find_empty_cell();
@@ -177,6 +177,8 @@ void Grid::summon_sugars(size_t amount)
                 best_cell = cell;
             }
         }
+        if (best_cell == NULL)
+            continue;
         best_cell->add_sugar();
         sugar_locations.push_back(best_cell->get_location());
     }
@@ -217,11 +219,6 @@ void Grid::clear()
     for (Colony *colony : colonies)
         delete colony;
     colonies.clear();
-}
-
-void Grid::set_ant(Ant *ant, Coordinates coordinates)
-{
-    int pos = coordinates.x * coordinates.y * SPACE_WIDTH;
 }
 
 void Grid::spawn_ant(Colony *colony, Coordinates location)

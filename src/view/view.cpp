@@ -72,7 +72,6 @@ void View::init_grid()
 {
     cell_size = std::min(window_w / SPACE_WIDTH, window_h / SPACE_HEIGHT);
 
-    std::cout << cell_size << std::endl;
     cell_w = cell_size;
     cell_h = cell_size;
 
@@ -117,7 +116,6 @@ void View::init_hud()
 
 Event View::event_manager()
 {
-    bool close_requested = false;
     SDL_Event event;
     clicked = false;
     double_clicked = false;
