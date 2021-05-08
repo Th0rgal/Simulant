@@ -1,6 +1,11 @@
-# Simulant
+<h1 align="center">
+  <br>
+  <img src="https://hackedserver.org/choucroute/velociraptor.svg" alt="Simulant logo" width="256">
+  <br>
+</h1>
 
-A simulation of ant colonies realized in C++.
+
+<h4 align="center">🐜 A C++ simulation of ant colonies.</h4>
 
 ## Features
 - Support for multiple colonies
