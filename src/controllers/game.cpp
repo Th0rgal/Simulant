@@ -3,7 +3,7 @@
 #include <iostream>
 #include <chrono>
 
-Game::Game() : view(true), grid(15)
+Game::Game() : view(true), grid(3)
 {
 }
 

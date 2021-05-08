@@ -30,10 +30,10 @@ void Colony::add_ant(Ant *ant)
 
 bool Colony::add_sugar()
 {
-    sugar += 1;
-    if (sugar > 1)
+    sugar++;
+    if (sugar > 2)
     {
-        sugar -= 1;
+        sugar -= 2;
         return true;
     }
     return false;
