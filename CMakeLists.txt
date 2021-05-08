@@ -29,7 +29,6 @@ set(SRCS
 
 set(HEADERS
     src/controllers/ant.hpp
-    src/controllers/colony.hpp
     src/controllers/game.hpp
     src/controllers/random.hpp
 
