@@ -8,7 +8,7 @@
 <h4 align="center">🐜 A C++ simulation of ant colonies.</h4>
 </br>
 <p align="center">
-<img src="https://hackedserver.org/choucroute/trex.png" alt="Simulant animation" width="512">
+<img src="./ressources/animation.png" alt="Simulant animation" width="512">
 </p>
 
 ## Features
