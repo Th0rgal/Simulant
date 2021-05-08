@@ -12,6 +12,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 set(SRCS
     src/controllers/ant.cpp
+    src/controllers/colony.cpp
     src/controllers/game.cpp
     src/controllers/random.cpp
 
@@ -28,6 +29,7 @@ set(SRCS
 
 set(HEADERS
     src/controllers/ant.hpp
+    src/controllers/colony.hpp
     src/controllers/game.hpp
     src/controllers/random.hpp
 
@@ -43,6 +45,7 @@ set(HEADERS
 set(TESTS
     tests/tests.cpp
     
+    tests/controllers/ant.cpp
     tests/controllers/game.cpp
 
     tests/models/space.cpp

@@ -17,12 +17,12 @@ class Ant
 public:
     Ant(Colony *colony, Coordinates coordinates);
     Coordinates get_location();
+    Colony *get_colony();
     bool has_sugar();
     void add_sugar();
     bool deposit_sugar();
     void move(Grid &grid, Cell *new_cell);
-    Cell* find_move(Grid &grid, size_t current_block);
-    Colony *get_colony();
+    Cell *find_move(Grid &grid, size_t current_block);
 
 private:
     Coordinates location;
