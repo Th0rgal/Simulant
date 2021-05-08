@@ -8,9 +8,7 @@ void Colony::remove_ant(Grid &grid, size_t ant_id)
     if (cell->get_ant() == ant)
         cell->set_ant(NULL);
     delete ant;
-    ant = NULL;
-    if (ant_id < ants.size())
-        ants.erase(ants.begin() + ant_id);
+    ants.erase(ants.begin() + ant_id);
 }
 
 size_t Colony::find_ant_index(Ant *ant)

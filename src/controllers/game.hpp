@@ -1,6 +1,7 @@
 #pragma once
 
 #include "models/grid.hpp"
+#include "models/action.hpp"
 #include "view/view.hpp"
 
 class Game

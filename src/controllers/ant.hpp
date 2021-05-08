@@ -17,6 +17,7 @@ class Ant
 public:
     Ant(Colony *colony, Coordinates coordinates);
     Coordinates get_location();
+    void set_location(const Coordinates &new_location);
     Colony *get_colony();
     bool has_sugar();
     void add_sugar();

@@ -1,12 +1,11 @@
 #include "controllers/game.hpp"
 #include "controllers/random.hpp"
-#include "models/action.hpp"
 #include <iostream>
 #include <chrono>
 
 //std::vector<Action> delta;
 
-Game::Game() : grid(15), view(true) // 3 colonie
+Game::Game() : grid(15) //, view(true) // 3 colonie
 {
 }
 
@@ -32,9 +31,8 @@ void Game::start()
     while ((event = view.event_manager()) != Event::close_request)
     {
         if (event == Event::restart)
-        {
             restart();
-        }
+
         long delay = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - previousTime).count();
         if (delay < minimal_delay)
         {
@@ -115,6 +113,8 @@ void Game::apply_ant_logic(Ant *ant, Cell *next_cell, std::vector<Ant *> &killed
         {
             killed.push_back(ant);
             in_fight.push_back(next_cell->get_ant());
+            grid.get_cell(ant->get_location())->set_ant(NULL);
+            ant->set_location(next_cell->get_location());
         }
     }
 

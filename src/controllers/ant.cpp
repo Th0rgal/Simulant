@@ -22,6 +22,11 @@ Coordinates Ant::get_location()
     return location;
 }
 
+void Ant::set_location(const Coordinates &new_location)
+{
+    location = new_location;
+}
+
 Colony *Ant::get_colony()
 {
     return colony;
