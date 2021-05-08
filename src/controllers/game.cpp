@@ -134,16 +134,10 @@ void Game::loop(unsigned long delay, size_t current_block)
                 }
             }
             else
-            {
-                std::cout << "hello" << std::endl;
                 delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
-            }
         }
         else
-        {
-            std::cout << "CETTE FOURMI EST MORT:" << ant->get_location() << std::endl;
             delta.push_back(move_ant_on_screen(grid, ant, ant->get_location()));
-        }
     });
 
     for (Ant *ant : killed)

@@ -116,10 +116,7 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
 
         // 3: we explore the world
         if (cells.empty())
-        {
-            std::cout << "EMPTY: " << location << std::endl;
             return NULL;
-        }
 
         double best_orientation = M_PI; // magic value
         MetaCell *best_cell = NULL;
@@ -151,9 +148,7 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
         }
     }
     else // back to the nest
-    {
         return nest_oriented;
-    }
 }
 
 Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
