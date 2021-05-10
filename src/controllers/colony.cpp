@@ -1,6 +1,28 @@
 #include "controllers/ant.hpp"
 #include "models/grid.hpp"
 
+Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
+{
+    left_corner_x = cells[0]->get_location().x;
+    left_corner_y = cells[0]->get_location().y;
+
+    for (Cell *cell : cells)
+    {
+        centroid_x += cell->get_location().x;
+        centroid_y += cell->get_location().y;
+        cell->set_nest(this);
+        cell->nest_pheromons[this] = 1;
+    }
+    centroid_x /= cells.size();
+    centroid_y /= cells.size();
+}
+
+Colony::~Colony()
+{
+    for (Ant *ant : ants)
+        delete (ant);
+}
+
 void Colony::remove_ant(Grid &grid, size_t ant_id)
 {
     Ant *ant = ants[ant_id];

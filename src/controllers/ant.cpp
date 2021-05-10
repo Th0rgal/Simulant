@@ -159,28 +159,6 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
         return nest_oriented;
 }
 
-Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
-{
-    left_corner_x = cells[0]->get_location().x;
-    left_corner_y = cells[0]->get_location().y;
-
-    for (Cell *cell : cells)
-    {
-        centroid_x += cell->get_location().x;
-        centroid_y += cell->get_location().y;
-        cell->set_nest(this);
-        cell->nest_pheromons[this] = 1;
-    }
-    centroid_x /= cells.size();
-    centroid_y /= cells.size();
-}
-
-Colony::~Colony()
-{
-    for (Ant *ant : ants)
-        delete (ant);
-}
-
 std::array<Cell *, 4> Colony::get_cells()
 {
     return cells;
