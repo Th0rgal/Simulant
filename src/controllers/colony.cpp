@@ -11,7 +11,7 @@ Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
         centroid_x += cell->get_location().x;
         centroid_y += cell->get_location().y;
         cell->set_nest(this);
-        cell->nest_pheromons[this] = 1;
+        cell->nest_pheromones[this] = 1;
     }
     centroid_x /= cells.size();
     centroid_y /= cells.size();

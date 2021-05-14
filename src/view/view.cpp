@@ -60,10 +60,10 @@ View::~View()
     SDL_DestroyWindow(window);
 
     m.clear();
-    disp_pheromons.clear();
+    disp_pheromones.clear();
     SDL_DestroyTexture(background_texture);
     SDL_DestroyTexture(entities_texture);
-    SDL_DestroyTexture(pheromons_texture);
+    SDL_DestroyTexture(pheromones_texture);
 
     SDL_Quit();
 }
@@ -190,22 +190,22 @@ void View::init_grid(const Grid &grid)
     // SDL_SetTextureBlendMode(background_texture, SDL_BLENDMODE_BLEND);
     // entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
     // SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
-    // pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
-    // SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_ADD);
+    // pheromones_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
+    // SDL_SetTextureBlendMode(pheromones_texture, SDL_BLENDMODE_ADD);
 
     background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(background_texture, SDL_BLENDMODE_BLEND);
     entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
-    pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
-    SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_ADD);
+    pheromones_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    SDL_SetTextureBlendMode(pheromones_texture, SDL_BLENDMODE_ADD);
 
     double base_tint = create_base_tint();
 
     for (size_t i = 0; i < grid.colonies.size(); i++)
     {
         m[grid.colonies[i]] = get_tint(i, grid.colonies.size(), base_tint, 0.35, 0.93);
-        disp_pheromons[grid.colonies[i]] = false;
+        disp_pheromones[grid.colonies[i]] = false;
     }
 
     SDL_SetRenderTarget(render, background_texture);
@@ -224,7 +224,7 @@ void View::init_grid(const Grid &grid)
     //SDL_RenderSetScale(render, 1, 1);
     SDL_SetRenderTarget(render, NULL);
     init_entities(grid);
-    update_pheromons(grid, 0);
+    update_pheromones(grid, 0);
 }
 
 void View::init_entities(const Grid &grid)
@@ -260,9 +260,9 @@ void View::init_entities(const Grid &grid)
 void View::clear()
 {
     m.clear();
-    disp_pheromons.clear();
+    disp_pheromones.clear();
     delta.clear();
     SDL_DestroyTexture(background_texture);
     SDL_DestroyTexture(entities_texture);
-    SDL_DestroyTexture(pheromons_texture);
+    SDL_DestroyTexture(pheromones_texture);
 }

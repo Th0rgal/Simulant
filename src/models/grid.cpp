@@ -58,26 +58,26 @@ void Cell::add_sugar()
     sugar = true;
 }
 
-double Cell::get_nest_pheromons(const Colony *colony)
+double Cell::get_nest_pheromones(const Colony *colony)
 {
-    if (nest_pheromons.find(colony) == nest_pheromons.end())
+    if (nest_pheromones.find(colony) == nest_pheromones.end())
         return 0;
-    return nest_pheromons[colony];
+    return nest_pheromones[colony];
 }
 
-double Cell::get_sugar_pheromons()
+double Cell::get_sugar_pheromones()
 {
-    return sugar_pheromons;
+    return sugar_pheromones;
 }
 
 void Cell::add_sugar_pheromon()
 {
-    sugar_pheromons += 1;
+    sugar_pheromones += 1;
 }
 
 void Cell::update(size_t current_block)
 {
-    sugar_pheromons *= std::pow(0.975, current_block - last_block);
+    sugar_pheromones *= std::pow(0.975, current_block - last_block);
     last_block = current_block;
 }
 
@@ -108,9 +108,9 @@ Grid::Grid(size_t colonies_amount)
                                      (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
         for (Cell *cell : map)
         {
-            if (cell->get_nest_pheromons(colony) != 1)
+            if (cell->get_nest_pheromones(colony) != 1)
             {
-                cell->nest_pheromons[colony] =
+                cell->nest_pheromones[colony] =
                     1 - cell->get_location().distance_to(colony->centroid_x, colony->centroid_y) / std::sqrt(max_square_distance);
             }
         }

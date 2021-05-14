@@ -69,7 +69,7 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
     Cell *sugar = NULL;
     Cell *nest_oriented = NULL;
 
-    bool pheromons = false;
+    bool pheromones = false;
     for (const Coordinates &coo : location.get_neighbors())
     {
         Cell *cell = grid.get_cell(coo, current_block);
@@ -89,10 +89,10 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
                          coo.square_distance_to(origin_x, origin_y),
                          (angle < 0 ? angle + 2 * M_PI : angle)});
 
-        if (cell->get_sugar_pheromons() > 0)
-            pheromons = true;
+        if (cell->get_sugar_pheromones() > 0)
+            pheromones = true;
 
-        if (nest_oriented == NULL || cell->get_nest_pheromons(colony) > nest_oriented->get_nest_pheromons(colony))
+        if (nest_oriented == NULL || cell->get_nest_pheromones(colony) > nest_oriented->get_nest_pheromones(colony))
             nest_oriented = cell;
     }
 
@@ -102,16 +102,16 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
         if (sugar != NULL)
             return sugar;
 
-        // 2: we follow pheromons
+        // 2: we follow pheromones
         double current_distance = location.square_distance_to(origin_x, origin_y);
         std::vector<MetaCell> distancing;
-        if (pheromons)
+        if (pheromones)
         {
             Cell *farthest = NULL;
             for (MetaCell meta_cell : cells)
                 if (meta_cell.square_distance > current_distance)
                 {
-                    if (meta_cell.cell->get_sugar_pheromons() > (farthest == NULL ? 0 : farthest->get_sugar_pheromons()))
+                    if (meta_cell.cell->get_sugar_pheromones() > (farthest == NULL ? 0 : farthest->get_sugar_pheromones()))
                         farthest = meta_cell.cell;
                 }
             if (farthest != NULL)

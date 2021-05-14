@@ -37,7 +37,7 @@ public:
 
     void    init_grid(const Grid &grid);
     void    init_entities(const Grid &grid);
-    void    update_pheromons(const Grid &grid, size_t current_block);
+    void    update_pheromones(const Grid &grid, size_t current_block);
     void    update_entities(const Grid &grid, double delta_time);
     void    update_grid();
 
@@ -81,11 +81,11 @@ private:
 
     SDL_Texture     *background_texture;
     SDL_Texture     *entities_texture;
-    SDL_Texture     *pheromons_texture;
+    SDL_Texture     *pheromones_texture;
 
 
     std::map<const Colony *, rgb> m;
-    std::map<const Colony *, bool> disp_pheromons;
+    std::map<const Colony *, bool> disp_pheromones;
 
     std::vector<Action> delta;
 
