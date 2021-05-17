@@ -47,6 +47,7 @@ set(TESTS
     tests/controllers/ant.cpp
     tests/controllers/game.cpp
 
+    tests/models/grid.cpp
     tests/models/space.cpp
 )
 
