@@ -33,7 +33,7 @@ double random_double(double lower, double higher);
  * 
  * @return bool random output
  * 
- * @confidence 5
+ * @confidence 3
  * @author Thomas Marchand
  **/
 bool flip_a_coin();

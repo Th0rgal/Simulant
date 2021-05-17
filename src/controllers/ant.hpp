@@ -132,7 +132,7 @@ public:
     /**
      * Colony destructor
      * 
-     * @confidence 5
+     * @confidence 3
      * @author Frédéric Becerril
      **/
     ~Colony();
@@ -174,7 +174,7 @@ public:
      * @param Grid& a reference to the grid
      * @param size_t index of the ant within the colony vectors
      * 
-     * @confidence 5
+     * @confidence 3
      * @author Thomas Marchand
      **/
     void remove_ant(Grid &grid, size_t ant_id);

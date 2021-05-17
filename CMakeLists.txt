@@ -45,7 +45,7 @@ set(TESTS
     tests/tests.cpp
     
     tests/controllers/ant.cpp
-    tests/controllers/game.cpp
+    tests/controllers/random.cpp
 
     tests/models/grid.cpp
     tests/models/space.cpp
