@@ -209,7 +209,7 @@ public:
     /**
      * Apply a lambda function taking a Ant* parameter to all ants of the grid
      * 
-     * @confidence 5
+     * @confidence 3
      * @author Thomas Marchand
      **/
     void map_ants(Function &&function);
@@ -264,7 +264,7 @@ public:
     /**
      * Clear the grid and free the memory
      * 
-     * @confidence 5
+     * @confidence 3
      * @author Thomas Marchand
      **/
     void clear();
@@ -278,7 +278,7 @@ private:
      * 
      * @return std::array<Cell *, 4> nest cells
      * 
-     * @confidence 5
+     * @confidence 3
      * @author Thomas Marchand
      **/
     std::array<Cell *, 4> find_nest_cells();
@@ -288,7 +288,7 @@ private:
      * 
      * @param Colony* colony
      * 
-     * @confidence 5
+     * @confidence 3
      * @author Thomas Marchand
      **/
     void summon_ants(Colony *colony);
@@ -298,7 +298,7 @@ private:
      * 
      * @param size_t amount of sugar to summon
      * 
-     * @confidence 5
+     * @confidence 3
      * @author Thomas Marchand
      **/
     void summon_sugars(size_t amount);
@@ -308,7 +308,7 @@ private:
      * 
      * @return Cell* a pointer to an empty cell
      * 
-     * @confidence 5
+     * @confidence 3
      * @author Thomas Marchand
      **/
     Cell *find_empty_cell();

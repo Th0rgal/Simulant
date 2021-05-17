@@ -11,5 +11,11 @@ TEST_CASE("testing Colony getters and setters")
             j++;
         });
         CHECK(j == i);
+
+        Cell *cell = grid.get_cell(Vector{0, 0});
+        Cell *cell2 = grid.get_cell(0, 0);
+        Cell *cell3 = grid.get_cell(Coordinates{0, 0}, 0);
+        CHECK(cell == cell2);
+        CHECK(cell == cell3);
     }
 }
