@@ -77,7 +77,7 @@ void View::init_grid()
 
     grid_w = cell_w * SPACE_WIDTH;
     grid_h = cell_h * SPACE_HEIGHT;
-    zoom_in = 2.0 / scale_high_dpi;
+    zoom_in = 1;
     cell_w *= zoom_in;
     cell_h *= zoom_in;
     new_w = cell_size;
