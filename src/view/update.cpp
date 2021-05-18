@@ -1,13 +1,15 @@
 #include "view/view.hpp"
 
-void    View::update(double time, const Grid& grid, size_t current_block) {
-    SDL_SetRenderDrawColor(render, 0, 0 ,0 ,0);
+void View::update(double time, const Grid &grid, size_t current_block)
+{
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
-    
-    update_grid();    
+
+    update_grid();
 
     hud.update();
-    if (clicked or double_clicked) {
+    if (clicked or double_clicked)
+    {
         int x_grid = (mouse_x * scale_high_dpi) / new_w - x_shift;
         int y_grid = (mouse_y * scale_high_dpi) / new_h - y_shift;
 
@@ -18,21 +20,27 @@ void    View::update(double time, const Grid& grid, size_t current_block) {
         // std::cout << "{--- > " << new_w << ", " << new_h << " < ---}" << std::endl;
 
         Cell *cell = grid.get_cell(x_grid, y_grid);
-        if (cell and cell->is_nest()) {
-            disp_pheromons[cell->get_nest()] = !disp_pheromons[cell->get_nest()];
+        if (cell and cell->is_nest())
+        {
+            disp_pheromones[cell->get_nest()] = !disp_pheromones[cell->get_nest()];
         }
         hud.use();
     }
-    if (double_clicked) {
+    if (double_clicked)
+    {
     }
-    if (scroll != 0) {
+    if (scroll != 0)
+    {
         double x_grid = (mouse_x * scale_high_dpi) / new_w;
         double y_grid = (mouse_y * scale_high_dpi) / new_w;
 
-        if (scroll == 1) {
+        if (scroll == 1)
+        {
             new_w = new_w * 0.9;
             new_h = new_h * 0.9;
-        } else {
+        }
+        else
+        {
             new_w = new_w * 1.1;
             new_h = new_h * 1.1;
         }
@@ -42,19 +50,18 @@ void    View::update(double time, const Grid& grid, size_t current_block) {
         double x_grid2 = (mouse_x * scale_high_dpi) / new_w;
         double y_grid2 = (mouse_y * scale_high_dpi) / new_w;
 
-       x_shift -= x_grid - x_grid2;
-       y_shift -= y_grid - y_grid2;
+        x_shift -= x_grid - x_grid2;
+        y_shift -= y_grid - y_grid2;
     }
-
 
     if (delta.size() > 0)
         update_entities(grid, time);
-    update_pheromons(grid, current_block);
+    update_pheromones(grid, current_block);
 }
 
-void View::update_pheromons(const Grid &grid, size_t current_block)
+void View::update_pheromones(const Grid &grid, size_t current_block)
 {
-    SDL_SetRenderTarget(render, pheromons_texture);
+    SDL_SetRenderTarget(render, pheromones_texture);
 
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
@@ -65,20 +72,20 @@ void View::update_pheromons(const Grid &grid, size_t current_block)
         Coordinates c = cell->get_location();
         for (Colony *colony : grid.colonies)
         {
-            if (disp_pheromons[colony])
+            if (disp_pheromones[colony])
             {
-                double alpha = cell->get_nest_pheromons(colony);
+                double alpha = cell->get_nest_pheromones(colony);
                 rgb color = m[colony];
                 draw_cell_rect(c, color.r, color.g, color.b, std::max(0.0, alpha * 255 - 100));
             }
-            if (cell->get_sugar_pheromons() > 0)
+            if (cell->get_sugar_pheromones() > 0)
             {
-                int alpha = cell->get_sugar_pheromons() * 255;
+                int alpha = cell->get_sugar_pheromones() * 25;
                 if (alpha > 255)
                 {
                     alpha = 255;
                 }
-                rgb color = {1.0, 1.0, 1.0};
+                rgb color = {0.40, 0.50, 0.70};
                 draw_cell_rect(c, color.r, color.g, color.b, alpha);
             }
         }
@@ -118,11 +125,13 @@ void View::update_entities(const Grid &grid, double delta_time)
     SDL_SetRenderTarget(render, NULL);
 }
 
-void    View::update_map(std::vector<Action> d) {
+void View::update_map(std::vector<Action> d)
+{
     delta = d;
 }
 
-void    View::update_grid() {
+void View::update_grid()
+{
     SDL_SetRenderTarget(render, background_texture);
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);

@@ -8,18 +8,29 @@ double random_orientation()
     return random_double(0, 2 * M_PI);
 }
 
-Ant::Ant(Colony *colony, Coordinates coordinates) : colony(colony),
-                                                    location(coordinates),
+Ant::Ant(Colony *colony, Coordinates coordinates) : location(coordinates),
                                                     sugar(false),
+                                                    colony(colony),
                                                     orientation(random_orientation()),
                                                     origin_x(colony->centroid_x),
                                                     origin_y(colony->centroid_y)
+
 {
 }
 
 Coordinates Ant::get_location()
 {
     return location;
+}
+
+void Ant::set_location(const Coordinates &new_location)
+{
+    location = new_location;
+}
+
+Colony *Ant::get_colony()
+{
+    return colony;
 }
 
 bool Ant::has_sugar()
@@ -45,11 +56,6 @@ void Ant::move(Grid &grid, Cell *new_cell)
     location = new_cell->get_location();
 }
 
-Colony *Ant::get_colony()
-{
-    return colony;
-}
-
 struct MetaCell
 {
     Cell *cell;
@@ -61,15 +67,19 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
 {
     std::vector<MetaCell> cells;
     Cell *sugar = NULL;
-    bool pheromons = false;
+    Cell *nest_oriented = NULL;
+
+    bool pheromones = false;
     for (const Coordinates &coo : location.get_neighbors())
     {
         Cell *cell = grid.get_cell(coo, current_block);
         if (cell->has_sugar())
+        {
             if (!has_sugar())
                 sugar = cell;
             else
                 continue;
+        }
         if (cell->has_ant() && cell->get_ant()->colony == colony)
             continue;
 
@@ -79,8 +89,11 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
                          coo.square_distance_to(origin_x, origin_y),
                          (angle < 0 ? angle + 2 * M_PI : angle)});
 
-        if (cell->get_sugar_pheromons() > 0)
-            pheromons = true;
+        if (cell->get_sugar_pheromones() > 0)
+            pheromones = true;
+
+        if (nest_oriented == NULL || cell->get_nest_pheromones(colony) > nest_oriented->get_nest_pheromones(colony))
+            nest_oriented = cell;
     }
 
     if (!has_sugar()) // looking for sugar
@@ -89,19 +102,20 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
         if (sugar != NULL)
             return sugar;
 
-        // 2: we follow pheromons
+        // 2: we follow pheromones
         double current_distance = location.square_distance_to(origin_x, origin_y);
         std::vector<MetaCell> distancing;
-        if (pheromons)
+        if (pheromones)
         {
             Cell *farthest = NULL;
             for (MetaCell meta_cell : cells)
                 if (meta_cell.square_distance > current_distance)
                 {
-                    if (meta_cell.cell->get_sugar_pheromons() > (farthest == NULL ? 0 : farthest->get_sugar_pheromons()))
+                    if (meta_cell.cell->get_sugar_pheromones() > (farthest == NULL ? 0 : farthest->get_sugar_pheromones()))
                         farthest = meta_cell.cell;
                 }
-            return farthest; // todo handle no farthest
+            if (farthest != NULL)
+                return farthest;
         }
         else
             for (MetaCell meta_cell : cells)
@@ -142,75 +156,10 @@ Cell *Ant::find_move(Grid &grid, size_t current_block)
         }
     }
     else // back to the nest
-    {
-        return NULL;
-    }
-
-    // nothing ? let's get another orientation and retry
-}
-
-Colony::Colony(std::array<Cell *, 4> cells) : cells(cells)
-{
-    left_corner_x = cells[0]->get_location().x;
-    left_corner_y = cells[0]->get_location().y;
-
-    for (Cell *cell : cells)
-    {
-        centroid_x += cell->get_location().x;
-        centroid_y += cell->get_location().y;
-        cell->set_nest(this);
-        cell->nest_pheromons[this] = 1;
-    }
-    centroid_x /= cells.size();
-    centroid_y /= cells.size();
-}
-
-Colony::~Colony()
-{
-    for (Ant *ant : ants)
-        delete (ant);
+        return nest_oriented;
 }
 
 std::array<Cell *, 4> Colony::get_cells()
 {
     return cells;
-}
-
-void Colony::remove_ant(Grid &grid, size_t ant_id)
-{
-    Ant *ant = ants[ant_id];
-    Cell *cell = grid.get_cell(ant->get_location());
-    if (cell->get_ant() == ant)
-        cell->set_ant(NULL);
-    delete ant;
-    if (ant_id < ants.size())
-        ants.erase(ants.begin() + ant_id);
-}
-
-size_t Colony::find_ant_index(Ant *ant)
-{
-    for (size_t i = 0; i < ants.size(); i++)
-        if (ant == ants[i])
-            return i;
-    std::cout << "ANT:" << ant << std::endl;
-    std::cout << "location:" << ant->get_location() << std::endl;
-    std::cout << "colony:" << ant->get_colony() << std::endl;
-    std::cout << "expected colony:" << this << std::endl;
-    throw std::invalid_argument("This ant does not belong to the colony");
-}
-
-void Colony::add_ant(Ant *ant)
-{
-    ants.push_back(ant);
-}
-
-bool Colony::add_sugar()
-{
-    sugar += 1;
-    if (sugar > 1)
-    {
-        sugar -= 1;
-        return true;
-    }
-    return false;
 }

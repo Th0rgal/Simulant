@@ -3,7 +3,7 @@
 #include "algorithm"
 #include "math.h"
 
-Cell::Cell(Coordinates location) : location(location), sugar(false), ant(NULL), nest(NULL)
+Cell::Cell(Coordinates location) : location(location), sugar(false), nest(NULL), ant(NULL)
 {
 }
 
@@ -58,26 +58,26 @@ void Cell::add_sugar()
     sugar = true;
 }
 
-double Cell::get_nest_pheromons(const Colony *colony)
+double Cell::get_nest_pheromones(const Colony *colony)
 {
-    if (nest_pheromons.find(colony) == nest_pheromons.end())
+    if (nest_pheromones.find(colony) == nest_pheromones.end())
         return 0;
-    return nest_pheromons[colony];
+    return nest_pheromones[colony];
 }
 
-double Cell::get_sugar_pheromons()
+double Cell::get_sugar_pheromones()
 {
-    return sugar_pheromons;
+    return sugar_pheromones;
 }
 
 void Cell::add_sugar_pheromon()
 {
-    sugar_pheromons += 1;
+    sugar_pheromones += 1;
 }
 
 void Cell::update(size_t current_block)
 {
-    sugar_pheromons *= std::pow(0.98, current_block - last_block);
+    sugar_pheromones *= std::pow(0.975, current_block - last_block);
     last_block = current_block;
 }
 
@@ -108,9 +108,9 @@ Grid::Grid(size_t colonies_amount)
                                      (SPACE_HEIGHT - 0.5) * (SPACE_HEIGHT - 0.5);
         for (Cell *cell : map)
         {
-            if (cell->get_nest_pheromons(colony) != 1)
+            if (cell->get_nest_pheromones(colony) != 1)
             {
-                cell->nest_pheromons[colony] =
+                cell->nest_pheromones[colony] =
                     1 - cell->get_location().distance_to(colony->centroid_x, colony->centroid_y) / std::sqrt(max_square_distance);
             }
         }
@@ -162,7 +162,7 @@ void Grid::summon_sugars(size_t amount)
     for (size_t i = 0; i < amount; i++)
     {
         double best_distance = -1;
-        Cell *best_cell;
+        Cell *best_cell = NULL;
         for (size_t i = 0; i < 7; i++)
         {
             Cell *cell = find_empty_cell();
@@ -177,6 +177,8 @@ void Grid::summon_sugars(size_t amount)
                 best_cell = cell;
             }
         }
+        if (best_cell == NULL)
+            continue;
         best_cell->add_sugar();
         sugar_locations.push_back(best_cell->get_location());
     }
@@ -217,11 +219,6 @@ void Grid::clear()
     for (Colony *colony : colonies)
         delete colony;
     colonies.clear();
-}
-
-void Grid::set_ant(Ant *ant, Coordinates coordinates)
-{
-    int pos = coordinates.x * coordinates.y * SPACE_WIDTH;
 }
 
 void Grid::spawn_ant(Colony *colony, Coordinates location)

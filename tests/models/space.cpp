@@ -42,11 +42,6 @@ TEST_CASE("testing coord")
     CHECK(c.x == 1);
     CHECK(c.y == -1);
 
-    CHECK(X_MAX == 10);
-    CHECK(Y_MAX == 10);
-    CHECK(X_MIN == -10);
-    CHECK(X_MIN == -10);
-
     CHECK(c == c);
     CHECK_FALSE(c == a);
     CHECK(c != a);

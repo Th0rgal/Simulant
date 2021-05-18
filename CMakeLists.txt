@@ -12,6 +12,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 set(SRCS
     src/controllers/ant.cpp
+    src/controllers/colony.cpp
     src/controllers/game.cpp
     src/controllers/random.cpp
 
@@ -42,7 +43,11 @@ set(HEADERS
 
 set(TESTS
     tests/tests.cpp
+    
+    tests/controllers/ant.cpp
+    tests/controllers/random.cpp
 
+    tests/models/grid.cpp
     tests/models/space.cpp
 )
 
@@ -52,7 +57,7 @@ set(LIBS
     SDL2_image
 )
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
 
 add_executable(simulant src/main.cpp ${SRCS} ${HEADERS})
 target_compile_features(simulant PRIVATE cxx_std_17)
