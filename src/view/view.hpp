@@ -70,6 +70,8 @@ private:
     int             scroll;
     int             mouse_x;
     int             mouse_y;
+    int             shift_to_x;
+    int             shift_to_y;
 
     double          zoom_in;
     double          new_w;

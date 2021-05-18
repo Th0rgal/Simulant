@@ -133,7 +133,6 @@ Event View::event_manager()
             switch (event.key.keysym.sym)
             {
             case SDLK_ESCAPE:
-            {
                 if (hud.menu_is_hidden("Pause"))
                 {
                     hud.show_menu("Pause");
@@ -143,7 +142,8 @@ Event View::event_manager()
                     hud.hide_menu("Pause");
                 }
                 break;
-            }
+            case SDLK_DOWN:
+                
             default:
                 break;
             }
@@ -195,11 +195,11 @@ void View::init_grid(const Grid &grid)
     // pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
     // SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_ADD);
 
-    background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w * zoom_in, window_h * zoom_in);
     SDL_SetTextureBlendMode(background_texture, SDL_BLENDMODE_BLEND);
-    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w * zoom_in, window_h * zoom_in);
     SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
-    pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    pheromons_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w * zoom_in, window_h * zoom_in);
     SDL_SetTextureBlendMode(pheromons_texture, SDL_BLENDMODE_ADD);
 
     double base_tint = create_base_tint();
