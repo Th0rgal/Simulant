@@ -19,19 +19,27 @@ void    View::renderAll() {
 }
 
 
-void View::draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+void View::draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool fill)
 {
     int x = (x_rect - X_MIN + x_shift) * cell_w;
     int y = (y_rect - Y_MIN + y_shift) * cell_h;
     int w = cell_w;
     int h = cell_h;
+    
+    if (x_rect  < x_start or x_rect > x_end or y_rect < y_start or y_rect > y_end)
+        return ;
+
     SDL_Rect rect = {x, y, w, h};
     SDL_SetRenderDrawColor(render, r, g, b, a);
-    SDL_RenderFillRect(render, &rect);
+    if (fill) {
+        SDL_RenderFillRect(render, &rect);
+    } else {
+        SDL_RenderDrawRect(render, &rect);
+    }
 }
 
-void View::draw_cell_rect(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-    draw_cell_rect(c.x, c.y, r, g, b, a);
+void View::draw_cell_rect(const Coordinates &c, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool fill) {
+    draw_cell_rect(c.x, c.y, r, g, b, a, fill);
 }
 
 
@@ -39,6 +47,9 @@ void View::draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, 
 {
     SDL_RendererInfo info;
     SDL_GetRendererInfo(render, &info);
+
+    if (x_rect < x_start or x_rect > x_end or y_rect < y_start or y_rect > y_end)
+        return ;
 
     SDL_SetRenderDrawColor(render, r, g, b, a);
         if (info.flags & SDL_RENDERER_ACCELERATED) {

@@ -140,8 +140,18 @@ Event View::event_manager()
                     hud.hide_menu("Pause");
                 }
                 break;
+            case SDLK_UP:
+                y_shift += 1;
+                break;
             case SDLK_DOWN:
-                
+                y_shift -= 1;
+                break;
+            case SDLK_RIGHT:
+                x_shift -= 1;
+                break;
+            case SDLK_LEFT:
+                x_shift += 1;
+                break;
             default:
                 break;
             }

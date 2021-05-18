@@ -4,6 +4,7 @@
 #include <SDL2/SDL_timer.h>
 #include <unordered_set>
 #include <map>
+#include <algorithm>
 
 #include "models/grid.hpp"
 #include "models/action.hpp"
@@ -28,8 +29,8 @@ public:
 
     void    clear();
 
-    void    draw_cell_rect(const Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-    void    draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    void    draw_cell_rect(const Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool fill = true);
+    void    draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, bool fill = true);
 
     void    draw_cell_circle(const Coordinates& c, uint8_t r, uint8_t g, uint8_t b, uint8_t a, double scale = 0.25);
     void    draw_cell_circle(double x_rect, double y_rect, uint8_t r, uint8_t g, uint8_t b, uint8_t a, double scale = 0.25);
@@ -70,14 +71,17 @@ private:
     int             scroll;
     int             mouse_x;
     int             mouse_y;
-    int             shift_to_x;
-    int             shift_to_y;
 
     double          zoom_in;
     double          new_w;
     double          new_h;
     double          x_shift;
     double          y_shift;
+
+    int             x_start;
+    int             x_end;
+    int             y_start;
+    int             y_end;
 
     SDL_Texture     *grid_texture;
 

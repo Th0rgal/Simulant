@@ -2,6 +2,11 @@
 
 void View::update(double time, const Grid &grid, size_t current_block)
 {
+    x_start = std::max(static_cast<int>(std::floor(-x_shift + X_MIN)), X_MIN);
+    x_end = std::min(static_cast<int>(std::ceil(-x_shift + X_MIN + grid_w / new_w)), X_MAX);
+    y_start = std::max(static_cast<int>(std::floor(-y_shift + Y_MIN)), Y_MIN);
+    y_end = std::min(static_cast<int>(std::ceil(-y_shift + Y_MIN + grid_h / new_h)), Y_MAX);
+
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
 
@@ -132,16 +137,16 @@ void View::update_map(std::vector<Action> d)
 
 void View::update_grid()
 {
+    std::cout << x_shift << ", " << y_shift << ", "<< new_w << ", " << grid_w << std::endl;
+
     SDL_SetRenderTarget(render, background_texture);
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
-    for (int i = 0; i < SPACE_HEIGHT; i++)
-    {
-        for (int j = 0; j < SPACE_WIDTH; j++)
-        {
-            SDL_Rect rect = {static_cast<int>((j + x_shift) * cell_w), static_cast<int>((i + y_shift) * cell_h), cell_w, cell_h};
-            SDL_RenderDrawRect(render, &rect);
+
+    for (int i = y_start; i <= y_end; i++) {
+        for (int j = x_start; j <= x_end; j++) {
+            draw_cell_rect(j, i, 0x2C, 0x3A, 0x47, 0xFF, false);
         }
     }
     SDL_SetRenderTarget(render, NULL);
