@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <vector>
 
-#define SPACE_WIDTH 512
-#define SPACE_HEIGHT 512
+#define SPACE_WIDTH 51
+#define SPACE_HEIGHT 51
 
 #define X_MIN ((-SPACE_WIDTH / 2))
 #define Y_MIN ((-SPACE_HEIGHT / 2))
