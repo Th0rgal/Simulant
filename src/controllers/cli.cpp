@@ -1,5 +1,4 @@
 #include "controllers/cli.hpp"
-#include <iostream>
 #include <cstring>
 
 GameOptions::GameOptions(int args_size, char *args[])
