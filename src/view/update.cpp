@@ -3,9 +3,9 @@
 void View::update(double time, const Grid &grid, size_t current_block)
 {
     x_start = std::max(static_cast<int>(std::floor(-x_shift + X_MIN)), X_MIN);
-    x_end = std::min(static_cast<int>(std::ceil(-x_shift + X_MIN + grid_w / cell_size)), X_MAX);
+    x_end = std::min(static_cast<int>(x_start + window_w / cell_size), X_MAX);
     y_start = std::max(static_cast<int>(std::floor(-y_shift + Y_MIN)), Y_MIN);
-    y_end = std::min(static_cast<int>(std::ceil(-y_shift + Y_MIN + grid_h / cell_size)), Y_MAX);
+    y_end = std::min(static_cast<int>(y_start + window_h / cell_size), Y_MAX);
 
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
@@ -18,10 +18,13 @@ void View::update(double time, const Grid &grid, size_t current_block)
         int x_grid = (mouse_x * scale_high_dpi) / cell_size - x_shift;
         int y_grid = (mouse_y * scale_high_dpi) / cell_size - y_shift;
 
+
         x_grid += X_MIN;
         y_grid += Y_MIN;
 
-        //std::cout << "{--- > " << x_grid << ", " << y_grid << " < ---}" << std::endl;
+        // std::cout << "{--- > " << x_grid << ", " << y_grid << " < ---}" << std::endl;
+        // std::cout << "{-- > " << x_start << ", " << y_start << " < --}" << std::endl;
+        // std::cout << "{- > " << x_end << ", " << y_end << " < -}" << std::endl;
         // std::cout << "{--- > " << new_w << ", " << new_h << " < ---}" << std::endl;
 
         Cell *cell = grid.get_cell(x_grid, y_grid);
