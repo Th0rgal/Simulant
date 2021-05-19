@@ -86,10 +86,10 @@ void View::init_grid()
     x_shift = 0;
     y_shift = 0;
     if (grid_w < window_w) {
-        x_shift = ((window_w - grid_w) / 2) / cell_w;
+        x_shift = ((window_w - grid_w) / 2) / cell_size;
     }
     if (grid_h < window_h) {
-        y_shift = ((window_h - grid_h) / 2) / cell_h;
+        y_shift = ((window_h - grid_h) / 2) / cell_size;
     }
 
 }
