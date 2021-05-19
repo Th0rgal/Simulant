@@ -64,6 +64,7 @@ View::~View()
     SDL_DestroyTexture(background_texture);
     SDL_DestroyTexture(entities_texture);
     SDL_DestroyTexture(pheromones_texture);
+    SDL_DestroyTexture(info_texture);
 
     SDL_Quit();
 }
@@ -77,9 +78,6 @@ void View::init_grid()
 
     grid_w = cell_w * SPACE_WIDTH;
     grid_h = cell_h * SPACE_HEIGHT;
-    zoom_in = 1;
-    cell_w *= zoom_in;
-    cell_h *= zoom_in;
     new_w = cell_size;
     new_h = cell_size;
 
@@ -99,16 +97,20 @@ void View::init_hud()
     hud.init_hud(window, render);
 
     hud.create_menu("Pause");
-    hud.add_rect_draw("Pause", "", {0, 0, 1, 1}, {0xFF, 0xFF, 0xFF, 0x50}, "ressources/Marianne-Regular.otf", 42);
+    hud.add_rect_draw("Pause", "", {0.4, 0.4, 0.2, 0.2}, {0x1C, 0x1F, 0x2A, 150}, "ressources/Marianne-Regular.otf", 42);
 
     //hud.add_rect_draw("Pause", "premier test", {0,0,0.10,0.10}, {0xFF,0xFF,0xFF,0xFF}, "ressources/Marianne-Regular.otf", 42);
-    hud.add_button("Pause", "Exit", {0.90, 0.80, 0.10, 0.10}, {0, 0xFF, 0, 0xFF}, "ressources/Marianne-Regular.otf", 21,
+    hud.add_button("Pause", "Resume", {0.46, 0.420, 0.08, 0.04}, {0x97, 0xF0, 0xCC, 0xFF}, "ressources/Marianne-Regular.otf", 21,
                    [&]() {
-                       end = true;
+                       hud.hide_menu("Pause");
                    });
-    hud.add_button("Pause", "Restart", {0.90, 0.90, 0.10, 0.10}, {0, 0xFF, 0, 0xFF}, "ressources/Marianne-Regular.otf", 21,
+    hud.add_button("Pause", "Restart", {0.46, 0.480, 0.08, 0.04}, {0xF1, 0xDB, 0x96, 0xFF}, "ressources/Marianne-Regular.otf", 21,
                    [&]() {
                        restart = true;
+                   });
+    hud.add_button("Pause", "Exit", {0.46, 0.540, 0.08, 0.04}, {0xF1, 0x96, 0xA6, 0xFF}, "ressources/Marianne-Regular.otf", 21,
+                   [&]() {
+                       end = true;
                    });
 
     hud.hide_menu("Pause");
@@ -203,12 +205,14 @@ void View::init_grid(const Grid &grid)
     // pheromones_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, texture_rect.w, texture_rect.h);
     // SDL_SetTextureBlendMode(pheromones_texture, SDL_BLENDMODE_ADD);
 
-    background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w * zoom_in, window_h * zoom_in);
+    background_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(background_texture, SDL_BLENDMODE_BLEND);
-    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w * zoom_in, window_h * zoom_in);
+    entities_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(entities_texture, SDL_BLENDMODE_BLEND);
-    pheromones_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w * zoom_in, window_h * zoom_in);
+    pheromones_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(pheromones_texture, SDL_BLENDMODE_ADD);
+    info_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
+    SDL_SetTextureBlendMode(info_texture, SDL_BLENDMODE_BLEND);
 
     double base_tint = create_base_tint();
 
@@ -275,4 +279,5 @@ void View::clear()
     SDL_DestroyTexture(background_texture);
     SDL_DestroyTexture(entities_texture);
     SDL_DestroyTexture(pheromones_texture);
+    SDL_DestroyTexture(info_texture);
 }

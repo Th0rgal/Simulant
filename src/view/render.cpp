@@ -9,6 +9,7 @@ void    View::renderAll() {
     SDL_RenderCopy(render, background_texture, NULL, NULL);
     SDL_RenderCopy(render, pheromones_texture, NULL, NULL);
     SDL_RenderCopy(render, entities_texture, NULL, NULL);
+    SDL_RenderCopy(render, info_texture, NULL, NULL);
     
     //SDL_RenderCopy(render, pheromones_texture, &texture_rect, NULL);
     //SDL_RenderCopy(render, entities_texture, &texture_rect, NULL);

@@ -41,6 +41,7 @@ public:
     void    update_pheromones(const Grid &grid, size_t current_block);
     void    update_entities(const Grid &grid, double delta_time);
     void    update_grid();
+    void    update_info(const Grid &grid);
 
     void    update(double time, const Grid &grid, size_t current_block);
     void    update_map(std::vector<Action> d);
@@ -72,7 +73,6 @@ private:
     int             mouse_x;
     int             mouse_y;
 
-    double          zoom_in;
     double          new_w;
     double          new_h;
     double          x_shift;
@@ -88,7 +88,7 @@ private:
     SDL_Texture     *background_texture;
     SDL_Texture     *entities_texture;
     SDL_Texture     *pheromones_texture;
-
+    SDL_Texture     *info_texture;
 
     std::map<const Colony *, rgb> m;
     std::map<const Colony *, bool> disp_pheromones;

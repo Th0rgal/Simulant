@@ -23,6 +23,10 @@ Colony::~Colony()
         delete (ant);
 }
 
+int Colony::get_nb_ants() {
+    return ants.size();
+}
+
 void Colony::remove_ant(Grid &grid, size_t ant_id)
 {
     Ant *ant = ants[ant_id];

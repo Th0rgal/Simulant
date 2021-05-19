@@ -137,6 +137,14 @@ public:
      **/
     ~Colony();
 
+    /**
+     * Colony getter nb ants
+     * 
+     * @confidence 5
+     * @author Frédéric Becerril
+     **/
+    int get_nb_ants();
+
     template <class Function>
     /**
      * Utility function to apply a lambda function over all ants of the colony

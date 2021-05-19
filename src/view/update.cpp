@@ -53,8 +53,8 @@ void View::update(double time, const Grid &grid, size_t current_block)
             new_h = new_h * 1.1;
         }
         cell_size = static_cast<int>(new_w);
-        cell_w = cell_size * zoom_in;
-        cell_h = cell_size * zoom_in;
+        cell_w = cell_size;
+        cell_h = cell_size;
         double x_grid2 = (mouse_x * scale_high_dpi) / new_w;
         double y_grid2 = (mouse_y * scale_high_dpi) / new_w;
 
@@ -65,6 +65,8 @@ void View::update(double time, const Grid &grid, size_t current_block)
     if (delta.size() > 0)
         update_entities(grid, time);
     update_pheromones(grid, current_block);
+
+    update_info(grid);
 }
 
 void View::update_pheromones(const Grid &grid, size_t current_block)
@@ -152,5 +154,44 @@ void View::update_grid()
             draw_cell_rect(j, i, 0x2C, 0x3A, 0x47, 0xFF, false);
         }
     }
+    SDL_SetRenderTarget(render, NULL);
+}
+
+void View::update_info(const Grid& grid) {
+    TTF_Font *font = TTF_OpenFont("ressources/Marianne-Regular.otf", 32);
+//    SDL_Surface *surface = TTF_RenderText_Blended(font, "Colonies", color_sdl);
+
+    SDL_SetRenderTarget(render, info_texture);
+
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
+    SDL_RenderClear(render);
+
+
+    int y = 0;
+    for (Colony *c : grid.colonies) {
+        rgb color = m[c];
+        SDL_Color color_sdl = {static_cast<Uint8>(color.r), static_cast<Uint8>(color.g), static_cast<Uint8>(color.b), 0xFF};
+        std::string text = std::to_string(c->get_nb_ants());
+        SDL_Surface *surface = TTF_RenderText_Blended(font, text.c_str(), color_sdl);
+
+        SDL_Texture *texture = SDL_CreateTextureFromSurface(render, surface);
+
+        int w, h;
+        SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
+        SDL_Rect dest = {3, y, w, h};
+
+        SDL_RenderCopy(render, texture, NULL, &dest);
+
+        SDL_FreeSurface(surface);
+        SDL_DestroyTexture(texture);
+
+        y += 50;
+    }
+
+    SDL_Rect rect = {0 , 0, 40, y};
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 100);
+    SDL_RenderFillRect(render, &rect);
+
     SDL_SetRenderTarget(render, NULL);
 }
