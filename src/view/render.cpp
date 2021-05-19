@@ -26,8 +26,11 @@ void View::draw_cell_rect(double x_rect, double y_rect, uint8_t r, uint8_t g, ui
     int w = cell_w;
     int h = cell_h;
     
-    if (x_rect  < x_start or x_rect > x_end or y_rect < y_start or y_rect > y_end)
+
+    if (x_rect < x_start - 1 or x_rect > x_end + 1 or y_rect < y_start - 1 or y_rect > y_end + 1) {
+        //std::cerr << "no aff" << std::endl;
         return ;
+    }
 
     SDL_Rect rect = {x, y, w, h};
     SDL_SetRenderDrawColor(render, r, g, b, a);
