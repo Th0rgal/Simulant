@@ -3,6 +3,7 @@
 #include "models/grid.hpp"
 #include "models/action.hpp"
 #include "view/view.hpp"
+#include "controllers/cli.hpp"
 
 class Game
 {
@@ -10,10 +11,12 @@ public:
     /**
      * to intialize a Game object
      * 
+     * @param const GameOptions& game options
+     * 
      * @confidence 5: no tests needed
      * @author Thomas Marchand
      **/
-    Game();
+    Game(const GameOptions& options);
 
     /**
      * to start the game

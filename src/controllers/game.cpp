@@ -3,7 +3,7 @@
 #include <iostream>
 #include <chrono>
 
-Game::Game() : view(false), grid(8)
+Game::Game(const GameOptions &options) : view(options.fullscreen_view), grid(options.colonies_amount)
 {
 }
 
