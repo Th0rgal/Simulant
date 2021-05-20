@@ -27,9 +27,15 @@ void View::update(double time, const Grid &grid, size_t current_block)
         // std::cout << "{--- > " << new_w << ", " << new_h << " < ---}" << std::endl;
 
         Cell *cell = grid.get_cell(x_grid, y_grid);
-        if (cell and cell->is_nest())
+        if (cell)
         {
-            disp_pheromones[cell->get_nest()] = !disp_pheromones[cell->get_nest()];
+            if (cell->is_nest()) {
+                disp_pheromones[cell->get_nest()] = !disp_pheromones[cell->get_nest()];
+            } else {
+                if (cell->is_void()) {
+                    cell->add_sugar();
+                }
+            }
         }
         hud.use();
     }
