@@ -120,6 +120,7 @@ void Game::apply_ant_logic(Ant *ant, Cell *next_cell, std::vector<Ant *> &killed
     else if (!ant->has_sugar() && next_cell->has_sugar())
     {
         ant->add_sugar();
+        next_cell->remove_sugar();
         move_ant_on_view(ant, ant->get_location());
     }
 

@@ -50,12 +50,17 @@ Ant *Cell::get_ant()
 
 bool Cell::has_sugar()
 {
-    return sugar;
+    return sugar > 0;
 }
 
 void Cell::add_sugar()
 {
-    sugar = true;
+    sugar = 20;
+}
+
+void Cell::remove_sugar()
+{
+    sugar--;
 }
 
 double Cell::get_nest_pheromones(const Colony *colony)

@@ -53,9 +53,7 @@ public:
     bool has_sugar();
 
     /**
-     * Add sugar to a 
-     * 
-     * @return true if cell has sugar
+     * Add sugar to a cell
      * 
      * @confidence 5
      * @author Thomas Marchand
@@ -172,7 +170,7 @@ public:
 
 private:
     Coordinates location;
-    bool sugar = false;
+    size_t sugar = 0;
     double sugar_pheromones = 0;
     std::map<const Colony *, double> nest_pheromones;
     Colony *nest = NULL;
