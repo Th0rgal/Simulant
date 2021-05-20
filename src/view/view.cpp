@@ -105,15 +105,15 @@ void View::init_hud()
     hud.add_rect_draw("Pause", "", {0.4, 0.35, 0.2, 0.28}, {0x1C, 0x1F, 0x2A, 150}, "ressources/Marianne-Regular.otf", 42);
 
     //hud.add_rect_draw("Pause", "premier test", {0,0,0.10,0.10}, {0xFF,0xFF,0xFF,0xFF}, "ressources/Marianne-Regular.otf", 42);
-    hud.add_button("Pause", "Resume", {0.46, 0.38, 0.08, 0.06}, {0x97, 0xF0, 0xCC, 0xFF}, "ressources/Marianne-Regular.otf", 21,
+    hud.add_button("Pause", "Resume", {0.45, 0.38, 0.1, 0.06}, {0x97, 0xF0, 0xCC, 0xFF}, "ressources/Marianne-Regular.otf", 21,
                    [&]() {
                        hud.hide_menu("Pause");
                    });
-    hud.add_button("Pause", "Restart", {0.46, 0.46, 0.08, 0.06}, {0xF1, 0xDB, 0x96, 0xFF}, "ressources/Marianne-Regular.otf", 21,
+    hud.add_button("Pause", "Restart", {0.45, 0.46, 0.1, 0.06}, {0xF1, 0xDB, 0x96, 0xFF}, "ressources/Marianne-Regular.otf", 21,
                    [&]() {
                        restart = true;
                    });
-    hud.add_button("Pause", "Exit", {0.46, 0.54, 0.08, 0.06}, {0xF1, 0x96, 0xA6, 0xFF}, "ressources/Marianne-Regular.otf", 21,
+    hud.add_button("Pause", "Exit", {0.45, 0.54, 0.1, 0.06}, {0xF1, 0x96, 0xA6, 0xFF}, "ressources/Marianne-Regular.otf", 21,
                    [&]() {
                        end = true;
                    });
