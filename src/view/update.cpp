@@ -158,9 +158,7 @@ void View::update_grid()
 }
 
 void View::update_info(const Grid& grid) {
-    TTF_Font *font = TTF_OpenFont("ressources/Marianne-Regular.otf", 32);
 //    SDL_Surface *surface = TTF_RenderText_Blended(font, "Colonies", color_sdl);
-
     SDL_SetRenderTarget(render, info_texture);
 
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);

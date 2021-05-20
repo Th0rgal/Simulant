@@ -90,6 +90,8 @@ private:
     SDL_Texture     *pheromones_texture;
     SDL_Texture     *info_texture;
 
+    TTF_Font        *font;
+
     std::map<const Colony *, rgb> m;
     std::map<const Colony *, bool> disp_pheromones;
 

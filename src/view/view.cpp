@@ -34,6 +34,9 @@ View::View(bool fullScreen)
 View::View(int w, int h)
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+
+    TTF_Init();
+
     window = SDL_CreateWindow("Ant", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_ALLOW_HIGHDPI);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED);
     if (!render) {
@@ -65,7 +68,9 @@ View::~View()
     SDL_DestroyTexture(entities_texture);
     SDL_DestroyTexture(pheromones_texture);
     SDL_DestroyTexture(info_texture);
+    TTF_CloseFont(font);
 
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -214,6 +219,8 @@ void View::init_grid(const Grid &grid)
     info_texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_w, window_h);
     SDL_SetTextureBlendMode(info_texture, SDL_BLENDMODE_BLEND);
 
+    font = TTF_OpenFont("ressources/Marianne-Regular.otf", 32);
+
     double base_tint = create_base_tint();
 
     for (size_t i = 0; i < grid.colonies.size(); i++)
@@ -280,4 +287,5 @@ void View::clear()
     SDL_DestroyTexture(entities_texture);
     SDL_DestroyTexture(pheromones_texture);
     SDL_DestroyTexture(info_texture);
+    TTF_CloseFont(font);
 }

@@ -8,7 +8,7 @@ GameOptions::GameOptions(int args_size, char *args[])
         char *arg = args[i];
         if (!strcmp(arg, "nests") || !strcmp(arg, "--nests") || !strcmp(arg, "-n"))
         {
-            colonies_amount = std::atoi(args[++i]);
+            colonies_amount = atoi(args[++i]);
             continue;
         }
         if (!strcmp(arg, "full") || !strcmp(arg, "--full") || !strcmp(arg, "-f"))
@@ -19,7 +19,7 @@ GameOptions::GameOptions(int args_size, char *args[])
         if (!strcmp(arg, "-fn"))
         {
             fullscreen_view = true;
-            colonies_amount = std::atoi(args[++i]);
+            colonies_amount = atoi(args[++i]);
             break;
         }
     }
