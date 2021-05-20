@@ -23,7 +23,7 @@ Colony::~Colony()
         delete (ant);
 }
 
-int Colony::get_nb_ants() {
+int Colony::get_ants_amount() {
     return ants.size();
 }
 
