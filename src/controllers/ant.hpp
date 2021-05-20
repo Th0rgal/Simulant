@@ -143,7 +143,7 @@ public:
      * @confidence 5
      * @author Frédéric Becerril
      **/
-    int get_nb_ants();
+    int get_ants_amount();
 
     template <class Function>
     /**

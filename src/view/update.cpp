@@ -18,7 +18,6 @@ void View::update(double time, const Grid &grid, size_t current_block)
         int x_grid = (mouse_x * scale_high_dpi) / cell_size - x_shift;
         int y_grid = (mouse_y * scale_high_dpi) / cell_size - y_shift;
 
-
         x_grid += X_MIN;
         y_grid += Y_MIN;
 
@@ -149,29 +148,35 @@ void View::update_grid()
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 0x2C, 0x3A, 0x47, 0xFF);
 
-    for (int i = y_start; i <= y_end; i++) {
-        for (int j = x_start; j <= x_end; j++) {
+    for (int i = y_start; i <= y_end; i++)
+    {
+        for (int j = x_start; j <= x_end; j++)
+        {
             draw_cell_rect(j, i, 0x2C, 0x3A, 0x47, 0xFF, false);
         }
     }
     SDL_SetRenderTarget(render, NULL);
 }
 
-void View::update_info(const Grid& grid) {
+void View::update_info(const Grid &grid)
+{
     TTF_Font *font = TTF_OpenFont("ressources/Marianne-Regular.otf", 32);
-//    SDL_Surface *surface = TTF_RenderText_Blended(font, "Colonies", color_sdl);
+    //    SDL_Surface *surface = TTF_RenderText_Blended(font, "Colonies", color_sdl);
 
     SDL_SetRenderTarget(render, info_texture);
 
     SDL_SetRenderDrawColor(render, 0, 0, 0, 0);
     SDL_RenderClear(render);
 
-
-    int y = 0;
-    for (Colony *c : grid.colonies) {
+    SDL_Rect rect = {0, 0, 40, static_cast<int>(grid.colonies.size() * 50)};
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 200);
+    SDL_RenderFillRect(render, &rect);
+    for (int i = 0; i < grid.colonies.size(); i++)
+    {
+        Colony *c = grid.colonies[i];
         rgb color = m[c];
         SDL_Color color_sdl = {static_cast<Uint8>(color.r), static_cast<Uint8>(color.g), static_cast<Uint8>(color.b), 0xFF};
-        std::string text = std::to_string(c->get_nb_ants());
+        std::string text = std::to_string(c->get_ants_amount());
         SDL_Surface *surface = TTF_RenderText_Blended(font, text.c_str(), color_sdl);
 
         SDL_Texture *texture = SDL_CreateTextureFromSurface(render, surface);
@@ -179,19 +184,13 @@ void View::update_info(const Grid& grid) {
         int w, h;
         SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
-        SDL_Rect dest = {3, y, w, h};
+        SDL_Rect dest = {3, i * 50, w, h};
 
         SDL_RenderCopy(render, texture, NULL, &dest);
 
         SDL_FreeSurface(surface);
         SDL_DestroyTexture(texture);
-
-        y += 50;
     }
-
-    SDL_Rect rect = {0 , 0, 40, y};
-    SDL_SetRenderDrawColor(render, 0, 0, 0, 100);
-    SDL_RenderFillRect(render, &rect);
 
     SDL_SetRenderTarget(render, NULL);
 }
